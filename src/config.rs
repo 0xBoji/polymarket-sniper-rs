@@ -26,7 +26,13 @@ pub struct PolymarketConfig {
 pub struct ArbitrageConfig {
     pub min_edge_bps: i32,
     pub max_position_size_usd: f64,
+    // Dynamic position sizing
+    pub use_dynamic_sizing: bool,
+    pub kelly_fraction: f64,
+    pub min_position_pct: f64,
+    pub max_position_pct: f64,
 }
+
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct AgentConfig {
@@ -77,6 +83,22 @@ impl Config {
                 .unwrap_or_else(|_| "10.0".to_string())
                 .parse()
                 .unwrap_or(10.0),
+            use_dynamic_sizing: env::var("USE_DYNAMIC_SIZING")
+                .unwrap_or_else(|_| "true".to_string())
+                .parse()
+                .unwrap_or(true),
+            kelly_fraction: env::var("KELLY_FRACTION")
+                .unwrap_or_else(|_| "0.25".to_string())
+                .parse()
+                .unwrap_or(0.25),
+            min_position_pct: env::var("MIN_POSITION_PCT")
+                .unwrap_or_else(|_| "0.01".to_string())
+                .parse()
+                .unwrap_or(0.01),
+            max_position_pct: env::var("MAX_POSITION_PCT")
+                .unwrap_or_else(|_| "0.10".to_string())
+                .parse()
+                .unwrap_or(0.10),
         };
 
         let agent = AgentConfig {
