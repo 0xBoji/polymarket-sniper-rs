@@ -28,13 +28,13 @@ pub struct Sniper {
     redemption_manager: Option<RedemptionManager>,
     seen_markets: HashSet<String>,
     pnl_tracker: Arc<Mutex<PnLTracker>>,
-    new_market_rx: Option<mpsc::Receiver<String>>, // From WebSocket events
+    new_market_rx: Option<mpsc::UnboundedReceiver<String>>, // From WebSocket events
     pending_retries: VecDeque<(String, u8)>, // (MarketID, RetryCount)
     // WebSocket CLOB
     ws_client: Option<ClobWebSocket>,
     ws_update_rx: Option<mpsc::Receiver<OrderbookUpdate>>,
     active_markets: HashMap<String, MarketData>,
-    asset_map: HashMap<String, String>, // AssetID -> "YES"/"NO" (Derived)
+    asset_map: HashMap<String, (String, String)>, // AssetID -> (MarketID, Side)
 }
 
 impl Sniper {
@@ -201,11 +201,11 @@ impl Sniper {
                     }
                 } => {
                      // 1. Identify Market
-                     if let Some((market_id, side)) = self.asset_map.get(&update.asset_id) {
+                     if let Some((market_id, side)) = self.asset_map.get(&update.asset_id).cloned() {
                          debug!("⚡ Tick: {} ({} bids, {} asks)", side, update.bids.len(), update.asks.len());
                          
                          // 2. Update State
-                         if let Some(market) = self.active_markets.get_mut(market_id) {
+                         if let Some(market) = self.active_markets.get_mut(&market_id) {
                              // Update Prices based on Bids/Asks
                              // NOTE: We are SNIPING, so we want to BUY.
                              // Buying YES means taking the Lowest ASK.
