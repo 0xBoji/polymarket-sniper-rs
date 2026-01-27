@@ -1,5 +1,6 @@
 use anyhow::Result;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
+use tracing::{info, warn};
 use std::sync::{Arc, Mutex};
 
 use polymarket_hft_agent::sniper::Sniper;
@@ -26,6 +27,19 @@ async fn main() -> Result<()> {
 
     // Load configuration
     let config = Config::from_env()?;
+    
+    // Phase 2 Optimization: CPU Pinning
+    // Pin main thread to dedicated core for consistent latency
+    if let Some(pinner) = polymarket_hft_agent::execution::CpuPinner::new() {
+        info!("🎯 CPU cores available: {}", pinner.core_count());
+        if pinner.pin_strategy_thread() {
+            info!("✅ Strategy thread pinned to core 0");
+        } else {
+            warn!("⚠️ Could not pin strategy thread");
+        }
+    } else {
+        warn!("⚠️ CPU pinning not available on this system");
+    }
 
     // Print startup banner
     print_banner(&config);
