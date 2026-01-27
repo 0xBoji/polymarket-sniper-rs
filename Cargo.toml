@@ -68,6 +68,9 @@ ethers-flashbots = "0.15.0"
 url = "2.5.8"
 ruint = "1.17.2"
 alloy-primitives = "1.5.2"
+bumpalo = "3.14"  # Memory arena allocator
+core_affinity = "0.8"  # CPU pinning
+crossbeam = "0.8"  # Lock-free data structures
 
 # Dashboard API server
 axum = "0.8"
