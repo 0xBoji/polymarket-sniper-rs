@@ -7,21 +7,25 @@ use polymarket_hft_agent::config::ArbitrageConfig;
 fn create_mock_orderbook(depth: usize) -> OrderBook {
     let mut orderbook = OrderBook::new();
     
+    let actual_depth = depth.min(50); // Cap at 50
+    
     // Create bids (descending prices)
-    for i in 0..depth {
-        orderbook.bids.push(OrderLevel {
+    for i in 0..actual_depth {
+        orderbook.bids[i] = OrderLevel {
             price: 0.50 - (i as f64 * 0.01),
             size: 100.0 + (i as f64 * 10.0),
-        });
+        };
     }
+    orderbook.bid_count = actual_depth;
     
     // Create asks (ascending prices)
-    for i in 0..depth {
-        orderbook.asks.push(OrderLevel {
+    for i in 0..actual_depth {
+        orderbook.asks[i] = OrderLevel {
             price: 0.51 + (i as f64 * 0.01),
             size: 100.0 + (i as f64 * 10.0),
-        });
+        };
     }
+    orderbook.ask_count = actual_depth;
     
     orderbook
 }

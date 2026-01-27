@@ -113,8 +113,8 @@ impl ArbitrageStrategy {
     /// Analyze full orderbook depth for a given order size
     pub fn analyze_orderbook_depth(&self, orderbook: &OrderBook, order_size_usd: f64) -> OrderbookDepth {
         // Calculate weighted average prices based on order size
-        let (weighted_bid, bid_liquidity) = self.calculate_weighted_price(&orderbook.bids, order_size_usd);
-        let (weighted_ask, ask_liquidity) = self.calculate_weighted_price(&orderbook.asks, order_size_usd);
+        let (weighted_bid, _bid_liquidity) = self.calculate_weighted_price(orderbook.bid_levels(), order_size_usd);
+        let (weighted_ask, _ask_liquidity) = self.calculate_weighted_price(orderbook.ask_levels(), order_size_usd);
         
         // Calculate slippage (difference between best price and weighted average)
         let best_bid = orderbook.best_bid().unwrap_or(0.0);
