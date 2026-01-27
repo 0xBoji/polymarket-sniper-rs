@@ -8,6 +8,7 @@ pub struct Config {
     pub agent: AgentConfig,
     pub risk: RiskConfig,
     pub market_filters: MarketFilters,
+    pub flashbots: FlashbotsConfig,
     pub polygon_ws_rpc: Option<String>,
     pub polygon_private_key: Option<String>,
     pub ctf_contract_address: Option<String>,
@@ -45,6 +46,14 @@ pub struct RiskConfig {
 pub struct MarketFilters {
     pub min_market_volume: f64,
     pub min_liquidity: f64,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct FlashbotsConfig {
+    pub enabled: bool,
+    pub relay_url: String,
+    pub signing_key: Option<String>,
+    pub max_retries: u32,
 }
 
 impl Config {
@@ -115,12 +124,27 @@ impl Config {
         let polygon_private_key = env::var("POLYGON_PRIVATE_KEY").ok();
         let ctf_contract_address = env::var("CTF_CONTRACT_ADDRESS").ok();
 
+        let flashbots = FlashbotsConfig {
+            enabled: env::var("USE_FLASHBOTS")
+                .unwrap_or_else(|_| "false".to_string())
+                .parse()
+                .unwrap_or(false),
+            relay_url: env::var("FLASHBOTS_RELAY_URL")
+                .unwrap_or_else(|_| "https://relay.flashbots.net".to_string()),
+            signing_key: env::var("FLASHBOTS_SIGNING_KEY").ok(),
+            max_retries: env::var("MAX_BUNDLE_RETRIES")
+                .unwrap_or_else(|_| "3".to_string())
+                .parse()
+                .unwrap_or(3),
+        };
+
         Ok(Config {
             polymarket,
             arbitrage,
             agent,
             risk,
             market_filters,
+            flashbots,
             polygon_ws_rpc,
             polygon_private_key,
             ctf_contract_address,

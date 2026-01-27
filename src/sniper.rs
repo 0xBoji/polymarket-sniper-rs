@@ -66,7 +66,37 @@ impl Sniper {
             Box::new(PolymarketClient::new(&config.polymarket, config.agent.paper_trading))
         };
 
-        let executor = Executor::new(executor_interface);
+        // Initialize Flashbots client if enabled
+        let flashbots_client = if config.flashbots.enabled {
+            if let (Some(rpc), Some(pk)) = (&config.polygon_ws_rpc, &config.polygon_private_key) {
+                let signing_key = config.flashbots.signing_key.as_ref().unwrap_or(pk);
+                
+                match crate::execution::flashbots::FlashbotsClient::new(
+                    rpc,
+                    signing_key,
+                    Some(&config.flashbots.relay_url),
+                    config.flashbots.max_retries,
+                ).await {
+                    Ok(client) => {
+                        info!("✅ Flashbots client initialized - MEV protection ENABLED");
+                        Some(client)
+                    }
+                    Err(e) => {
+                        error!("❌ Failed to initialize Flashbots client: {}", e);
+                        warn!("⚠️ Continuing without Flashbots protection");
+                        None
+                    }
+                }
+            } else {
+                warn!("⚠️ Flashbots enabled but missing RPC or private key");
+                None
+            }
+        } else {
+            info!("📊 Flashbots disabled - using regular transaction submission");
+            None
+        };
+
+        let executor = Executor::new(executor_interface, flashbots_client);
         
         let mempool_monitor = MempoolMonitor::new(config.polygon_ws_rpc.clone()).await;
 
@@ -470,34 +500,22 @@ impl Sniper {
                      
                      let trade_id = format!("arb_{}_{}", market.id, Utc::now().timestamp_millis());
 
-                     // Execute YES
-                     let decision_yes = crate::strategies::types::TradingDecision {
-                         should_trade: true,
-                         side: "YES".to_string(),
-                         confidence: 1.0,
-                         position_size_pct: 0.1, // Fixed for now, handled by size_usd in reality
-                         reasoning: "Arbitrage".to_string(),
-                         risks: vec![],
-                     };
-                     
-                     // Execute NO
-                     let decision_no = crate::strategies::types::TradingDecision {
-                         should_trade: true,
-                         side: "NO".to_string(),
-                         confidence: 1.0,
-                         position_size_pct: 0.1,
-                         reasoning: "Arbitrage".to_string(),
-                         risks: vec![],
-                     };
-
-                     // Execute YES
-                     if let Err(e) = self.executor.execute_trade(&decision_yes, market, &trade_id, &mut self.risk_manager).await {
-                         error!("❌ Arb Execution Failed (YES): {}", e);
-                     }
-                     
-                     // Execute NO
-                     if let Err(e) = self.executor.execute_trade(&decision_no, market, &trade_id, &mut self.risk_manager).await {
-                         error!("❌ Arb Execution Failed (NO): {}", e);
+                     // Execute atomic arbitrage bundle (YES + NO together)
+                     // This uses Flashbots if enabled, otherwise falls back to regular execution
+                     match self.executor.execute_arbitrage_bundle(
+                         market,
+                         yes_price,
+                         no_price,
+                         size_usd,
+                         &trade_id,
+                         &mut self.risk_manager,
+                     ).await {
+                         Ok(bundle_id) => {
+                             info!("✅ Arbitrage bundle executed: {}", bundle_id);
+                         }
+                         Err(e) => {
+                             error!("❌ Arbitrage bundle execution failed: {}", e);
+                         }
                      }
                      
                      // Update PnL (Mocking generic position for now)
