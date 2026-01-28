@@ -157,6 +157,12 @@ Resources:
       Roles:
         - !Ref HFTInstanceRole
 
+  HFTLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: Polymarket-HFT-Bot
+      RetentionInDays: 7
+
 Outputs:
   InstanceId:
     Description: InstanceId of the newly created EC2 instance
