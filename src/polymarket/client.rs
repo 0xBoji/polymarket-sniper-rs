@@ -68,7 +68,7 @@ impl MarketInterface for PolymarketClient {
         // The CLOB API usually requires token_id (which we don't have yet from condition_id),
         // so we cannot bypass Gamma for the initial mapping.
         
-        warn!("⚠️ Market {} not in Gamma yet. Will retry.", market_id);
+        debug!("⚠️ Market {} not in Gamma yet. Will retry.", market_id);
         anyhow::bail!("Market not found in Gamma: {}", market_id)
     }
 

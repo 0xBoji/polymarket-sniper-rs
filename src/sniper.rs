@@ -233,21 +233,24 @@ impl Sniper {
                 Some((condition_id, attempts, result)) = retry_rx.recv() => {
                      match result {
                         Ok(market) => {
-                            debug!("✅ Retry success for {} after {} attempts", market.question, attempts);
+                            info!("✅ Sync success for {} after {} attempts", market.question, attempts);
                             if !self.seen_markets.contains(&market.id) {
                                 self.seen_markets.insert(market.id.clone());
-                                info!("🚀 Processing queued market: {}", market.question);
                                 if let Err(e) = self.process_single_market(&market).await {
                                     error!("❌ Error processing market {}: {}", market.question, e);
                                 }
                             }
                         },
-                        Err(_) => {
+                        Err(e) => {
                             let max_attempts = 60;
                             if attempts < max_attempts {
+                                // Silent retry for most attempts to avoid log spam
+                                if attempts == 1 || attempts % 20 == 0 {
+                                    info!("⏳ Still waiting for Gamma to sync market {} (Attempt {})", condition_id, attempts);
+                                }
                                 self.pending_retries.push_back((condition_id, attempts + 1));
                             } else {
-                                error!("❌ Gave up fetching {} after {} attempts", condition_id, max_attempts);
+                                error!("❌ Gave up fetching {} after {} attempts. Error: {}", condition_id, max_attempts, e);
                             }
                         }
                      }
