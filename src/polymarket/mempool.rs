@@ -1,5 +1,4 @@
 use ethers::prelude::*;
-use std::collections::HashSet;
 use std::sync::Arc;
 use std::str::FromStr;
 use tracing::{error, info, warn};

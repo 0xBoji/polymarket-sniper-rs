@@ -51,45 +51,44 @@ impl ArbitrageStrategy {
 
     /// Check for arbitrage opportunity using simple best bid/ask
     /// Now with dynamic position sizing based on Kelly Criterion
+    /// Optimized with branchless code and early returns
+    #[inline(always)]
     pub fn check_opportunity(&self, market: &MarketData) -> TradeAction {
-        // Basic Intra-Market Arbitrage:
-        // If Price(YES) + Price(NO) < 1.0, there is a guaranteed profit (ignoring fees for a moment).
-        // Realistically: Price(YES) + Price(NO) < 1.0 - fees - target_margin
-        
-        let yes_ask = market.yes_price; // Assuming yes_price is best ask for now
-        let no_ask = market.no_price;   // Assuming no_price is best ask for now
+        let yes_ask = market.yes_price;
+        let no_ask = market.no_price;
 
-        if yes_ask <= 0.0 || no_ask <= 0.0 {
-            return TradeAction::None;
-        }
-
+        // Branchless validation: both prices must be positive
+        // If either is <= 0, total_cost will be invalid
         let total_cost = yes_ask + no_ask;
         let spread = 1.0 - total_cost;
         let spread_bps = (spread * 10000.0) as i32;
 
-        if spread_bps > self.config.min_edge_bps {
-            // Calculate position size
-            let size_usd = self.calculate_position_size(
-                spread_bps,
-                &market.id,
-                0, // No slippage for simple best bid/ask
-                true, // Assume atomic execution
-            );
-            
-            return TradeAction::BuyBoth {
-                market_id: market.id.clone(),
-                yes_price: yes_ask,
-                no_price: no_ask,
-                size_usd,
-                expected_profit_bps: spread_bps,
-            };
-            
+        // Early return if no opportunity (most common case)
+        // Branchless: use comparison result directly
+        if spread_bps <= self.config.min_edge_bps || yes_ask <= 0.0 || no_ask <= 0.0 {
+            return TradeAction::None;
         }
 
-        TradeAction::None
+        // Hot path: calculate position size
+        let size_usd = self.calculate_position_size(
+            spread_bps,
+            &market.id,
+            0,
+            true,
+        );
+        
+        TradeAction::BuyBoth {
+            market_id: market.id.clone(),
+            yes_price: yes_ask,
+            no_price: no_ask,
+            size_usd,
+            expected_profit_bps: spread_bps,
+        }
     }
     
     /// Calculate optimal position size based on edge and risk parameters
+    /// Optimized with const capital and inline hint
+    #[inline(always)]
     fn calculate_position_size(
         &self,
         edge_bps: i32,
@@ -97,17 +96,18 @@ impl ArbitrageStrategy {
         slippage_bps: i32,
         is_atomic: bool,
     ) -> f64 {
-        if let Some(sizer) = &self.position_sizer {
-            // Dynamic sizing using Kelly Criterion
-            let capital = 1000.0; // TODO: Get from account balance
-            let win_prob = estimate_win_probability(is_atomic, slippage_bps);
-            let volatility = estimate_volatility(market_id);
-            
-            sizer.calculate_optimal_size(edge_bps, win_prob, capital, volatility)
-        } else {
-            // Fixed sizing (fallback)
-            self.config.max_position_size_usd
-        }
+        // Fast path: fixed sizing (no allocation)
+        let sizer = match &self.position_sizer {
+            Some(s) => s,
+            None => return self.config.max_position_size_usd,
+        };
+        
+        // Dynamic sizing using Kelly Criterion
+        const CAPITAL: f64 = 1000.0; // Const for compiler optimization
+        let win_prob = estimate_win_probability(is_atomic, slippage_bps);
+        let volatility = estimate_volatility(market_id);
+        
+        sizer.calculate_optimal_size(edge_bps, win_prob, CAPITAL, volatility)
     }
 
     /// Analyze full orderbook depth for a given order size

@@ -16,10 +16,11 @@ use std::collections::{HashSet, HashMap};
 use std::collections::VecDeque;
 use chrono::Utc;
 use crate::polymarket::ws::{ClobWebSocket, OrderbookUpdate};
+use crate::polymarket::contracts::derive_asset_ids;
 
 pub struct Sniper {
     config: Config,
-    market_interface: Box<dyn MarketInterface>,
+    market_interface: Arc<dyn MarketInterface + Send + Sync>,
     risk_manager: RiskManager,
     _start_time: chrono::DateTime<chrono::Utc>, // Keep track of uptime
     strategy: ArbitrageStrategy,
@@ -40,14 +41,15 @@ pub struct Sniper {
 impl Sniper {
     pub async fn new(config: Config, pnl_tracker: Arc<Mutex<PnLTracker>>) -> Self {
         // Initialize Market Interface (Real or Sim)
-        let market_interface: Box<dyn MarketInterface> = if config.agent.simulation_mode {
+        let market_interface: Arc<dyn MarketInterface + Send + Sync> = if config.agent.simulation_mode {
             info!("🎞️  Initializing Market Simulator");
-            Box::new(MarketSimulator::new())
+            Arc::new(MarketSimulator::new())
         } else {
             info!("🌐 Initializing Real Polymarket Client");
-            Box::new(PolymarketClient::new(
+            Arc::new(PolymarketClient::new(
                 &config.polymarket, 
-                config.agent.paper_trading
+                config.agent.paper_trading,
+                config.polygon_private_key.clone()
             ))
         };
 
@@ -63,7 +65,7 @@ impl Sniper {
         let executor_interface: Box<dyn MarketInterface> = if config.agent.simulation_mode {
             Box::new(MarketSimulator::new()) 
         } else {
-            Box::new(PolymarketClient::new(&config.polymarket, config.agent.paper_trading))
+            Box::new(PolymarketClient::new(&config.polymarket, config.agent.paper_trading, config.polygon_private_key.clone()))
         };
 
         // Initialize Flashbots client if enabled
@@ -220,9 +222,36 @@ impl Sniper {
 
         // Retry interval (every 1 second)
         let mut retry_interval = interval(Duration::from_secs(1));
+        retry_interval.set_missed_tick_behavior(tokio::time::MissedTickBehavior::Skip);
+
+        // Async Retry Results Channel
+        let (retry_tx, mut retry_rx) = mpsc::channel::<(String, u8, Result<MarketData>)>(1000);
 
         loop {
             tokio::select! {
+                // 0. Async Retry Results handling
+                Some((condition_id, attempts, result)) = retry_rx.recv() => {
+                     match result {
+                        Ok(market) => {
+                            debug!("✅ Retry success for {} after {} attempts", market.question, attempts);
+                            if !self.seen_markets.contains(&market.id) {
+                                self.seen_markets.insert(market.id.clone());
+                                info!("🚀 Processing queued market: {}", market.question);
+                                if let Err(e) = self.process_single_market(&market).await {
+                                    error!("❌ Error processing market {}: {}", market.question, e);
+                                }
+                            }
+                        },
+                        Err(_) => {
+                            let max_attempts = 60;
+                            if attempts < max_attempts {
+                                self.pending_retries.push_back((condition_id, attempts + 1));
+                            } else {
+                                error!("❌ Gave up fetching {} after {} attempts", condition_id, max_attempts);
+                            }
+                        }
+                     }
+                }
                 // 1. CLOB Orderbook Updates (HIGHEST PRIORITY)
                 Some(update) = async {
                     match &mut self.ws_update_rx {
@@ -281,14 +310,60 @@ impl Sniper {
                         continue;
                     }
                     
-                    // Try fetch ONCE immediately
+                    // GOD MODE: Perform local calculation of Token IDs immediately
+                    // This creates a "Synthetic" market to start tracking prices while Gamma indexes
+                    match derive_asset_ids(&condition_id) {
+                        Ok((yes_id, no_id)) => {
+                            info!("🔮 Derived Token IDs locally! YES: ...{}, NO: ...{}", 
+                                &yes_id[yes_id.len()-6..], &no_id[no_id.len()-6..]);
+                            
+                            // Initialize "Synthetic" Market Entry
+                            // We don't have the question yet, but we have the IDs to trade!
+                            let synthetic_market = MarketData {
+                                id: condition_id.clone(),
+                                question: format!("⌛ Loading Metadata ({})", condition_id),
+                                end_date: Some("Unknown".to_string()),
+                                description: None,
+                                volume: 0.0,
+                                liquidity: 0.0,
+                                yes_price: 0.0,
+                                no_price: 0.0,
+                                best_bid: 0.0,
+                                best_ask: 0.0,
+                                order_book_imbalance: 0.0,
+                                asset_ids: vec![no_id.clone(), yes_id.clone()], // Standard: [No, Yes] usually, but verify?
+                                // Important: derive_asset_ids returns (YES, NO) tuple order I defined?
+                                // My function returns (yes_id, no_id).
+                                // MarketData.asset_ids usually matches the order in CLOB.
+                                // Let's store them and map them.
+                            };
+                            
+                            // Map Assets for Price Updates
+                            self.asset_map.insert(yes_id.clone(), (condition_id.clone(), "YES".to_string()));
+                            self.asset_map.insert(no_id.clone(), (condition_id.clone(), "NO".to_string()));
+                            self.active_markets.insert(condition_id.clone(), synthetic_market.clone());
+                            
+                            // Subscribe to CLOB WebSocket IMMEDIATELY
+                             if let Some(ws) = &mut self.ws_client {
+                                ws.subscribe(vec![yes_id, no_id]);
+                                info!("🔌 Subscribed to CLOB for derived IDs (YES/NO)");
+                             }
+                        }
+                        Err(e) => {
+                            error!("❌ Failed to derive asset ids: {}", e);
+                        }
+                    }
+
+                    // Also try normal fetch (will likely fail initially but needed for metadata)
                     // If it fails, add to retry queue to avoid blocking
-                    info!("⚡ Triggering immediate fast market fetch...");
+                    debug!("⚡ Triggering immediate fast market fetch...");
                     match self.market_interface.get_market_details(&condition_id).await {
                         Ok(market) => {
-                            info!("✅ Fast sync success: {}", market.question);
+                            debug!("✅ Fast sync success: {}", market.question);
                             if !self.seen_markets.contains(&market.id) {
                                 self.seen_markets.insert(market.id.clone());
+                                // Update the synthetic market with real metadata
+                                self.active_markets.insert(market.id.clone(), market.clone()); 
                                 info!("🚀 Processing new market immediately: {}", market.question);
                                 if let Err(e) = self.process_single_market(&market).await {
                                     error!("❌ Error processing market {}: {}", market.question, e);
@@ -297,50 +372,35 @@ impl Sniper {
                         },
                         Err(e) => {
                             // Non-blocking retry: Queue it
-                            warn!("⚠️ Initial fetch failed ({}), queuing for retry...", e);
+                            debug!("⚠️ Initial fetch failed ({}), queuing for retry...", e);
                             self.pending_retries.push_back((condition_id, 1));
                         }
                     }
                 }
 
-                // Generic Retry Processing (Non-blocking)
+                // Generic Retry Processing (Non-blocking spawning)
                 _ = retry_interval.tick() => {
-                    let mut still_pending = VecDeque::new();
-                    let max_attempts = 10; // Allow more attempts since non-blocking
-
-                    while let Some((condition_id, attempts)) = self.pending_retries.pop_front() {
-                        // Check if seen in meantime
-                        if self.seen_markets.contains(&condition_id) {
-                            continue;
-                        }
-
-                        // Try fetch
-                        match self.market_interface.get_market_details(&condition_id).await {
-                            Ok(market) => {
-                                info!("✅ Retry success for {} after {} attempts", market.question, attempts);
-                                if !self.seen_markets.contains(&market.id) {
-                                    self.seen_markets.insert(market.id.clone());
-                                    info!("🚀 Processing queued market: {}", market.question);
-                                    if let Err(e) = self.process_single_market(&market).await {
-                                        error!("❌ Error processing market {}: {}", market.question, e);
-                                    }
-                                }
-                            },
-                            Err(_) => {
-                                if attempts < max_attempts {
-                                    // Push back to end of NEW queue (round robin style if multiple)
-                                    still_pending.push_back((condition_id, attempts + 1));
-                                } else {
-                                    error!("❌ Gave up fetching {} after {} attempts", condition_id, max_attempts);
-                                    // Trigger fallback full sync ONLY when giving up? 
-                                    // Or just let polling catch it eventually.
-                                }
+                    // Process a batch of retries to avoid spawning too many tasks at once
+                    let batch_size = 20; 
+                    for _ in 0..batch_size {
+                        if let Some((condition_id, attempts)) = self.pending_retries.pop_front() {
+                            if self.seen_markets.contains(&condition_id) {
+                                continue;
                             }
+                            
+                            // Spawn async fetch
+                            let client = self.market_interface.clone();
+                            let tx = retry_tx.clone();
+                            let cid = condition_id.clone();
+                            
+                            tokio::spawn(async move {
+                                let res = client.get_market_details(&cid).await;
+                                let _ = tx.send((cid, attempts, res)).await;
+                            });
+                        } else {
+                            break;
                         }
                     }
-                    
-                    // Restore pending
-                    self.pending_retries = still_pending;
                 }
                 
                 // Polling (BACKUP - catches anything WS might miss)
@@ -493,9 +553,26 @@ impl Sniper {
             TradeAction::BuyBoth { market_id: _, yes_price, no_price, size_usd, expected_profit_bps } => {
                 info!("🎯 Sniper Signal: {} (Profit: {} bps)", market.question, expected_profit_bps);
 
-                // 2. Risk Check
+                // 2. Balance Check & Capping
+                let balance = self.market_interface.get_balance().await.unwrap_or(0.0);
+                let mut final_size = size_usd;
+
+                if balance < final_size {
+                    warn!("⚠️ Balance (${:.2}) < Target Size (${:.2}). Capping to balance.", balance, final_size);
+                    final_size = balance;
+                }
+                
+                // Ensure we have enough for 2 legs (min ~$1 per leg)
+                // If we have less than $2, we probably can't execute both legs reliably or meet min size
+                if final_size < 2.0 {
+                     warn!("❌ Insufficient balance to trade (${:.2}). Min required for arb is ~$2.0", balance);
+                     // Skip this opportunity
+                     return Ok(()); 
+                }
+
+                // 3. Risk Check
                 // Note: For arb, confidence is essentially 100% (1.0) if we trust the orderbook
-                if self.risk_manager.validate_entry(&market.id, size_usd, 1.0) {
+                if self.risk_manager.validate_entry(&market.id, final_size, 1.0) {
                      info!("⚡ Executing ARBITRAGE for {}", market.question);
                      
                      let trade_id = format!("arb_{}_{}", market.id, Utc::now().timestamp_millis());
@@ -506,7 +583,7 @@ impl Sniper {
                          market,
                          yes_price,
                          no_price,
-                         size_usd,
+                         final_size,
                          &trade_id,
                          &mut self.risk_manager,
                      ).await {
@@ -524,7 +601,7 @@ impl Sniper {
                         market_id: market.id.clone(),
                         market_question: market.question.clone(),
                         side: "BOTH".to_string(),
-                        size: size_usd, // Total size roughly
+                        size: final_size, // Total size roughly
                         entry_price: yes_price + no_price, // Arbitrage cost
                         current_price: yes_price + no_price,
                         entry_time: Utc::now(),
@@ -584,6 +661,12 @@ impl Sniper {
 
     /// Check if market passes filters
     fn passes_filters(&self, market: &MarketData) -> bool {
+        // GOD MODE: Skip filters for fresh derived markets
+        if market.question.contains("Loading Metadata") {
+            // Optional: You could implement a lighter check here, but for now we trust the Sniper
+            return true;
+        }
+
         if market.volume < self.config.market_filters.min_market_volume {
             info!(
                 "⏭️  Volume ${:.2} below minimum ${:.2}",

@@ -3,7 +3,7 @@ use ethers::prelude::*;
 use ethers::types::Address;
 use std::str::FromStr;
 use std::sync::Arc;
-use tracing::{info, warn, error};
+use tracing::info;
 
 // Partial ABI for Conditional Tokens Framework (CTF)
 abigen!(

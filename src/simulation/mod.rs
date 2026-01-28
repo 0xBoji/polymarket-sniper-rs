@@ -1,7 +1,7 @@
 use anyhow::{Result, anyhow};
 use async_trait::async_trait;
 use std::collections::HashMap;
-use tracing::{info, warn};
+use tracing::info;
 use crate::polymarket::{MarketInterface, MarketData};
 
 /// Simulates market interactions for backtesting
@@ -9,7 +9,7 @@ pub struct MarketSimulator {
     // Current simulated time or tick index could be stored here
     active_markets: Vec<MarketData>,
     balance: f64,
-    positions: HashMap<String, f64>, // (MarketID, SizeUSD)
+    _positions: HashMap<String, f64>, // (MarketID, SizeUSD)
     
     // Backtesting Fields
     historical_ticks: Vec<Tick>,
@@ -30,7 +30,7 @@ impl MarketSimulator {
         Self {
             active_markets: Vec::new(),
             balance: 10_000.0, // Start with $10k paper money
-            positions: HashMap::new(),
+            _positions: HashMap::new(),
             historical_ticks: Vec::new(),
             current_tick_index: 0,
         }

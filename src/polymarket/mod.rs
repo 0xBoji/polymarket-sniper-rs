@@ -5,6 +5,7 @@ pub mod api;
 pub mod orderbook;
 pub mod events;
 pub mod lockfree_queue;
+pub mod contracts;
 
 pub use client::PolymarketClient;
 pub use mempool::MempoolMonitor;

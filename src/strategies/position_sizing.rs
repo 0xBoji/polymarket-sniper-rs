@@ -1,5 +1,4 @@
 /// Dynamic position sizing using Kelly Criterion and risk adjustments
-use tracing::info;
 
 pub struct PositionSizer {
     kelly_fraction: f64,    // Fractional Kelly (e.g., 0.25 for quarter-Kelly)
@@ -28,6 +27,7 @@ impl PositionSizer {
     /// For arbitrage:
     /// - p ≈ 1.0 (near certain if executed atomically)
     /// - b = edge_bps / (10000 - edge_bps)
+    #[inline(always)]
     pub fn calculate_optimal_size(
         &self,
         edge_bps: i32,
@@ -35,6 +35,7 @@ impl PositionSizer {
         capital: f64,
         volatility: f64,
     ) -> f64 {
+        // Early return for invalid inputs (most common in testing)
         if edge_bps <= 0 || win_probability <= 0.0 || capital <= 0.0 {
             return 0.0;
         }
@@ -65,6 +66,7 @@ impl PositionSizer {
     }
     
     /// Adjust position size based on market volatility
+    #[inline(always)]
     fn adjust_for_volatility(&self, kelly_fraction: f64, volatility: f64) -> f64 {
         // Volatility adjustment factor
         // Higher volatility -> reduce position size
@@ -82,6 +84,7 @@ impl PositionSizer {
     }
     
     /// Apply min/max position size constraints
+    #[inline(always)]
     fn apply_risk_limits(&self, size_usd: f64, capital: f64) -> f64 {
         let min_size = capital * self.min_position_pct;
         let max_size = capital * self.max_position_pct;
@@ -126,6 +129,7 @@ impl PositionSizer {
 /// Helper function to estimate win probability for arbitrage
 /// For atomic arbitrage, this should be very high (0.95-0.99)
 /// For non-atomic, adjust based on execution risk
+#[inline(always)]
 pub fn estimate_win_probability(is_atomic: bool, slippage_bps: i32) -> f64 {
     if is_atomic {
         // Atomic execution via Flashbots - very high probability
@@ -140,6 +144,7 @@ pub fn estimate_win_probability(is_atomic: bool, slippage_bps: i32) -> f64 {
 
 /// Estimate market volatility from recent price movements
 /// This is a placeholder - in production, calculate from historical data
+#[inline(always)]
 pub fn estimate_volatility(_market_id: &str) -> f64 {
     // Default to 10% volatility
     // TODO: Calculate from historical price data
