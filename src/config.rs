@@ -46,6 +46,9 @@ pub struct RiskConfig {
     pub max_position_size_pct: f64,
     pub max_portfolio_exposure_pct: f64,
     pub stop_loss_pct: f64,
+    pub use_dynamic_sl: bool,
+    pub min_hold_time_secs: u64,
+    pub auto_sell_threshold: f64,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -129,6 +132,18 @@ impl Config {
                 .unwrap_or_else(|_| "10.0".to_string())
                 .parse()
                 .unwrap_or(10.0),
+            use_dynamic_sl: env::var("USE_DYNAMIC_SL")
+                .unwrap_or_else(|_| "true".to_string())
+                .parse()
+                .unwrap_or(true),
+            min_hold_time_secs: env::var("MIN_HOLD_TIME_SECS")
+                .unwrap_or_else(|_| "60".to_string())
+                .parse()
+                .unwrap_or(60),
+            auto_sell_threshold: env::var("AUTO_SELL_THRESHOLD")
+                .unwrap_or_else(|_| "0.99".to_string())
+                .parse()
+                .unwrap_or(0.99),
         };
 
         let market_filters = MarketFilters {

@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use tracing::{info, warn};
+use tracing::{info, warn, debug};
 
 use crate::config::RiskConfig;
 use crate::strategies::types::TradingDecision;
@@ -69,26 +69,65 @@ impl RiskManager {
 
     /// Check stop loss condition
     pub fn check_stop_loss(&self, position: &Position, current_price: f64) -> bool {
-        // Calculate P&L %
-        // For YES/NO tokens, price moves from entry_price.
-        // If I bought YES at 0.6 and it goes to 0.5, I lost (0.5-0.6)/0.6 = -16.6%.
-        // If I bought NO at 0.4 and it goes to 0.3 (meaning YES goes up), NO price is 0.3?
-        // Wait, Polymarket 'no_price' is usually the price of the 'No' token.
-        // So the logic is symmetric: (current - entry) / entry
+        // 1. Check minimum hold time
+        let now = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap()
+            .as_secs();
         
+        let held_secs = now.saturating_sub(position.timestamp);
+        if held_secs < self.config.min_hold_time_secs {
+            debug!(
+                "⏳ Skipping SL check for {}: held for {}s, need {}s",
+                position.market_id, held_secs, self.config.min_hold_time_secs
+            );
+            return false;
+        }
+
+        // 2. Calculate P&L %
         let pnl_pct = (current_price - position.entry_price) / position.entry_price;
 
+        // 3. Determine threshold
+        let threshold = if self.config.use_dynamic_sl {
+            self.get_dynamic_threshold(position.entry_price)
+        } else {
+            self.config.stop_loss_pct
+        };
+
         // Stop loss: e.g. -15% (represented as positive 0.15 in config, so check < -0.15)
-        if pnl_pct < -self.config.stop_loss_pct {
+        if pnl_pct < -threshold {
             warn!(
-                "🛑 Stop Loss Triggered! Market: {}, P/L: {:.2}%",
+                "🛑 Stop Loss Triggered! Market: {}, P/L: {:.2}%, Threshold: {:.2}%",
                 position.market_id,
-                pnl_pct * 100.0
+                pnl_pct * 100.0,
+                threshold * 100.0
             );
             return true;
         }
 
         false
+    }
+
+    fn get_dynamic_threshold(&self, entry_price: f64) -> f64 {
+        // Tiers:
+        // 1. Premium (0.90+): 3% SL
+        // 2. Quality (0.80-0.90): 5% SL
+        // 3. Standard (0.70-0.80): 8% SL
+        // 4. Speculative (0.60-0.70): 12% SL
+        // 5. Risky (< 0.60): 15% (or global config)
+
+        if entry_price >= 0.90 {
+            0.03
+        } else if entry_price >= 0.80 {
+            0.05
+        } else if entry_price >= 0.70 {
+            0.08
+        } else if entry_price >= 0.60 {
+            0.12
+        } else {
+            // Fallback to global config for risky trades
+            self.config.stop_loss_pct
+        }
     }
 
     pub fn add_position(

@@ -658,7 +658,18 @@ impl Sniper {
                     }
                 }
 
-                // TODO: Add Take Profit logic here
+                // 2. Check Auto-Sell (Take Profit)
+                if current_price >= self.config.risk.auto_sell_threshold {
+                    info!("💰 Executing AUTO-SELL (Take Profit) for {} at {:.4}", market.question, current_price);
+                    if let Err(e) = self.executor.close_position(market, &position.side, &mut self.risk_manager).await {
+                         error!("❌ Failed to close position (Auto-Sell) for {}: {}", market.question, e);
+                    } else {
+                        // Success: Update PnL Tracker
+                        if let Ok(mut tracker) = self.pnl_tracker.lock() {
+                            tracker.close_position(&position.trade_id);
+                        }
+                    }
+                }
             }
         }
         
