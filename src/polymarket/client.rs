@@ -83,6 +83,7 @@ impl MarketInterface for PolymarketClient {
                     liquidity: 0.0,
                     yes_price: 0.0, 
                     no_price: 0.0,
+                    volume_24h: 0.0,
                     description: None,
                     order_book_imbalance: 0.0,
                     best_bid: 0.0,
