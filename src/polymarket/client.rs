@@ -297,6 +297,7 @@ impl PolymarketClient {
             liquidity,
             yes_price,
             no_price,
+            volume_24h: 0.0, // convert_market uses polyfill Market which might not have 24h vol easily available
             description: Some(market.description.clone()),
             order_book_imbalance: 0.0,
             best_bid: 0.0,
@@ -370,6 +371,11 @@ impl PolymarketClient {
             liquidity,
             yes_price,
             no_price,
+            volume_24h: match &market.volume_24hr {
+                serde_json::Value::Number(n) => n.as_f64().unwrap_or(0.0),
+                serde_json::Value::String(s) => s.parse().unwrap_or(0.0),
+                _ => 0.0,
+            },
             description: market.description.clone(),
             order_book_imbalance: 0.0,
             best_bid: 0.0,
@@ -396,6 +402,7 @@ struct GammaMarket {
     #[serde(default)]
     pub clob_token_ids: String, // Default to ""
     pub volume: serde_json::Value,     // Can be String or Number
+    pub volume_24hr: serde_json::Value, // Added for popularity filter
     pub liquidity: serde_json::Value,  // Can be String or Number
 }
 // Add uuid dependency for order IDs

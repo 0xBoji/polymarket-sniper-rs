@@ -700,6 +700,14 @@ impl Sniper {
             return false;
         }
 
+        if market.volume_24h < self.config.market_filters.min_24h_volume {
+             debug!(
+                "⏭️  24h Volume ${:.2} below minimum ${:.2} for {}",
+                market.volume_24h, self.config.market_filters.min_24h_volume, market.question
+            );
+            return false;
+        }
+
         true
     }
 }

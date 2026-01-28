@@ -55,6 +55,7 @@ pub struct RiskConfig {
 pub struct MarketFilters {
     pub min_market_volume: f64,
     pub min_liquidity: f64,
+    pub min_24h_volume: f64,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -155,6 +156,10 @@ impl Config {
                 .unwrap_or_else(|_| "500.0".to_string())
                 .parse()
                 .unwrap_or(500.0),
+            min_24h_volume: env::var("MIN_24H_VOLUME")
+                .unwrap_or_else(|_| "0.0".to_string())
+                .parse()
+                .unwrap_or(0.0),
         };
 
         let polygon_ws_rpc = env::var("POLYGON_WS_RPC").ok();

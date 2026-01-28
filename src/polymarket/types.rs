@@ -9,6 +9,7 @@ pub struct MarketData {
     pub liquidity: f64,
     pub yes_price: f64,
     pub no_price: f64,
+    pub volume_24h: f64,
     pub description: Option<String>,
     // L2 Data
     #[serde(default)]
