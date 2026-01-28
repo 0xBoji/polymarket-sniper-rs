@@ -616,7 +616,10 @@ impl Sniper {
                 }
             }
             TradeAction::None => {
-                // info!("💤 No arb opportunity for {}", market.question);
+                // Log at DEBUG level why it was rejected (calculated in check_opportunity but we don't see it here)
+                // To see it, we need check_opportunity to return the 'miss' reason or calc it here.
+                // For now, let's just log that we processed it.
+                 debug!("🔍 Checked {} - No arb opportunity found", market.question);
             }
         }
         
@@ -666,22 +669,22 @@ impl Sniper {
     fn passes_filters(&self, market: &MarketData) -> bool {
         // GOD MODE: Skip filters for fresh derived markets
         if market.question.contains("Loading Metadata") {
-            // Optional: You could implement a lighter check here, but for now we trust the Sniper
+            debug!("⚡ Skipping filters for Synthetic Market (God Mode)");
             return true;
         }
 
         if market.volume < self.config.market_filters.min_market_volume {
-            info!(
-                "⏭️  Volume ${:.2} below minimum ${:.2}",
-                market.volume, self.config.market_filters.min_market_volume
+             debug!(
+                "⏭️  Volume ${:.2} below minimum ${:.2} for {}",
+                market.volume, self.config.market_filters.min_market_volume, market.question
             );
             return false;
         }
 
         if market.liquidity < self.config.market_filters.min_liquidity {
-            info!(
-                "⏭️  Liquidity ${:.2} below minimum ${:.2}",
-                market.liquidity, self.config.market_filters.min_liquidity
+             debug!(
+                "⏭️  Liquidity ${:.2} below minimum ${:.2} for {}",
+                market.liquidity, self.config.market_filters.min_liquidity, market.question
             );
             return false;
         }

@@ -42,7 +42,8 @@ impl MarketInterface for PolymarketClient {
         
         // Optimized: Fetch specific market from Gamma API directly
         // Polymarket "Events" usually map via condition_id
-        let url = format!("{}/markets?condition_id={}", self.gamma_url, market_id);
+        // FIX: The correct query parameter is `condition_ids` (plural), not `condition_id`
+        let url = format!("{}/markets?condition_ids={}", self.gamma_url, market_id);
         
         let response = self.http_client
             .get(&url)
@@ -50,7 +51,10 @@ impl MarketInterface for PolymarketClient {
             .await?;
 
         if !response.status().is_success() {
-            anyhow::bail!("Gamma API error: {}", response.status());
+            let status = response.status();
+            let error_text = response.text().await.unwrap_or_else(|_| "Unknown error".to_string());
+            warn!("Gamma API error for {}: {} - {}", market_id, status, error_text);
+            anyhow::bail!("Gamma API error: {} - {}", status, error_text);
         }
 
         let markets: Vec<GammaMarket> = response.json().await?;
