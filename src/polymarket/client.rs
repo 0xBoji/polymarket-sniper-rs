@@ -68,12 +68,33 @@ impl MarketInterface for PolymarketClient {
             return self.convert_gamma_market(&m);
         }
         
-        // FALLBACK: If not found in Gamma, we must wait/retry.
-        // The CLOB API usually requires token_id (which we don't have yet from condition_id),
-        // so we cannot bypass Gamma for the initial mapping.
+        // FALLBACK: If not found in Gamma, try local derivation
+        info!("⚠️ Market {} not in Gamma yet. Attempting local derivation.", market_id);
         
-        debug!("⚠️ Market {} not in Gamma yet. Will retry.", market_id);
-        anyhow::bail!("Market not found in Gamma: {}", market_id)
+        match crate::polymarket::contracts::derive_asset_ids(market_id) {
+            Ok((yes_id, no_id)) => {
+                 info!("✅ Derived IDs for {}: YES={}, NO={}", market_id, yes_id, no_id);
+                 // Assuming binary market: NO is index 0, YES is index 1
+                 Ok(MarketData {
+                    id: market_id.to_string(),
+                    question: format!("Market {}", market_id), // Placeholder
+                    end_date: None,
+                    volume: 0.0,
+                    liquidity: 0.0,
+                    yes_price: 0.0, 
+                    no_price: 0.0,
+                    description: None,
+                    order_book_imbalance: 0.0,
+                    best_bid: 0.0,
+                    best_ask: 0.0,
+                    asset_ids: vec![no_id, yes_id], 
+                 })
+            },
+            Err(e) => {
+                 warn!("❌ Failed to derive IDs: {}", e);
+                 anyhow::bail!("Market not found in Gamma and derivation failed: {}", market_id)
+            }
+        }
     }
 
     async fn get_balance(&self) -> Result<f64> {
