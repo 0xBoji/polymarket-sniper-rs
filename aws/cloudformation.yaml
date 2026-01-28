@@ -60,6 +60,7 @@ Resources:
       SecurityGroups:
         - !Ref InstanceSecurityGroup
       KeyName: !Ref KeyName
+      IamInstanceProfile: !Ref HFTInstanceProfile
       ImageId: !FindInMap [RegionMap, !Ref "AWS::Region", AMI]
       Tags: 
         - Key: Name
@@ -72,31 +73,21 @@ Resources:
           # Update system
           dnf update -y
           
-          # Install critical tools first (split to ensure failure in one doesn't break others)
-          dnf install -y --allowerasing git
-          dnf install -y --allowerasing gcc openssl-devel curl
+          # Install critical tools
+          dnf install -y --allowerasing git gcc openssl-devel curl amazon-cloudwatch-agent
           
-          # Try to install extras, but don't fail script if missing
+          # Try to install extras
           dnf install -y --allowerasing tmux htop || echo "Extras installation failed, continuing..."
-
-          # Verify git
-          if ! command -v git &> /dev/null; then
-              echo "Git not found! Installing..."
-              dnf install -y --allowerasing git
-          fi
 
           # Install Rust (as ec2-user)
           runuser -l ec2-user -c 'curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y'
           
           # Clone repository
-          # Ensure home directory is correct
           cd /home/ec2-user
-          
-          # Clone with retry
           runuser -l ec2-user -c 'git clone https://github.com/0xBoji/polymarket-sniper-rs.git /home/ec2-user/bot' || echo "Git clone failed"
           
           if [ -d "/home/ec2-user/bot" ]; then
-              # Create .env file
+              # Create .env file with placeholders
               cat <<EOF > /home/ec2-user/bot/.env
               POLYMARKET_API_KEY=YOUR_API_KEY
               POLYMARKET_SECRET=YOUR_SECRET
@@ -116,26 +107,63 @@ Resources:
               MAX_POSITION_SIZE_USD=1.0
               EOF
           
-              # Fix permissions
               chown ec2-user:ec2-user /home/ec2-user/bot/.env
               
+              # Configuration for CloudWatch Agent
+              cat <<EOF > /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
+              {
+                "logs": {
+                  "logs_collected": {
+                    "files": {
+                      "collect_list": [
+                        {
+                          "file_path": "/home/ec2-user/bot/bot.log",
+                          "log_group_name": "Polymarket-HFT-Bot",
+                          "log_stream_name": "{instance_id}",
+                          "timestamp_format": "%Y-%m-%dT%H:%M:%S"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+              EOF
+
+              # Start CloudWatch Agent
+              /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
+              
               # Build in background
-              echo "Starting build..."
               runuser -l ec2-user -c 'source $HOME/.cargo/env && cd /home/ec2-user/bot && cargo build --release'
-              echo "Build command sent."
-          else
-              echo "CRITICAL: Bot directory not created. Git clone likely failed."
           fi
           
-          echo "Setup Complete. Connect via SSH and run: cd bot && ./target/release/polymarket-hft-agent"
+          echo "Setup Complete."
+
+  HFTInstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
+
+  HFTInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref HFTInstanceRole
 
 Outputs:
   InstanceId:
     Description: InstanceId of the newly created EC2 instance
     Value: !Ref HFTInstance
-  PublicDNS:
-    Description: Public DNSName of the newly created EC2 instance
-    Value: !GetAtt [HFTInstance, PublicDnsName]
   PublicIP:
     Description: Public IP address of the newly created EC2 instance
     Value: !GetAtt [HFTInstance, PublicIp]
+  LogGroupName:
+    Description: CloudWatch Log Group
+    Value: Polymarket-HFT-Bot
