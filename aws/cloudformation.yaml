@@ -1,0 +1,141 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Deploy Polymarket HFT Bot Infrastructure'
+
+Parameters:
+  KeyName:
+    Description: Name of an existing EC2 KeyPair to enable SSH access
+    Type: AWS::EC2::KeyPair::KeyName
+    ConstraintDescription: must be the name of an existing EC2 KeyPair.
+  
+  InstanceType:
+    Description: High-performance HFT instance type
+    Type: String
+    Default: c6i.large
+    AllowedValues:
+      - c6i.large
+      - c6i.xlarge
+      - c7g.large
+      - c7g.xlarge
+      - t3.large
+      - t3.medium
+    ConstraintDescription: must be a valid EC2 instance type.
+
+  SSHLocation:
+    Description: The IP address range that can be used to SSH to the EC2 instances
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+    Default: 0.0.0.0/0
+    AllowedPattern: "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
+    ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
+
+Mappings: 
+  RegionMap: 
+    us-east-1: 
+      AMI: ami-0230bd60aa48260c6  # Amazon Linux 2023 64-bit (x86_64)
+    us-east-2: 
+      AMI: ami-05fb0b8c1424f266b
+    eu-west-1: 
+      AMI: ami-01dd271720c1ba44f
+    ap-southeast-1:
+      AMI: ami-0d07675d294f17973 # Singapore
+    ap-southeast-2:
+      AMI: ami-048ab8ac7e8c6533d # Sydney
+
+Resources:
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable SSH access via port 22
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: '22'
+        ToPort: '22'
+        CidrIp: !Ref SSHLocation
+
+  HFTInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref InstanceType
+      SecurityGroups:
+        - !Ref InstanceSecurityGroup
+      KeyName: !Ref KeyName
+      ImageId: !FindInMap [RegionMap, !Ref "AWS::Region", AMI]
+      Tags: 
+        - Key: Name
+          Value: Polymarket-HFT-Bot
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          set -x # Enable debug printing
+          
+          # Update system
+          dnf update -y
+          
+          # Install critical tools first (split to ensure failure in one doesn't break others)
+          dnf install -y --allowerasing git
+          dnf install -y --allowerasing gcc openssl-devel curl
+          
+          # Try to install extras, but don't fail script if missing
+          dnf install -y --allowerasing tmux htop || echo "Extras installation failed, continuing..."
+
+          # Verify git
+          if ! command -v git &> /dev/null; then
+              echo "Git not found! Installing..."
+              dnf install -y --allowerasing git
+          fi
+
+          # Install Rust (as ec2-user)
+          runuser -l ec2-user -c 'curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y'
+          
+          # Clone repository
+          # Ensure home directory is correct
+          cd /home/ec2-user
+          
+          # Clone with retry
+          runuser -l ec2-user -c 'git clone https://github.com/0xBoji/polymarket-sniper-rs.git /home/ec2-user/bot' || echo "Git clone failed"
+          
+          if [ -d "/home/ec2-user/bot" ]; then
+              # Create .env file
+              cat <<EOF > /home/ec2-user/bot/.env
+              POLYMARKET_API_KEY=YOUR_API_KEY
+              POLYMARKET_SECRET=YOUR_SECRET
+              POLYMARKET_PASSPHRASE=YOUR_PASSPHRASE
+              POLYMARKET_HOST=https://clob.polymarket.com
+              POLYGON_WS_RPC=YOUR_WS_RPC
+              PAPER_TRADING=false
+              MAX_POSITION_SIZE_PCT=5.0
+              MAX_PORTFOLIO_EXPOSURE_PCT=50.0
+              STOP_LOSS_PCT=10.0
+              MIN_MARKET_VOLUME=1000.0
+              MIN_LIQUIDITY=500.0
+              MARKET_POLL_INTERVAL_SECS=60
+              RUST_LOG=info,polymarket_hft_agent=debug
+              POLYGON_PRIVATE_KEY=YOUR_PRIVATE_KEY
+              CTF_CONTRACT_ADDRESS=0x4D97DCd97eC945f40cF65F87097ACe5EA0476045
+              MAX_POSITION_SIZE_USD=1.0
+              EOF
+          
+              # Fix permissions
+              chown ec2-user:ec2-user /home/ec2-user/bot/.env
+              
+              # Build in background
+              echo "Starting build..."
+              runuser -l ec2-user -c 'source $HOME/.cargo/env && cd /home/ec2-user/bot && cargo build --release'
+              echo "Build command sent."
+          else
+              echo "CRITICAL: Bot directory not created. Git clone likely failed."
+          fi
+          
+          echo "Setup Complete. Connect via SSH and run: cd bot && ./target/release/polymarket-hft-agent"
+
+Outputs:
+  InstanceId:
+    Description: InstanceId of the newly created EC2 instance
+    Value: !Ref HFTInstance
+  PublicDNS:
+    Description: Public DNSName of the newly created EC2 instance
+    Value: !GetAtt [HFTInstance, PublicDnsName]
+  PublicIP:
+    Description: Public IP address of the newly created EC2 instance
+    Value: !GetAtt [HFTInstance, PublicIp]
