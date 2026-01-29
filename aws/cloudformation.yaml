@@ -74,7 +74,7 @@ Resources:
           dnf update -y
           
           # Install critical tools
-          dnf install -y --allowerasing git gcc openssl-devel curl amazon-cloudwatch-agent
+          dnf install -y --allowerasing git gcc openssl-devel curl amazon-cloudwatch-agent clang lld
           
           # Try to install extras
           dnf install -y --allowerasing tmux htop || echo "Extras installation failed, continuing..."
@@ -85,6 +85,15 @@ Resources:
           # Clone repository
           cd /home/ec2-user
           runuser -l ec2-user -c 'git clone https://github.com/0xBoji/polymarket-sniper-rs.git /home/ec2-user/bot' || echo "Git clone failed"
+          
+          # Configure Cargo for fast linking (lld)
+          mkdir -p /home/ec2-user/.cargo
+          cat <<EOF > /home/ec2-user/.cargo/config.toml
+          [target.x86_64-unknown-linux-gnu]
+          linker = "clang"
+          rustflags = ["-C", "link-arg=-fuse-ld=lld", "-C", "target-cpu=native"]
+          EOF
+          chown -R ec2-user:ec2-user /home/ec2-user/.cargo
           
           if [ -d "/home/ec2-user/bot" ]; then
               # Create .env file with placeholders
