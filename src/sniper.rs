@@ -486,14 +486,19 @@ impl Sniper {
         // FIRST TIME ONLY: Mark all existing markets as seen without analyzing
         // This prevents analyzing 1000+ old markets on startup
         if self.seen_markets.is_empty() {
-            for market in &all_markets {
-                self.seen_markets.insert(market.id.clone());
+            if !self.config.agent.scan_existing_on_startup {
+                for market in &all_markets {
+                    self.seen_markets.insert(market.id.clone());
+                }
+                info!("🚀 Startup: Skipped {} existing markets (only trading NEW markets from now on)", all_markets.len());
+                
+                // Still manage positions even on first run
+                self.manage_positions(&all_markets).await?;
+                return Ok(());
+            } else {
+                info!("🚀 Startup: Analyzing {} existing markets for immediate opportunities...", all_markets.len());
+                // Don't insert into seen_markets yet, let the loop below do it
             }
-            info!("🚀 Startup: Skipped {} existing markets (only trading NEW markets from now on)", all_markets.len());
-            
-            // Still manage positions even on first run
-            self.manage_positions(&all_markets).await?;
-            return Ok(());
         }
 
         // SUBSEQUENT RUNS: Detect and process NEW markets only

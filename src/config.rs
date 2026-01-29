@@ -39,6 +39,7 @@ pub struct AgentConfig {
     pub paper_trading: bool,
     pub simulation_mode: bool,
     pub market_poll_interval_secs: u64,
+    pub scan_existing_on_startup: bool,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -80,9 +81,9 @@ impl Config {
 
         let arbitrage = ArbitrageConfig {
             min_edge_bps: env::var("MIN_EDGE_BPS")
-                .unwrap_or_else(|_| "200".to_string())
+                .unwrap_or_else(|_| "20".to_string())
                 .parse()
-                .unwrap_or(200),
+                .unwrap_or(20),
             max_position_size_usd: env::var("MAX_POSITION_SIZE_USD")
                 .unwrap_or_else(|_| "10.0".to_string())
                 .parse()
@@ -118,6 +119,10 @@ impl Config {
                 .unwrap_or_else(|_| "5".to_string())
                 .parse()
                 .unwrap_or(5),
+            scan_existing_on_startup: env::var("SCAN_EXISTING_ON_STARTUP")
+                .unwrap_or_else(|_| "true".to_string())
+                .parse()
+                .unwrap_or(true),
         };
 
         let risk = RiskConfig {

@@ -150,6 +150,16 @@ Resources:
             Action: sts:AssumeRole
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
+      Policies:
+        - PolicyName: LogCleanupPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:DeleteLogStream
+                  - logs:DeleteLogGroup
+                Resource: !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:Polymarket-HFT-Bot:*'
 
   HFTInstanceProfile:
     Type: AWS::IAM::InstanceProfile
