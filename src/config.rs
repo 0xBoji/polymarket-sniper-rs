@@ -12,6 +12,7 @@ pub struct Config {
     pub polygon_ws_rpc: Option<String>,
     pub polygon_private_key: Option<String>,
     pub ctf_contract_address: Option<String>,
+    pub expiration: ExpirationConfig,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -31,6 +32,14 @@ pub struct ArbitrageConfig {
     pub kelly_fraction: f64,
     pub min_position_pct: f64,
     pub max_position_pct: f64,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct ExpirationConfig {
+    pub enabled: bool,
+    pub max_time_remaining_sec: u64,
+    pub min_price: f64,
+    pub target_price: f64,
 }
 
 
@@ -104,6 +113,25 @@ impl Config {
                 .unwrap_or_else(|_| "0.10".to_string())
                 .parse()
                 .unwrap_or(0.10),
+        };
+
+        let expiration = ExpirationConfig {
+            enabled: env::var("EXPIRATION_SNIPING_ENABLED")
+                .unwrap_or_else(|_| "false".to_string())
+                .parse()
+                .unwrap_or(false),
+            max_time_remaining_sec: env::var("EXPIRATION_MAX_TIME_SEC")
+                .unwrap_or_else(|_| "60".to_string())
+                .parse()
+                .unwrap_or(60),
+            min_price: env::var("EXPIRATION_MIN_PRICE")
+                .unwrap_or_else(|_| "0.92".to_string())
+                .parse()
+                .unwrap_or(0.92),
+            target_price: env::var("EXPIRATION_TARGET_PRICE")
+                .unwrap_or_else(|_| "0.99".to_string())
+                .parse()
+                .unwrap_or(0.99),
         };
 
         let agent = AgentConfig {
@@ -195,6 +223,7 @@ impl Config {
             polygon_ws_rpc,
             polygon_private_key,
             ctf_contract_address,
+            expiration,
         })
     }
 }

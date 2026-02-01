@@ -1,5 +1,6 @@
 use crate::polymarket::{MarketData, OrderBook, OrderLevel};
 use crate::config::ArbitrageConfig;
+use tracing::debug;
 use crate::strategies::position_sizing::{PositionSizer, estimate_win_probability, estimate_volatility};
 
 #[derive(Debug)]
@@ -10,6 +11,12 @@ pub enum TradeAction {
         no_price: f64,
         size_usd: f64,
         expected_profit_bps: i32,
+    },
+    Snipe {
+        market_id: String,
+        side: String, // "YES" or "NO"
+        price: f64,
+        size_usd: f64,
     },
     None,
 }
@@ -65,7 +72,15 @@ impl ArbitrageStrategy {
 
         // Early return if no opportunity (most common case)
         // Branchless: use comparison result directly
-        if spread_bps <= self.config.min_edge_bps || yes_ask <= 0.0 || no_ask <= 0.0 {
+        if spread_bps <= self.config.min_edge_bps {
+            if spread_bps > 0 {
+                debug!("⚖️ Spread: {} bps (Target: {}). Not enough edge.", spread_bps, self.config.min_edge_bps);
+            }
+            return TradeAction::None;
+        }
+
+        if yes_ask <= 0.0 || no_ask <= 0.0 {
+            debug!("⚠️ Missing prices for {}: YES={:.4}, NO={:.4}", market.id, yes_ask, no_ask);
             return TradeAction::None;
         }
 

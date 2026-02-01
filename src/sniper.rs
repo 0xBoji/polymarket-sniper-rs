@@ -8,6 +8,7 @@ use ethers::types::Address;
 use crate::config::Config;
 use crate::strategies::risk::RiskManager;
 use crate::strategies::arbitrage::{ArbitrageStrategy, TradeAction};
+use crate::strategies::expiration::ExpirationStrategy;
 use crate::execution::{Executor, RedemptionManager};
 use crate::polymarket::{MarketData, MempoolMonitor, PolymarketClient, MarketInterface, MarketEventListener};
 use crate::simulation::MarketSimulator;
@@ -24,6 +25,7 @@ pub struct Sniper {
     risk_manager: RiskManager,
     _start_time: chrono::DateTime<chrono::Utc>, // Keep track of uptime
     strategy: ArbitrageStrategy,
+    expiration_strategy: ExpirationStrategy,
     executor: Executor,
     _mempool_monitor: MempoolMonitor,
     redemption_manager: Option<RedemptionManager>,
@@ -36,6 +38,9 @@ pub struct Sniper {
     ws_update_rx: Option<mpsc::Receiver<OrderbookUpdate>>,
     active_markets: HashMap<String, MarketData>,
     asset_map: HashMap<String, (String, String)>, // AssetID -> (MarketID, Side)
+    // Caching
+    cached_balance: f64,
+    last_balance_update: std::time::Instant,
 }
 
 impl Sniper {
@@ -55,6 +60,7 @@ impl Sniper {
 
         let risk_manager = RiskManager::new(config.risk.clone());
         let strategy = ArbitrageStrategy::new(config.arbitrage.clone());
+        let expiration_strategy = ExpirationStrategy::new(config.expiration.clone());
         
         // Executor needs a separate instance or clone.
         // For Sim: new simulator instance (Note: State sharing logic needed if we want positions to sync)
@@ -175,6 +181,7 @@ impl Sniper {
             risk_manager,
             _start_time: Utc::now(),
             strategy,
+            expiration_strategy,
             executor,
             _mempool_monitor: mempool_monitor,
             redemption_manager,
@@ -186,6 +193,8 @@ impl Sniper {
             ws_update_rx,
             active_markets: HashMap::new(),
             asset_map: HashMap::new(),
+            cached_balance: 0.0,
+            last_balance_update: std::time::Instant::now() - Duration::from_secs(600), // Force initial update
         }
     }
 
@@ -278,8 +287,10 @@ impl Sniper {
                                  let price = best_ask.price.parse::<f64>().unwrap_or(0.0);
                                  if side == "YES" {
                                      market.yes_price = price;
+                                     debug!("📊 WS Update: {} YES -> {:.4}", market.question, price);
                                  } else {
                                      market.no_price = price;
+                                     debug!("📊 WS Update: {} NO -> {:.4}", market.question, price);
                                  }
                                  
                                  // Trigger re-eval
@@ -540,8 +551,24 @@ impl Sniper {
                  info!("🔌 Subscribing to Orderbook for {}", market.question);
                  ws.subscribe(market.asset_ids.clone());
                  
-                 // Cache state
-                 self.active_markets.insert(market.id.clone(), market.clone());
+                 // Cache state - BUT PRESERVE WS PRICES if they exist and are newer
+                 if let Some(existing) = self.active_markets.get_mut(&market.id) {
+                     // Metadata update only
+                     existing.question = market.question.clone();
+                     existing.volume = market.volume;
+                     existing.liquidity = market.liquidity;
+                     existing.volume_24h = market.volume_24h;
+                     
+                     // Only update prices if Gamma has values AND WS hasn't provided better ones yet
+                     if existing.yes_price <= 0.0 && market.yes_price > 0.0 {
+                          existing.yes_price = market.yes_price;
+                     }
+                     if existing.no_price <= 0.0 && market.no_price > 0.0 {
+                          existing.no_price = market.no_price;
+                     }
+                 } else {
+                     self.active_markets.insert(market.id.clone(), market.clone());
+                 }
                  
                  // Map Asset Maps
                  // Assuming asset_ids[0] = NO, asset_ids[1] = YES (This is standard for Polymarket CTF)
@@ -563,7 +590,14 @@ impl Sniper {
                 info!("🎯 Sniper Signal: {} (Profit: {} bps)", market.question, expected_profit_bps);
 
                 // 2. Balance Check & Capping
-                let balance = self.market_interface.get_balance().await.unwrap_or(0.0);
+                 // 2. Balance Check & Capping (Cached for performance)
+                 if self.last_balance_update.elapsed() > Duration::from_secs(10) {
+                     if let Ok(bal) = self.market_interface.get_balance().await {
+                         self.cached_balance = bal;
+                         self.last_balance_update = std::time::Instant::now();
+                     }
+                 }
+                 let balance = self.cached_balance;
                 let mut final_size = size_usd;
 
                 if balance < final_size {
@@ -596,11 +630,11 @@ impl Sniper {
                          &trade_id,
                          &mut self.risk_manager,
                      ).await {
-                         Ok(bundle_id) => {
-                             info!("✅ Arbitrage bundle executed: {}", bundle_id);
+                         Ok(tx_hash) => {
+                             info!("✅ Arbitrage Executed! TX/Order: {}", tx_hash);
                          }
                          Err(e) => {
-                             error!("❌ Arbitrage bundle execution failed: {}", e);
+                             error!("❌ Execution failed: {}", e);
                          }
                      }
                      
@@ -610,22 +644,102 @@ impl Sniper {
                         market_id: market.id.clone(),
                         market_question: market.question.clone(),
                         side: "BOTH".to_string(),
-                        size: final_size, // Total size roughly
-                        entry_price: yes_price + no_price, // Arbitrage cost
+                        size: final_size,
+                        entry_price: yes_price + no_price,
                         current_price: yes_price + no_price,
                         entry_time: Utc::now(),
-                    };
-                    
-                    if let Ok(mut tracker) = self.pnl_tracker.lock() {
-                        tracker.add_position(position);
-                    }
+                     };
+                     if let Ok(mut tracker) = self.pnl_tracker.lock() {
+                         tracker.add_position(position);
+                     }
+                 } else {
+                    debug!("⚠️ Risk Check failed for {}", market.id);
                 }
             }
+            TradeAction::Snipe { market_id: _, side, price, size_usd } => {
+                info!("🎯 EXPIRATION SNIPE Signal: {} (Side: {})", market.question, side);
+                
+                // Balance Check (reuse cached)
+                 if self.last_balance_update.elapsed() > Duration::from_secs(10) {
+                     if let Ok(bal) = self.market_interface.get_balance().await {
+                         self.cached_balance = bal;
+                         self.last_balance_update = std::time::Instant::now();
+                     }
+                 }
+                 let balance = self.cached_balance;
+                 let mut final_size = size_usd;
+                 
+                 if balance < final_size {
+                     final_size = balance;
+                  }
+
+                 if final_size < 1.0 { 
+                      warn!("❌ Insufficient balance for Snipe (${:.2})", balance);
+                      return Ok(());
+                 }
+                 
+                 // Risk Check
+                 if self.risk_manager.validate_entry(&market.id, final_size, 0.9) { 
+                     info!("⚡ Executing SNIPE for {}", market.question);
+                     let trade_id = format!("snipe_{}_{}", market.id, Utc::now().timestamp_millis());
+                     
+                     if let Err(e) = self.executor.execute_snipe(
+                         market,
+                         &side,
+                         price,
+                         final_size,
+                         &trade_id,
+                         &mut self.risk_manager
+                     ).await {
+                         error!("❌ Snipe execution failed: {}", e);
+                     }
+                 }
+            }
             TradeAction::None => {
-                // Log at DEBUG level why it was rejected (calculated in check_opportunity but we don't see it here)
-                // To see it, we need check_opportunity to return the 'miss' reason or calc it here.
-                // For now, let's just log that we processed it.
-                 debug!("🔍 Checked {} - No arb opportunity found", market.question);
+                 // Fallback: Check Expiration Strategy
+                 match self.expiration_strategy.check_opportunity(market) {
+                     TradeAction::Snipe { market_id: _, side, price, size_usd } => {
+                         info!("🎯 EXPIRATION SNIPE Signal: {} (Side: {})", market.question, side);
+                         
+                         // Balance Check
+                         if self.last_balance_update.elapsed() > Duration::from_secs(10) {
+                             if let Ok(bal) = self.market_interface.get_balance().await {
+                                 self.cached_balance = bal;
+                                 self.last_balance_update = std::time::Instant::now();
+                             }
+                         }
+                         let balance = self.cached_balance;
+                         let mut final_size = size_usd;
+                         
+                         if balance < final_size {
+                             final_size = balance;
+                         }
+        
+                         if final_size < 1.0 {
+                              warn!("❌ Insufficient balance for Snipe (${:.2})", balance);
+                              return Ok(());
+                         }
+                         
+                         if self.risk_manager.validate_entry(&market.id, final_size, 0.9) {
+                             info!("⚡ Executing SNIPE for {}", market.question);
+                             let trade_id = format!("snipe_{}_{}", market.id, Utc::now().timestamp_millis());
+                             
+                             if let Err(e) = self.executor.execute_snipe(
+                                 market,
+                                 &side,
+                                 price,
+                                 final_size,
+                                 &trade_id,
+                                 &mut self.risk_manager
+                             ).await {
+                                 error!("❌ Snipe execution failed: {}", e);
+                             }
+                         }
+                     }
+                     _ => {
+                         debug!("🔍 Checked {} - No arb opportunity found", market.question);
+                     }
+                 }
             }
         }
         

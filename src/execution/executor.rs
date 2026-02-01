@@ -193,4 +193,44 @@ impl Executor {
         info!("✅ Position closed successfully");
         Ok(())
     }
+
+    /// Execute a "Snipe" trade (Single sided, explicit USD size)
+    pub async fn execute_snipe(
+        &self,
+        market: &MarketData,
+        side: &str,
+        price: f64,
+        size_usd: f64,
+        trade_id: &str,
+        risk_manager: &mut RiskManager,
+    ) -> Result<String> {
+        info!("🎯 Executing SNIPE for market: {} ({})", market.question, side);
+
+        // Place order
+        let order_id = self
+            .market_interface
+            .place_order(
+                &market.id,
+                side,
+                size_usd,
+                price,
+            )
+            .await?;
+
+        info!(
+            "✅ Snipe Order placed: {} {} @ ${:.4} (Size: ${:.2})",
+            side, market.question, price, size_usd
+        );
+
+        // Register position with risk manager
+        risk_manager.add_position(
+            trade_id.to_string(),
+            market.id.clone(),
+            side.to_string(),
+            size_usd,
+            price,
+        );
+
+        Ok(order_id)
+    }
 }
