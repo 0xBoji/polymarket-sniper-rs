@@ -4,7 +4,7 @@ Description: 'Deploy Polymarket HFT Bot Infrastructure'
 Parameters:
   KeyName:
     Description: Name of an existing EC2 KeyPair to enable SSH access
-    Type: AWS::EC2::KeyPair::KeyName
+    Type: String
     ConstraintDescription: must be the name of an existing EC2 KeyPair.
   
   InstanceType:
@@ -32,7 +32,7 @@ Parameters:
 Mappings: 
   RegionMap: 
     us-east-1: 
-      AMI: ami-0230bd60aa48260c6  # Amazon Linux 2023 64-bit (x86_64)
+      AMI: ami-0532be01f26a3de55  # Amazon Linux 2023 64-bit (x86_64) - Updated 2025
     us-east-2: 
       AMI: ami-05fb0b8c1424f266b
     eu-west-1: 
