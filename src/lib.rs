@@ -5,3 +5,4 @@ pub mod execution;
 pub mod polymarket;
 pub mod simulation;
 pub mod analytics;
+pub mod pricefeed;

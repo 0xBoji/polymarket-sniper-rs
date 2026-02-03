@@ -67,9 +67,9 @@ bumpalo = "3.14"  # Memory arena allocator
 core_affinity = "0.8"  # CPU pinning
 crossbeam = "0.8"  # Lock-free data structures
 
-# Dashboard API server
-axum = "0.8"
-tower-http = { version = "0.6", features = ["cors", "fs"] }
+# Dashboard API server removed
+# axum = "0.8"
+# tower-http = { version = "0.6", features = ["cors", "fs"] }
 
 [dev-dependencies]
 criterion = "0.8.1"

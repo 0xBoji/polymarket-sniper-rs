@@ -1,6 +1,7 @@
 use anyhow::Result;
 use async_trait::async_trait;
 use super::types::MarketData;
+use polyfill_rs::types::OrderType;
 
 #[async_trait]
 pub trait MarketInterface: Send + Sync {
@@ -20,5 +21,6 @@ pub trait MarketInterface: Send + Sync {
         side: &str,
         size: f64,
         price: f64,
+        order_type: OrderType,
     ) -> Result<String>;
 }

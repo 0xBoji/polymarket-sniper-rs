@@ -9,6 +9,8 @@ use crate::config::Config;
 use crate::strategies::risk::RiskManager;
 use crate::strategies::arbitrage::{ArbitrageStrategy, TradeAction};
 use crate::strategies::expiration::ExpirationStrategy;
+use crate::strategies::predictive::PredictiveStrategy;
+use crate::pricefeed::BinanceClient;
 use crate::execution::{Executor, RedemptionManager};
 use crate::polymarket::{MarketData, MempoolMonitor, PolymarketClient, MarketInterface, MarketEventListener};
 use crate::simulation::MarketSimulator;
@@ -26,6 +28,7 @@ pub struct Sniper {
     _start_time: chrono::DateTime<chrono::Utc>, // Keep track of uptime
     strategy: ArbitrageStrategy,
     expiration_strategy: ExpirationStrategy,
+    predictive_strategy: PredictiveStrategy,
     executor: Executor,
     _mempool_monitor: MempoolMonitor,
     redemption_manager: Option<RedemptionManager>,
@@ -61,6 +64,8 @@ impl Sniper {
         let risk_manager = RiskManager::new(config.risk.clone());
         let strategy = ArbitrageStrategy::new(config.arbitrage.clone());
         let expiration_strategy = ExpirationStrategy::new(config.expiration.clone());
+        let binance_client = Arc::new(BinanceClient::new());
+        let predictive_strategy = PredictiveStrategy::new(config.predictive.clone(), binance_client.clone());
         
         // Executor needs a separate instance or clone.
         // For Sim: new simulator instance (Note: State sharing logic needed if we want positions to sync)
@@ -182,6 +187,7 @@ impl Sniper {
             _start_time: Utc::now(),
             strategy,
             expiration_strategy,
+            predictive_strategy,
             executor,
             _mempool_monitor: mempool_monitor,
             redemption_manager,
@@ -737,9 +743,52 @@ impl Sniper {
                          }
                      }
                      _ => {
-                         debug!("🔍 Checked {} - No arb opportunity found", market.question);
-                     }
-                 }
+                          // Final Fallback: Predictive Check (requires await)
+                          match self.predictive_strategy.check_opportunity(market).await {
+                              TradeAction::Snipe { market_id: _, side, price, size_usd } => {
+                                  info!("🎯 PREDICTIVE SNIPE Signal: {} (Side: {})", market.question, side);
+                                  
+                                  // Balance Check
+                                  if self.last_balance_update.elapsed() > Duration::from_secs(10) {
+                                      if let Ok(bal) = self.market_interface.get_balance().await {
+                                          self.cached_balance = bal;
+                                          self.last_balance_update = std::time::Instant::now();
+                                      }
+                                  }
+                                  let balance = self.cached_balance;
+                                  let mut final_size = size_usd;
+                                  
+                                  if balance < final_size {
+                                      final_size = balance;
+                                  }
+                 
+                                  if final_size < 1.0 {
+                                       warn!("❌ Insufficient balance for Predictive Snipe (${:.2})", balance);
+                                       return Ok(());
+                                  }
+                                  
+                                  if self.risk_manager.validate_entry(&market.id, final_size, 0.7) { // Lower confidence threshold for predictive
+                                      info!("⚡ Executing PREDICTIVE SNIPE for {}", market.question);
+                                      let trade_id = format!("pred_{}_{}", market.id, Utc::now().timestamp_millis());
+                                      
+                                      if let Err(e) = self.executor.execute_snipe(
+                                          market,
+                                          &side,
+                                          price,
+                                          final_size,
+                                          &trade_id,
+                                          &mut self.risk_manager
+                                      ).await {
+                                          error!("❌ Predictive Snipe execution failed: {}", e);
+                                      }
+                                  }
+                              }
+                              _ => {
+                                  debug!("🔍 Checked {} - No arb opportunity found", market.question);
+                              }
+                          }
+                      }
+                  }
             }
         }
         

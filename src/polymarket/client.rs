@@ -135,6 +135,7 @@ impl MarketInterface for PolymarketClient {
         side_str: &str,
         size_usd: f64,
         price_f64: f64,
+        order_type: OrderType,
     ) -> Result<String> {
         if self.paper_trading {
             info!(
@@ -207,7 +208,7 @@ impl MarketInterface for PolymarketClient {
         // 4. Post Order
         let response = self.client.post_order(
             signed_order,
-            OrderType::GTC, // Good Til Cancelled
+            order_type,
         ).await.map_err(|e| anyhow::anyhow!("Failed to post order: {}", e))?;
 
         let order_id = response["orderID"].as_str()

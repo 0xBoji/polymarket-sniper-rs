@@ -1,0 +1,1034 @@
+2026-02-01T15:32:16.903749Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.903766Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.903777Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.903718Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Giannis Antetokounmpo be traded this season?
+2026-02-01T15:32:16.903793Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.903811Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.903828Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.903844Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.903860Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.903794Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Giannis Antetokounmpo be traded this season? - No arb opportunity found
+2026-02-01T15:32:16.903873Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.903895Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.903908Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.903925Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.903935Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.903946Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.903958Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.903972Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.903881Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for GPT ads by March 31?
+2026-02-01T15:32:16.903988Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904005Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904036Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904048Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904064Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904076Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904087Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904106Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904124Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904136Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.903987Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked GPT ads by March 31? - No arb opportunity found
+2026-02-01T15:32:16.904150Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Olivia Dean win Best New Artist at the 68th Annual GRAMMY Awards?
+2026-02-01T15:32:16.904154Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904160Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Olivia Dean win Best New Artist at the 68th Annual GRAMMY Awards? - No arb opportunity found
+2026-02-01T15:32:16.904169Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904190Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904205Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904230Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904242Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904254Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904272Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904283Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904297Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904316Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904329Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904347Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904376Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904388Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904400Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904418Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904429Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904442Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904453Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904473Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904484Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904494Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904504Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904534Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904545Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904552Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904570Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904580Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904592Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904614Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904625Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904637Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904648Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904671Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904681Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904693Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904713Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904724Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904733Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904744Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904759Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904771Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904785Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904796Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904815Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904826Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904837Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904848Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904869Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904881Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904893Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904916Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904928Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904939Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904957Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904969Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904980Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904991Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905015Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905027Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905038Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905058Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905068Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905081Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905092Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905116Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905127Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905142Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905160Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905171Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905182Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905192Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905211Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905224Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905236Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905261Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905272Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905283Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905302Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905316Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905327Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905338Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905363Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905373Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905383Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905401Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905417Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905432Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905452Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905464Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905474Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905485Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905507Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905516Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905523Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905532Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905555Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905567Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905577Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905602Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905614Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905625Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905643Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905654Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905665Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905679Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905701Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905712Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905722Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905733Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905752Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905766Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905777Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905795Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905807Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905818Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905829Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905852Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905859Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905870Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905888Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905899Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905910Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905922Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905944Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905954Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905963Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905973Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.905997Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906008Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906021Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906054Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906065Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906075Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906095Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906104Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906118Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906136Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906150Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906161Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906172Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906189Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906204Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906216Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906237Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906248Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906254Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906266Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906284Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906298Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906311Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906338Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906348Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906356Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906366Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906387Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906399Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906407Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906418Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906440Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906450Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906465Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906485Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906496Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906508Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906519Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906537Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906549Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906560Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906580Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906594Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906600Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906612Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906627Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906641Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906652Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906663Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906682Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906693Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906703Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906714Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906731Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906742Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906749Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906760Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906789Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906801Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906811Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906829Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906840Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906851Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906869Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906883Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906893Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906904Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906923Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906934Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906947Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906959Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906983Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.906993Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907005Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907022Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907037Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907050Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907057Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907080Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907092Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907103Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907125Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907140Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907151Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907171Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907183Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907193Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907206Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907230Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907242Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907253Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907276Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907286Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907297Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907316Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907327Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907338Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907349Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907372Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907384Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907398Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907418Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907430Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907442Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907453Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907471Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907483Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907496Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907518Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907530Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907542Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907563Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907574Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907588Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907599Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907616Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907626Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907637Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907647Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907674Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907688Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907698Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907716Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907727Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907738Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907759Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907771Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907783Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907794Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907814Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907825Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907833Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907847Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907867Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907878Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907889Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907908Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907920Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907931Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907941Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907961Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907972Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907983Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.907993Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908025Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908036Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908054Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908066Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908078Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908088Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908111Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908126Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908137Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908155Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908166Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908177Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908197Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908210Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908222Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908233Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908254Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908265Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908279Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908298Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908310Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908321Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908331Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908349Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908363Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908378Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908400Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908414Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908422Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908433Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908457Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908471Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908482Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908502Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908513Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908525Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908546Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908562Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908575Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908597Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908609Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908620Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908631Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908651Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908662Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908669Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908679Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908701Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908713Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908723Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908742Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908754Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908764Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908775Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908798Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908805Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908818Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908840Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908852Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908864Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908874Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908896Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908911Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908923Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908944Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908956Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908967Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.908985Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909001Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909013Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909024Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909050Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909061Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909071Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909095Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909106Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909116Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909133Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909145Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909155Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909169Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909192Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909201Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909213Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909230Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909243Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909257Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909268Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909289Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909301Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909310Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909321Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909341Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909353Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909364Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909382Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909393Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909404Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909415Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909433Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909444Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909454Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909465Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909486Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909498Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909510Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909529Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909542Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909552Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909563Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909586Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909599Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909611Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909632Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909644Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909655Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909663Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909687Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909700Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909711Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909731Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909743Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909754Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909772Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909785Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909799Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909810Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909830Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909841Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909849Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909871Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909882Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909891Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909902Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909911Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909934Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909949Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909971Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909984Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.909996Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910006Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910028Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910041Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910053Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910068Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910080Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910090Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910100Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910122Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910130Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910142Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910152Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910170Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910182Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910193Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910202Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910225Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910236Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910244Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910263Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910275Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910288Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910299Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910325Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910337Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910348Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910369Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910382Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910394Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910415Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910426Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910438Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910449Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910495Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910515Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910527Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910538Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910549Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910566Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910581Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910593Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910611Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910624Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910635Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910646Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910671Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.910683Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.904177Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Deni Avdija win the 2025–2026 NBA Most Improved Player?
+2026-02-01T15:32:16.910719Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Deni Avdija win the 2025–2026 NBA Most Improved Player? - No arb opportunity found
+2026-02-01T15:32:16.910728Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Denise Powell be the Democratic nominee for NE-02?
+2026-02-01T15:32:16.910737Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Denise Powell be the Democratic nominee for NE-02? - No arb opportunity found
+2026-02-01T15:32:16.910744Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will OpenAI’s market cap be between $500B and $750B at market close on IPO day?
+2026-02-01T15:32:16.910757Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will OpenAI’s market cap be between $500B and $750B at market close on IPO day? - No arb opportunity found
+2026-02-01T15:32:16.910765Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will US GDP growth in 2025 be between 2.0% and 2.5%?
+2026-02-01T15:32:16.910775Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will US GDP growth in 2025 be between 2.0% and 2.5%? - No arb opportunity found
+2026-02-01T15:32:16.910782Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Me Porto Bonito be played at the Super Bowl halftime show?
+2026-02-01T15:32:16.910790Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Me Porto Bonito be played at the Super Bowl halftime show? - No arb opportunity found
+2026-02-01T15:32:16.910808Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Manchild (Sabrina Carpenter) win Record of the Year at the 68th Annual GRAMMY Awards?
+2026-02-01T15:32:16.910818Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Manchild (Sabrina Carpenter) win Record of the Year at the 68th Annual GRAMMY Awards? - No arb opportunity found
+2026-02-01T15:32:16.910825Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will BAILE INOLVIDABLE be played at the Super Bowl halftime show?
+2026-02-01T15:32:16.910833Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will BAILE INOLVIDABLE be played at the Super Bowl halftime show? - No arb opportunity found
+2026-02-01T15:32:16.910841Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Discord IPO before 2027?
+2026-02-01T15:32:16.910858Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Discord IPO before 2027? - No arb opportunity found
+2026-02-01T15:32:16.910865Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Ojitos Lindos be played at the Super Bowl halftime show?
+2026-02-01T15:32:16.910874Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Ojitos Lindos be played at the Super Bowl halftime show? - No arb opportunity found
+2026-02-01T15:32:16.910881Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Ausar Thompson lead the NBA in steals during the 2025–26 NBA season?
+2026-02-01T15:32:16.910889Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Ausar Thompson lead the NBA in steals during the 2025–26 NBA season? - No arb opportunity found
+2026-02-01T15:32:16.910907Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will the Democrats win the Rhode Island governor race in 2026?
+2026-02-01T15:32:16.910916Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will the Democrats win the Rhode Island governor race in 2026? - No arb opportunity found
+2026-02-01T15:32:16.910923Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Jason Esteves win the 2026 Georgia Governor Democratic primary election?
+2026-02-01T15:32:16.910928Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Jason Esteves win the 2026 Georgia Governor Democratic primary election? - No arb opportunity found
+2026-02-01T15:32:16.910937Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for BLS delays another CPI release before 2027?
+2026-02-01T15:32:16.910953Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked BLS delays another CPI release before 2027? - No arb opportunity found
+2026-02-01T15:32:16.910961Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will DTMF (Bad Bunny) win Song of the Year at the 68th Annual GRAMMY Awards?
+2026-02-01T15:32:16.910970Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will DTMF (Bad Bunny) win Song of the Year at the 68th Annual GRAMMY Awards? - No arb opportunity found
+2026-02-01T15:32:16.910978Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Anthropic not IPO by June 30, 2026?
+2026-02-01T15:32:16.910986Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Anthropic not IPO by June 30, 2026? - No arb opportunity found
+2026-02-01T15:32:16.911000Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Juliana Stratton be the Democratic nominee for Senate in Illinois?
+2026-02-01T15:32:16.911009Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Juliana Stratton be the Democratic nominee for Senate in Illinois? - No arb opportunity found
+2026-02-01T15:32:16.911017Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will APT (Rosé and Bruno Mars) win Song of the Year at the 68th Annual GRAMMY Awards?
+2026-02-01T15:32:16.911025Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will APT (Rosé and Bruno Mars) win Song of the Year at the 68th Annual GRAMMY Awards? - No arb opportunity found
+2026-02-01T15:32:16.911033Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Waymo launch in Detroit by June 30 2026?
+2026-02-01T15:32:16.911041Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Waymo launch in Detroit by June 30 2026? - No arb opportunity found
+2026-02-01T15:32:16.911053Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Israel launch a major ground offensive in Gaza by March 31?
+2026-02-01T15:32:16.911058Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Israel launch a major ground offensive in Gaza by March 31? - No arb opportunity found
+2026-02-01T15:32:16.911066Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Luther (Kendrick Lamar and SZA) win Song of the Year at the 68th Annual GRAMMY Awards?
+2026-02-01T15:32:16.911074Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Luther (Kendrick Lamar and SZA) win Song of the Year at the 68th Annual GRAMMY Awards? - No arb opportunity found
+2026-02-01T15:32:16.911082Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will the Democrats win the Minnesota governor race in 2026?
+2026-02-01T15:32:16.911089Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will the Democrats win the Minnesota governor race in 2026? - No arb opportunity found
+2026-02-01T15:32:16.911103Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will James Osyf be the Democratic nominee for VA-02?
+2026-02-01T15:32:16.911111Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will James Osyf be the Democratic nominee for VA-02? - No arb opportunity found
+2026-02-01T15:32:16.911118Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will John Hickenlooper be the Democratic nominee for Senate in Colorado?
+2026-02-01T15:32:16.911127Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will John Hickenlooper be the Democratic nominee for Senate in Colorado? - No arb opportunity found
+2026-02-01T15:32:16.911134Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Matthew Dunlap be the Democratic nominee for ME-02?
+2026-02-01T15:32:16.911155Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Matthew Dunlap be the Democratic nominee for ME-02? - No arb opportunity found
+2026-02-01T15:32:16.911162Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Kyle Duyck win the 2026 Oregon Governor Republican primary election?
+2026-02-01T15:32:16.911189Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.911217Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.911247Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.911258Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.911272Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.911284Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.911309Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.911320Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.911332Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.911354Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.911366Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.911380Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.911403Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.911414Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.911425Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.911442Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.911454Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.911469Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.911481Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.911506Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.911517Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.911528Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.911551Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.911563Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.911573Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.911220Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Kyle Duyck win the 2026 Oregon Governor Republican primary election? - No arb opportunity found
+2026-02-01T15:32:16.911601Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Gavin Newsom announce a Presidential run before 2027?
+2026-02-01T15:32:16.911613Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Gavin Newsom announce a Presidential run before 2027? - No arb opportunity found
+2026-02-01T15:32:16.911621Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Conservative win the most seats in the 2026 Colombian Chamber of Representatives election?
+2026-02-01T15:32:16.911630Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Conservative win the most seats in the 2026 Colombian Chamber of Representatives election? - No arb opportunity found
+2026-02-01T15:32:16.911646Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Ukraine election held by June 30, 2026?
+2026-02-01T15:32:16.911654Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Ukraine election held by June 30, 2026? - No arb opportunity found
+2026-02-01T15:32:16.911661Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Gary Goodweather win the 2026 Democratic D.C. Mayoral Primary?
+2026-02-01T15:32:16.911670Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Gary Goodweather win the 2026 Democratic D.C. Mayoral Primary? - No arb opportunity found
+2026-02-01T15:32:16.911677Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will the Republicans win the Pennsylvania governor race in 2026?
+2026-02-01T15:32:16.911695Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will the Republicans win the Pennsylvania governor race in 2026? - No arb opportunity found
+2026-02-01T15:32:16.911703Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Russia capture Sloviansk by June 30?
+2026-02-01T15:32:16.911910Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.911956Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.911980Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.911994Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Russia capture Sloviansk by June 30? - No arb opportunity found
+2026-02-01T15:32:16.912022Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Hunter Biden announce a Presidential run before 2027?
+2026-02-01T15:32:16.912033Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Hunter Biden announce a Presidential run before 2027? - No arb opportunity found
+2026-02-01T15:32:16.912040Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will a hurricane form by May 31?
+2026-02-01T15:32:16.912048Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will a hurricane form by May 31? - No arb opportunity found
+2026-02-01T15:32:16.912067Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Michael Soetaert be the Democratic nominee for Senate in Kansas?
+2026-02-01T15:32:16.912076Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Michael Soetaert be the Democratic nominee for Senate in Kansas? - No arb opportunity found
+2026-02-01T15:32:16.912083Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will the New England Patriots win Super Bowl 2026?
+2026-02-01T15:32:16.912091Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will the New England Patriots win Super Bowl 2026? - No arb opportunity found
+2026-02-01T15:32:16.912098Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will the Republicans win the Oregon Senate race in 2026?
+2026-02-01T15:32:16.912116Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will the Republicans win the Oregon Senate race in 2026? - No arb opportunity found
+2026-02-01T15:32:16.912123Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Pete Buttigieg win the 2028 Democratic presidential nomination?
+2026-02-01T15:32:16.912131Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Pete Buttigieg win the 2028 Democratic presidential nomination? - No arb opportunity found
+2026-02-01T15:32:16.912138Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Onyeka Okongwu win the 2025–2026 NBA Sixth Man of the Year?
+2026-02-01T15:32:16.912146Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Onyeka Okongwu win the 2025–2026 NBA Sixth Man of the Year? - No arb opportunity found
+2026-02-01T15:32:16.912164Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Sandy Spidel Neumann be the Democratic nominee for Senate in Kansas?
+2026-02-01T15:32:16.912173Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Sandy Spidel Neumann be the Democratic nominee for Senate in Kansas? - No arb opportunity found
+2026-02-01T15:32:16.912180Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will the Washington Wizards win more than 20.5 regular season games in 2025–26?
+2026-02-01T15:32:16.912189Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will the Washington Wizards win more than 20.5 regular season games in 2025–26? - No arb opportunity found
+2026-02-01T15:32:16.912196Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Betty Yee advance from the 2026 California Governor primary election?
+2026-02-01T15:32:16.912219Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Betty Yee advance from the 2026 California Governor primary election? - No arb opportunity found
+2026-02-01T15:32:16.912227Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Ukraine officially agrees to a US backed ceasefire framework by March 31?
+2026-02-01T15:32:16.912236Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Ukraine officially agrees to a US backed ceasefire framework by March 31? - No arb opportunity found
+2026-02-01T15:32:16.912244Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will the Republicans win the Oklahoma governor race in 2026?
+2026-02-01T15:32:16.912260Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will the Republicans win the Oklahoma governor race in 2026? - No arb opportunity found
+2026-02-01T15:32:16.912267Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Jason Miyares be the Republican nominee for Senate in Virginia?
+2026-02-01T15:32:16.912275Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Jason Miyares be the Republican nominee for Senate in Virginia? - No arb opportunity found
+2026-02-01T15:32:16.912283Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Christy Davis be the Democratic nominee for Senate in Kansas?
+2026-02-01T15:32:16.912290Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Christy Davis be the Democratic nominee for Senate in Kansas? - No arb opportunity found
+2026-02-01T15:32:16.912298Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Claire Valdez be the Democratic nominee for NY-07?
+2026-02-01T15:32:16.912314Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Claire Valdez be the Democratic nominee for NY-07? - No arb opportunity found
+2026-02-01T15:32:16.912321Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Asaad Alnajjar win the 2026 Los Angeles mayoral election?
+2026-02-01T15:32:16.912329Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Asaad Alnajjar win the 2026 Los Angeles mayoral election? - No arb opportunity found
+2026-02-01T15:32:16.912336Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Russia invade a NATO country by June 30, 2026?
+2026-02-01T15:32:16.912345Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Russia invade a NATO country by June 30, 2026? - No arb opportunity found
+2026-02-01T15:32:16.912358Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will the Carolina Hurricanes win the Metropolitan Division?
+2026-02-01T15:32:16.912367Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will the Carolina Hurricanes win the Metropolitan Division? - No arb opportunity found
+2026-02-01T15:32:16.912374Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Shai Gilgeous-Alexander win the 2025–2026 NBA MVP?
+2026-02-01T15:32:16.912382Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Shai Gilgeous-Alexander win the 2025–2026 NBA MVP? - No arb opportunity found
+2026-02-01T15:32:16.912389Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will the Republicans win the Kansas Senate race in 2026?
+2026-02-01T15:32:16.912404Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will the Republicans win the Kansas Senate race in 2026? - No arb opportunity found
+2026-02-01T15:32:16.912412Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for OpenAI announces it has achieved AGI before 2027?
+2026-02-01T15:32:16.912420Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked OpenAI announces it has achieved AGI before 2027? - No arb opportunity found
+2026-02-01T15:32:16.912427Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Paul Dans be the Republican nominee for Senate in South Carolina?
+2026-02-01T15:32:16.912436Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Paul Dans be the Republican nominee for Senate in South Carolina? - No arb opportunity found
+2026-02-01T15:32:16.912443Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will the Democrats win the Georgia governor race in 2026?
+2026-02-01T15:32:16.912459Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will the Democrats win the Georgia governor race in 2026? - No arb opportunity found
+2026-02-01T15:32:16.912466Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Reed Sheppard win the 2025–2026 NBA Sixth Man of the Year?
+2026-02-01T15:32:16.912474Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Reed Sheppard win the 2025–2026 NBA Sixth Man of the Year? - No arb opportunity found
+2026-02-01T15:32:16.912481Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will the Edmonton Oilers win the Pacific Division?
+2026-02-01T15:32:16.912489Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will the Edmonton Oilers win the Pacific Division? - No arb opportunity found
+2026-02-01T15:32:16.912508Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will the Toronto Raptors win the 2025–2026 NBA Atlantic Division?
+2026-02-01T15:32:16.912516Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will the Toronto Raptors win the 2025–2026 NBA Atlantic Division? - No arb opportunity found
+2026-02-01T15:32:16.912523Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will the Memphis Grizzlies make the NBA Playoffs?
+2026-02-01T15:32:16.912531Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will the Memphis Grizzlies make the NBA Playoffs? - No arb opportunity found
+2026-02-01T15:32:16.912538Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Liam rank #1 among boy names on the SSA’s official list for 2025?
+2026-02-01T15:32:16.912555Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Liam rank #1 among boy names on the SSA’s official list for 2025? - No arb opportunity found
+2026-02-01T15:32:16.912563Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Hillary Clinton announce a Presidential run before 2027?
+2026-02-01T15:32:16.912571Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Hillary Clinton announce a Presidential run before 2027? - No arb opportunity found
+2026-02-01T15:32:16.912578Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will the Republicans win the Rhode Island Senate race in 2026?
+2026-02-01T15:32:16.912585Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will the Republicans win the Rhode Island Senate race in 2026? - No arb opportunity found
+2026-02-01T15:32:16.912593Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Tyrese Maxey win the 2025–2026 NBA Clutch Player of the Year?
+2026-02-01T15:32:16.912612Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Tyrese Maxey win the 2025–2026 NBA Clutch Player of the Year? - No arb opportunity found
+2026-02-01T15:32:16.912620Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Any US state legislature votes on secession by June 30, 2026?
+2026-02-01T15:32:16.912629Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Any US state legislature votes on secession by June 30, 2026? - No arb opportunity found
+2026-02-01T15:32:16.912636Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for NATO/EU troops fighting in Ukraine in June 30, 2026?
+2026-02-01T15:32:16.912651Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked NATO/EU troops fighting in Ukraine in June 30, 2026? - No arb opportunity found
+2026-02-01T15:32:16.912659Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Named storm forms before hurricane season?
+2026-02-01T15:32:16.912668Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Named storm forms before hurricane season? - No arb opportunity found
+2026-02-01T15:32:16.912672Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will the Democrats win the Vermont governor race in 2026?
+2026-02-01T15:32:16.912680Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will the Democrats win the Vermont governor race in 2026? - No arb opportunity found
+2026-02-01T15:32:16.912688Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Raphael Warnock announce a Presidential run before 2027?
+2026-02-01T15:32:16.912710Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Raphael Warnock announce a Presidential run before 2027? - No arb opportunity found
+2026-02-01T15:32:16.912717Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for 2026 U.S. House Election: Republican Odds under 15% by March 31?
+2026-02-01T15:32:16.912725Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked 2026 U.S. House Election: Republican Odds under 15% by March 31? - No arb opportunity found
+2026-02-01T15:32:16.912733Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will PH win the most seats in the 2026 Colombian Senate election?
+2026-02-01T15:32:16.912749Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will PH win the most seats in the 2026 Colombian Senate election? - No arb opportunity found
+2026-02-01T15:32:16.912757Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will CD win the most seats in the 2026 Colombian Senate election?
+2026-02-01T15:32:16.912766Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will CD win the most seats in the 2026 Colombian Senate election? - No arb opportunity found
+2026-02-01T15:32:16.912773Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for 2026 Balance of Power: R Senate, R House
+2026-02-01T15:32:16.912782Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked 2026 Balance of Power: R Senate, R House - No arb opportunity found
+2026-02-01T15:32:16.912788Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will China blockade Taiwan by June 30?
+2026-02-01T15:32:16.912782Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.912826Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.912845Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.912855Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.912806Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will China blockade Taiwan by June 30? - No arb opportunity found
+2026-02-01T15:32:16.912876Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.912923Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.912956Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.912967Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.912979Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.912995Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913007Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913021Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913033Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913051Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913063Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913073Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913083Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913101Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913111Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913121Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913131Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913150Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913162Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913176Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913198Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913209Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913220Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913231Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913251Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913261Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913276Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913300Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913312Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913323Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913340Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913351Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913364Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913375Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913398Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913409Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913420Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913441Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913453Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.913465Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.912907Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will the Miami Heat win more than 37.5 regular season games in 2025–26?
+2026-02-01T15:32:16.913497Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will the Miami Heat win more than 37.5 regular season games in 2025–26? - No arb opportunity found
+2026-02-01T15:32:16.913506Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will MetaMask launch a token by June 30?
+2026-02-01T15:32:16.913514Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will MetaMask launch a token by June 30? - No arb opportunity found
+2026-02-01T15:32:16.913521Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will 2026 be the third-hottest year on record?
+2026-02-01T15:32:16.913542Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will 2026 be the third-hottest year on record? - No arb opportunity found
+2026-02-01T15:32:16.913550Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Shai Gilgeous-Alexander lead the NBA in points during the 2025–26 NBA season?
+2026-02-01T15:32:16.913558Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Shai Gilgeous-Alexander lead the NBA in points during the 2025–26 NBA season? - No arb opportunity found
+2026-02-01T15:32:16.913566Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Trump pardon Ryan Salame before 2027?
+2026-02-01T15:32:16.913573Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Trump pardon Ryan Salame before 2027? - No arb opportunity found
+2026-02-01T15:32:16.913590Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Oprah Winfrey announce a Presidential run before 2027?
+2026-02-01T15:32:16.913598Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Oprah Winfrey announce a Presidential run before 2027? - No arb opportunity found
+2026-02-01T15:32:16.913605Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for SpaceX (Space Exploration Technologies Corp.) IPO before 2027?
+2026-02-01T15:32:16.913613Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked SpaceX (Space Exploration Technologies Corp.) IPO before 2027? - No arb opportunity found
+2026-02-01T15:32:16.913620Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will the Republicans win the Massachusetts governor race in 2026?
+2026-02-01T15:32:16.913638Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will the Republicans win the Massachusetts governor race in 2026? - No arb opportunity found
+2026-02-01T15:32:16.913646Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Khamenei out as Supreme Leader of Iran by June 30?
+2026-02-01T15:32:16.913655Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Khamenei out as Supreme Leader of Iran by June 30? - No arb opportunity found
+2026-02-01T15:32:16.913662Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will the Orlando Magic win the 2025–2026 NBA Southeast Division?
+2026-02-01T15:32:16.913670Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will the Orlando Magic win the 2025–2026 NBA Southeast Division? - No arb opportunity found
+2026-02-01T15:32:16.913685Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Sinners win Best Original Screenplay at the 98th Academy Awards?
+2026-02-01T15:32:16.913694Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Sinners win Best Original Screenplay at the 98th Academy Awards? - No arb opportunity found
+2026-02-01T15:32:16.913701Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will John Sanchez win the 2026 New Mexico Governor Republican primary election?
+2026-02-01T15:32:16.913709Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will John Sanchez win the 2026 New Mexico Governor Republican primary election? - No arb opportunity found
+2026-02-01T15:32:16.913716Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Victor Wembanyama lead the NBA in blocks during the 2025–26 NBA season?
+2026-02-01T15:32:16.913734Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Victor Wembanyama lead the NBA in blocks during the 2025–26 NBA season? - No arb opportunity found
+2026-02-01T15:32:16.913741Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will the Republicans win the Louisiana Senate race in 2026?
+2026-02-01T15:32:16.913751Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will the Republicans win the Louisiana Senate race in 2026? - No arb opportunity found
+2026-02-01T15:32:16.913758Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Chael Sonnen win the 2026 Oregon Governor Republican primary election?
+2026-02-01T15:32:16.913766Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Chael Sonnen win the 2026 Oregon Governor Republican primary election? - No arb opportunity found
+2026-02-01T15:32:16.913784Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will the Swedish Social Democratic Party (S) win the most seats in the 2026 Swedish parliamentary election?
+2026-02-01T15:32:16.913793Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will the Swedish Social Democratic Party (S) win the most seats in the 2026 Swedish parliamentary election? - No arb opportunity found
+2026-02-01T15:32:16.913801Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will the Fed’s lower bound reach 2.75% or lower before 2027?
+2026-02-01T15:32:16.913809Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will the Fed’s lower bound reach 2.75% or lower before 2027? - No arb opportunity found
+2026-02-01T15:32:16.913817Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Jerami Grant win the 2025–2026 NBA Sixth Man of the Year?
+2026-02-01T15:32:16.913835Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Jerami Grant win the 2025–2026 NBA Sixth Man of the Year? - No arb opportunity found
+2026-02-01T15:32:16.913842Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Jessie Buckley win Best Actress at the 98th Academy Awards?
+2026-02-01T15:32:16.913851Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Jessie Buckley win Best Actress at the 98th Academy Awards? - No arb opportunity found
+2026-02-01T15:32:16.913859Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Ukraine agree to cede territory to Russia before 2027?
+2026-02-01T15:32:16.913867Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Ukraine agree to cede territory to Russia before 2027? - No arb opportunity found
+2026-02-01T15:32:16.913881Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Dan Koh be the Democratic nominee for MA-06?
+2026-02-01T15:32:16.913890Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Dan Koh be the Democratic nominee for MA-06? - No arb opportunity found
+2026-02-01T15:32:16.913897Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Brian Kemp announce a presidential run before 2027?
+2026-02-01T15:32:16.913905Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Brian Kemp announce a presidential run before 2027? - No arb opportunity found
+2026-02-01T15:32:16.913912Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Polymarket mindshare hit 85%?
+2026-02-01T15:32:16.913927Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Polymarket mindshare hit 85%? - No arb opportunity found
+2026-02-01T15:32:16.913934Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Gonzaga win the 2026 NCAA Tournament?
+2026-02-01T15:32:16.913944Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Gonzaga win the 2026 NCAA Tournament? - No arb opportunity found
+2026-02-01T15:32:16.913951Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will the Republicans win the Mississippi Senate race in 2026?
+2026-02-01T15:32:16.913959Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will the Republicans win the Mississippi Senate race in 2026? - No arb opportunity found
+2026-02-01T15:32:16.913966Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Michelle Bolsonaro qualify for Brazil's presidential runoff?
+2026-02-01T15:32:16.913982Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Michelle Bolsonaro qualify for Brazil's presidential runoff? - No arb opportunity found
+2026-02-01T15:32:16.913989Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Doechii perform during the Super Bowl LX halftime show?
+2026-02-01T15:32:16.913997Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Doechii perform during the Super Bowl LX halftime show? - No arb opportunity found
+2026-02-01T15:32:16.914004Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Chelsea Clinton announce a Presidential run before 2027?
+2026-02-01T15:32:16.914012Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Chelsea Clinton announce a Presidential run before 2027? - No arb opportunity found
+2026-02-01T15:32:16.914028Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Tommy Tuberville win the 2026 Alabama Governor Republican primary election?
+2026-02-01T15:32:16.914037Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Tommy Tuberville win the 2026 Alabama Governor Republican primary election? - No arb opportunity found
+2026-02-01T15:32:16.914045Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Abdul El-Sayed win the 2026 Michigan Democratic Primary?
+2026-02-01T15:32:16.914053Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Abdul El-Sayed win the 2026 Michigan Democratic Primary? - No arb opportunity found
+2026-02-01T15:32:16.914060Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will the Fed’s lower bound reach 3.25% or lower before 2027?
+2026-02-01T15:32:16.914075Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will the Fed’s lower bound reach 3.25% or lower before 2027? - No arb opportunity found
+2026-02-01T15:32:16.914083Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Stephen A. Smith announce a Presidential run before 2027?
+2026-02-01T15:32:16.914092Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Stephen A. Smith announce a Presidential run before 2027? - No arb opportunity found
+2026-02-01T15:32:16.914099Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will a hurricane make landfall in the US by May 31?
+2026-02-01T15:32:16.914104Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will a hurricane make landfall in the US by May 31? - No arb opportunity found
+2026-02-01T15:32:16.914107Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will 2026 be the fourth-hottest year on record?
+2026-02-01T15:32:16.914116Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will 2026 be the fourth-hottest year on record? - No arb opportunity found
+2026-02-01T15:32:16.914131Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Robert F. Kennedy Jr. announce a presidential run before 2027?
+2026-02-01T15:32:16.914140Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Robert F. Kennedy Jr. announce a presidential run before 2027? - No arb opportunity found
+2026-02-01T15:32:16.914147Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will China invades Taiwan before GTA VI?
+2026-02-01T15:32:16.914151Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will China invades Taiwan before GTA VI? - No arb opportunity found
+2026-02-01T15:32:16.914158Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Nathan MacKinnon win the 2025–2026 NHL Art Ross Trophy?
+2026-02-01T15:32:16.914175Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Nathan MacKinnon win the 2025–2026 NHL Art Ross Trophy? - No arb opportunity found
+2026-02-01T15:32:16.914182Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will OpenAI be the first company to have an AI model hit 1500 on Chatbot Arena by June 30 2026?
+2026-02-01T15:32:16.914191Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will OpenAI be the first company to have an AI model hit 1500 on Chatbot Arena by June 30 2026? - No arb opportunity found
+2026-02-01T15:32:16.914199Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Timothy Wilcox win the 2026 Connecticut Governor Republican primary election?
+2026-02-01T15:32:16.914208Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Timothy Wilcox win the 2026 Connecticut Governor Republican primary election? - No arb opportunity found
+2026-02-01T15:32:16.914220Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Callaita be played at the Super Bowl halftime show?
+2026-02-01T15:32:16.914228Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Callaita be played at the Super Bowl halftime show? - No arb opportunity found
+2026-02-01T15:32:16.914236Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will the Democrats win the Illinois Senate race in 2026?
+2026-02-01T15:32:16.914244Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will the Democrats win the Illinois Senate race in 2026? - No arb opportunity found
+2026-02-01T15:32:16.914250Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will John Kiper win the 2026 New Hampshire Governor Democratic primary election?
+2026-02-01T15:32:16.914259Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will John Kiper win the 2026 New Hampshire Governor Democratic primary election? - No arb opportunity found
+2026-02-01T15:32:16.914277Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Byron Donalds be the Republican nominee for Florida Governor?
+2026-02-01T15:32:16.914286Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Byron Donalds be the Republican nominee for Florida Governor? - No arb opportunity found
+2026-02-01T15:32:16.914294Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for GTA 6 launch postponed again?
+2026-02-01T15:32:16.914302Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked GTA 6 launch postponed again? - No arb opportunity found
+2026-02-01T15:32:16.914309Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Steve Lanier win the 2026 New Mexico Governor Republican primary election?
+2026-02-01T15:32:16.914327Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Steve Lanier win the 2026 New Mexico Governor Republican primary election? - No arb opportunity found
+2026-02-01T15:32:16.914335Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Leo Zacky advance from the 2026 California Governor primary election?
+2026-02-01T15:32:16.914344Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Leo Zacky advance from the 2026 California Governor primary election? - No arb opportunity found
+2026-02-01T15:32:16.914351Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will US GDP growth in 2025 be greater than 2.5%?
+2026-02-01T15:32:16.914359Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will US GDP growth in 2025 be greater than 2.5%? - No arb opportunity found
+2026-02-01T15:32:16.914371Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will the Republicans win the Michigan Senate race in 2026?
+2026-02-01T15:32:16.914388Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will the Republicans win the Michigan Senate race in 2026? - No arb opportunity found
+2026-02-01T15:32:16.914395Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for 2026 U.S. Senate Election: Republican Odds under 40% by March 31?
+2026-02-01T15:32:16.914404Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked 2026 U.S. Senate Election: Republican Odds under 40% by March 31? - No arb opportunity found
+2026-02-01T15:32:16.914405Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.914411Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for US-Iran nuclear deal before 2027?
+2026-02-01T15:32:16.914428Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked US-Iran nuclear deal before 2027? - No arb opportunity found
+2026-02-01T15:32:16.914435Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for China x Philippines military clash before 2027?
+2026-02-01T15:32:16.914443Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked China x Philippines military clash before 2027? - No arb opportunity found
+2026-02-01T15:32:16.914450Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will the Fed Cut–Pause–Pause in the next three decisions (Dec–Jan–Mar)?
+2026-02-01T15:32:16.914459Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will the Fed Cut–Pause–Pause in the next three decisions (Dec–Jan–Mar)? - No arb opportunity found
+2026-02-01T15:32:16.914475Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Byron Donalds announce a presidential run before 2027?
+2026-02-01T15:32:16.914460Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.914500Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.914512Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.914538Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.914552Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.914572Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.914583Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.914596Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.914606Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.914625Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.914635Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.914646Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.914484Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Byron Donalds announce a presidential run before 2027? - No arb opportunity found
+2026-02-01T15:32:16.914677Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Hamnet win Best Adapted Screenplay at the 98th Academy Awards?
+2026-02-01T15:32:16.914688Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Hamnet win Best Adapted Screenplay at the 98th Academy Awards? - No arb opportunity found
+2026-02-01T15:32:16.914696Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Pam Bondi leave the Trump administration before 2027?
+2026-02-01T15:32:16.914704Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Pam Bondi leave the Trump administration before 2027? - No arb opportunity found
+2026-02-01T15:32:16.914728Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Fernando Haddad qualify for Brazil's presidential runoff?
+2026-02-01T15:32:16.914741Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Fernando Haddad qualify for Brazil's presidential runoff? - No arb opportunity found
+2026-02-01T15:32:16.914749Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will the Philadelphia 76ers win more than 43.5 regular season games in 2025–26?
+2026-02-01T15:32:16.914761Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will the Philadelphia 76ers win more than 43.5 regular season games in 2025–26? - No arb opportunity found
+2026-02-01T15:32:16.914781Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will the Oklahoma City Thunder win more than 62.5 regular season games in 2025–26?
+2026-02-01T15:32:16.914790Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will the Oklahoma City Thunder win more than 62.5 regular season games in 2025–26? - No arb opportunity found
+2026-02-01T15:32:16.914798Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will the Republicans win the Florida Senate race in 2026?
+2026-02-01T15:32:16.914806Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will the Republicans win the Florida Senate race in 2026? - No arb opportunity found
+2026-02-01T15:32:16.914822Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will the Tampa Bay Lightning win the Atlantic Division?
+2026-02-01T15:32:16.914842Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will the Tampa Bay Lightning win the Atlantic Division? - No arb opportunity found
+2026-02-01T15:32:16.914850Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will the Republicans win the North Carolina Senate race in 2026?
+2026-02-01T15:32:16.914866Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will the Republicans win the North Carolina Senate race in 2026? - No arb opportunity found
+2026-02-01T15:32:16.914873Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Nathan MacKinnon win the 2025–2026 NHL Hart Memorial Trophy?
+2026-02-01T15:32:16.914899Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Nathan MacKinnon win the 2025–2026 NHL Hart Memorial Trophy? - No arb opportunity found
+2026-02-01T15:32:16.915014Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915038Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915054Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915070Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915086Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915108Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915127Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915150Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915162Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915181Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915205Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915229Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915249Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915261Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915283Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915298Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915311Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915329Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915365Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915377Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915397Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915418Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915438Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915461Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915472Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915498Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915509Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915521Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915532Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915545Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915570Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915595Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915613Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915628Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915639Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915652Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915663Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915688Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915702Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915717Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915729Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915740Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915774Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915789Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915800Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915823Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915869Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915886Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:16.915917Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:17.008552Z DEBUG polymarket_hft_agent::sniper: ⚡ Tick: NO (6 bids, 37 asks)
+2026-02-01T15:32:17.008562Z DEBUG polymarket_hft_agent::sniper: 📊 WS Update: Will Leon Thomas win Best New Artist at the 68th Annual GRAMMY Awards? NO -> 0.9900
+2026-02-01T15:32:17.008575Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Leon Thomas win Best New Artist at the 68th Annual GRAMMY Awards?
+2026-02-01T15:32:17.008592Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:17.008642Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Leon Thomas win Best New Artist at the 68th Annual GRAMMY Awards? - No arb opportunity found
+2026-02-01T15:32:17.008654Z DEBUG polymarket_hft_agent::sniper: ⚡ Tick: YES (37 bids, 6 asks)
+2026-02-01T15:32:17.008660Z DEBUG polymarket_hft_agent::sniper: 📊 WS Update: Will Leon Thomas win Best New Artist at the 68th Annual GRAMMY Awards? YES -> 0.9900
+2026-02-01T15:32:17.008669Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Will Leon Thomas win Best New Artist at the 68th Annual GRAMMY Awards?
+2026-02-01T15:32:17.008683Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:17.008706Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Will Leon Thomas win Best New Artist at the 68th Annual GRAMMY Awards? - No arb opportunity found
+2026-02-01T15:32:18.612078Z  INFO polymarket_hft_agent::polymarket::events: 🆕 NEW MARKET EVENT: Condition ID 0xeef81f4d9efd9a2e21aa43fedb333ae3caa0a1f63d3e0cd2c556b375c96c513c
+2026-02-01T15:32:18.612112Z  INFO polymarket_hft_agent::sniper: ⚡ WebSocket event: New market condition 0xeef81f4d9efd9a2e21aa43fedb333ae3caa0a1f63d3e0cd2c556b375c96c513c
+2026-02-01T15:32:18.612156Z  INFO polymarket_hft_agent::sniper: 🔮 Derived Token IDs locally! YES: ...826340, NO: ...326576
+2026-02-01T15:32:18.612194Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribed to CLOB for derived IDs (YES/NO)
+2026-02-01T15:32:18.612202Z DEBUG polymarket_hft_agent::sniper: ⚡ Triggering immediate fast market fetch...
+2026-02-01T15:32:18.612228Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:18.612228Z DEBUG polymarket_hft_agent::polymarket::client: Fetching details for market (optimized): 0xeef81f4d9efd9a2e21aa43fedb333ae3caa0a1f63d3e0cd2c556b375c96c513c
+2026-02-01T15:32:18.899757Z  INFO polymarket_hft_agent::polymarket::client: ⚠️ Market 0xeef81f4d9efd9a2e21aa43fedb333ae3caa0a1f63d3e0cd2c556b375c96c513c not in Gamma yet. Attempting local derivation.
+2026-02-01T15:32:18.899809Z  INFO polymarket_hft_agent::polymarket::client: ✅ Derived IDs for 0xeef81f4d9efd9a2e21aa43fedb333ae3caa0a1f63d3e0cd2c556b375c96c513c: YES=82729233048337402492675214128541291904433360314850319260954896928005300826340, NO=113708865388086062743527945213646946189106260433856730412670590813739404326576
+2026-02-01T15:32:18.899823Z DEBUG polymarket_hft_agent::sniper: ✅ Fast sync success: Market 0xeef81f4d9efd9a2e21aa43fedb333ae3caa0a1f63d3e0cd2c556b375c96c513c
+2026-02-01T15:32:18.899833Z  INFO polymarket_hft_agent::sniper: 🚀 Processing new market immediately: Market 0xeef81f4d9efd9a2e21aa43fedb333ae3caa0a1f63d3e0cd2c556b375c96c513c
+2026-02-01T15:32:18.899842Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Market 0xeef81f4d9efd9a2e21aa43fedb333ae3caa0a1f63d3e0cd2c556b375c96c513c
+2026-02-01T15:32:18.899855Z DEBUG polymarket_hft_agent::strategies::arbitrage: ⚠️ Missing prices for 0xeef81f4d9efd9a2e21aa43fedb333ae3caa0a1f63d3e0cd2c556b375c96c513c: YES=0.0000, NO=0.0000
+2026-02-01T15:32:18.899860Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Market 0xeef81f4d9efd9a2e21aa43fedb333ae3caa0a1f63d3e0cd2c556b375c96c513c - No arb opportunity found
+2026-02-01T15:32:18.899896Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:24.598627Z  INFO polymarket_hft_agent::polymarket::events: 🆕 NEW MARKET EVENT: Condition ID 0xbc328d0acd3286a0240c308a446f2f1930901fd7b8cfd0783a20717ea615ecda
+2026-02-01T15:32:24.598664Z  INFO polymarket_hft_agent::sniper: ⚡ WebSocket event: New market condition 0xbc328d0acd3286a0240c308a446f2f1930901fd7b8cfd0783a20717ea615ecda
+2026-02-01T15:32:24.598715Z  INFO polymarket_hft_agent::sniper: 🔮 Derived Token IDs locally! YES: ...520429, NO: ...867732
+2026-02-01T15:32:24.598763Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:24.598802Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribed to CLOB for derived IDs (YES/NO)
+2026-02-01T15:32:24.598810Z DEBUG polymarket_hft_agent::sniper: ⚡ Triggering immediate fast market fetch...
+2026-02-01T15:32:24.598814Z DEBUG polymarket_hft_agent::polymarket::client: Fetching details for market (optimized): 0xbc328d0acd3286a0240c308a446f2f1930901fd7b8cfd0783a20717ea615ecda
+2026-02-01T15:32:24.715373Z  INFO polymarket_hft_agent::polymarket::client: ⚠️ Market 0xbc328d0acd3286a0240c308a446f2f1930901fd7b8cfd0783a20717ea615ecda not in Gamma yet. Attempting local derivation.
+2026-02-01T15:32:24.715425Z  INFO polymarket_hft_agent::polymarket::client: ✅ Derived IDs for 0xbc328d0acd3286a0240c308a446f2f1930901fd7b8cfd0783a20717ea615ecda: YES=85446678888350410585538924479521711670924373743124055978787052561532998520429, NO=37538193951245963101489133993729942102695670238073722694452971979187098867732
+2026-02-01T15:32:24.715439Z DEBUG polymarket_hft_agent::sniper: ✅ Fast sync success: Market 0xbc328d0acd3286a0240c308a446f2f1930901fd7b8cfd0783a20717ea615ecda
+2026-02-01T15:32:24.715459Z  INFO polymarket_hft_agent::sniper: 🚀 Processing new market immediately: Market 0xbc328d0acd3286a0240c308a446f2f1930901fd7b8cfd0783a20717ea615ecda
+2026-02-01T15:32:24.715471Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Market 0xbc328d0acd3286a0240c308a446f2f1930901fd7b8cfd0783a20717ea615ecda
+2026-02-01T15:32:24.715484Z DEBUG polymarket_hft_agent::strategies::arbitrage: ⚠️ Missing prices for 0xbc328d0acd3286a0240c308a446f2f1930901fd7b8cfd0783a20717ea615ecda: YES=0.0000, NO=0.0000
+2026-02-01T15:32:24.715505Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Market 0xbc328d0acd3286a0240c308a446f2f1930901fd7b8cfd0783a20717ea615ecda - No arb opportunity found
+2026-02-01T15:32:24.715507Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:30.459263Z  INFO polymarket_hft_agent::polymarket::events: 🆕 NEW MARKET EVENT: Condition ID 0x5c8b458610a213e79a5c34a1321bdc224092463d13be63d4aab5c3b6b386a87a
+2026-02-01T15:32:30.459355Z  INFO polymarket_hft_agent::sniper: ⚡ WebSocket event: New market condition 0x5c8b458610a213e79a5c34a1321bdc224092463d13be63d4aab5c3b6b386a87a
+2026-02-01T15:32:30.459387Z  INFO polymarket_hft_agent::sniper: 🔮 Derived Token IDs locally! YES: ...053029, NO: ...047384
+2026-02-01T15:32:30.459428Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:30.459439Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribed to CLOB for derived IDs (YES/NO)
+2026-02-01T15:32:30.459468Z DEBUG polymarket_hft_agent::sniper: ⚡ Triggering immediate fast market fetch...
+2026-02-01T15:32:30.459478Z DEBUG polymarket_hft_agent::polymarket::client: Fetching details for market (optimized): 0x5c8b458610a213e79a5c34a1321bdc224092463d13be63d4aab5c3b6b386a87a
+2026-02-01T15:32:30.568910Z  INFO polymarket_hft_agent::polymarket::client: ⚠️ Market 0x5c8b458610a213e79a5c34a1321bdc224092463d13be63d4aab5c3b6b386a87a not in Gamma yet. Attempting local derivation.
+2026-02-01T15:32:30.568958Z  INFO polymarket_hft_agent::polymarket::client: ✅ Derived IDs for 0x5c8b458610a213e79a5c34a1321bdc224092463d13be63d4aab5c3b6b386a87a: YES=82142589901512077468399960612358488871795632620030517283496701251599780053029, NO=77201185115009213864057719298599427208148452453268750603185335648889063047384
+2026-02-01T15:32:30.568970Z DEBUG polymarket_hft_agent::sniper: ✅ Fast sync success: Market 0x5c8b458610a213e79a5c34a1321bdc224092463d13be63d4aab5c3b6b386a87a
+2026-02-01T15:32:30.568986Z  INFO polymarket_hft_agent::sniper: 🚀 Processing new market immediately: Market 0x5c8b458610a213e79a5c34a1321bdc224092463d13be63d4aab5c3b6b386a87a
+2026-02-01T15:32:30.568995Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Market 0x5c8b458610a213e79a5c34a1321bdc224092463d13be63d4aab5c3b6b386a87a
+2026-02-01T15:32:30.569010Z DEBUG polymarket_hft_agent::strategies::arbitrage: ⚠️ Missing prices for 0x5c8b458610a213e79a5c34a1321bdc224092463d13be63d4aab5c3b6b386a87a: YES=0.0000, NO=0.0000
+2026-02-01T15:32:30.569028Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:30.569032Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Market 0x5c8b458610a213e79a5c34a1321bdc224092463d13be63d4aab5c3b6b386a87a - No arb opportunity found
+2026-02-01T15:32:31.466878Z DEBUG polymarket_hft_agent::polymarket::client: Fetching markets from Polymarket
+2026-02-01T15:32:31.548121Z  INFO polymarket_hft_agent::polymarket::client: Fetched 1000 markets
+2026-02-01T15:32:36.625986Z  INFO polymarket_hft_agent::polymarket::events: 🆕 NEW MARKET EVENT: Condition ID 0x2f4d7ef77c31135fde826a0e25dee8a5141fedfd9ce207443d5d2db32b2140ae
+2026-02-01T15:32:36.626027Z  INFO polymarket_hft_agent::sniper: ⚡ WebSocket event: New market condition 0x2f4d7ef77c31135fde826a0e25dee8a5141fedfd9ce207443d5d2db32b2140ae
+2026-02-01T15:32:36.626079Z  INFO polymarket_hft_agent::sniper: 🔮 Derived Token IDs locally! YES: ...012766, NO: ...777639
+2026-02-01T15:32:36.626113Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribed to CLOB for derived IDs (YES/NO)
+2026-02-01T15:32:36.626121Z DEBUG polymarket_hft_agent::sniper: ⚡ Triggering immediate fast market fetch...
+2026-02-01T15:32:36.626122Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:36.626129Z DEBUG polymarket_hft_agent::polymarket::client: Fetching details for market (optimized): 0x2f4d7ef77c31135fde826a0e25dee8a5141fedfd9ce207443d5d2db32b2140ae
+2026-02-01T15:32:36.743261Z  INFO polymarket_hft_agent::polymarket::client: ⚠️ Market 0x2f4d7ef77c31135fde826a0e25dee8a5141fedfd9ce207443d5d2db32b2140ae not in Gamma yet. Attempting local derivation.
+2026-02-01T15:32:36.743316Z  INFO polymarket_hft_agent::polymarket::client: ✅ Derived IDs for 0x2f4d7ef77c31135fde826a0e25dee8a5141fedfd9ce207443d5d2db32b2140ae: YES=31730733925965155498780135271604788835170975118923548475716179050612595012766, NO=11909665287833043919115450967066600736211117672584191576176875979563039777639
+2026-02-01T15:32:36.743333Z DEBUG polymarket_hft_agent::sniper: ✅ Fast sync success: Market 0x2f4d7ef77c31135fde826a0e25dee8a5141fedfd9ce207443d5d2db32b2140ae
+2026-02-01T15:32:36.743343Z  INFO polymarket_hft_agent::sniper: 🚀 Processing new market immediately: Market 0x2f4d7ef77c31135fde826a0e25dee8a5141fedfd9ce207443d5d2db32b2140ae
+2026-02-01T15:32:36.743360Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Market 0x2f4d7ef77c31135fde826a0e25dee8a5141fedfd9ce207443d5d2db32b2140ae
+2026-02-01T15:32:36.743372Z DEBUG polymarket_hft_agent::strategies::arbitrage: ⚠️ Missing prices for 0x2f4d7ef77c31135fde826a0e25dee8a5141fedfd9ce207443d5d2db32b2140ae: YES=0.0000, NO=0.0000
+2026-02-01T15:32:36.743417Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Market 0x2f4d7ef77c31135fde826a0e25dee8a5141fedfd9ce207443d5d2db32b2140ae - No arb opportunity found
+2026-02-01T15:32:36.743395Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:42.467972Z  INFO polymarket_hft_agent::polymarket::events: 🆕 NEW MARKET EVENT: Condition ID 0x4be4a135b4ba1fcbfe2abc8f533d05e5c746b7fd6daefa9d8befa83ded8cbea8
+2026-02-01T15:32:42.468019Z  INFO polymarket_hft_agent::sniper: ⚡ WebSocket event: New market condition 0x4be4a135b4ba1fcbfe2abc8f533d05e5c746b7fd6daefa9d8befa83ded8cbea8
+2026-02-01T15:32:42.468070Z  INFO polymarket_hft_agent::sniper: 🔮 Derived Token IDs locally! YES: ...559143, NO: ...469504
+2026-02-01T15:32:42.468111Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:42.468159Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribed to CLOB for derived IDs (YES/NO)
+2026-02-01T15:32:42.468167Z DEBUG polymarket_hft_agent::sniper: ⚡ Triggering immediate fast market fetch...
+2026-02-01T15:32:42.468172Z DEBUG polymarket_hft_agent::polymarket::client: Fetching details for market (optimized): 0x4be4a135b4ba1fcbfe2abc8f533d05e5c746b7fd6daefa9d8befa83ded8cbea8
+2026-02-01T15:32:42.584449Z  INFO polymarket_hft_agent::polymarket::client: ⚠️ Market 0x4be4a135b4ba1fcbfe2abc8f533d05e5c746b7fd6daefa9d8befa83ded8cbea8 not in Gamma yet. Attempting local derivation.
+2026-02-01T15:32:42.584500Z  INFO polymarket_hft_agent::polymarket::client: ✅ Derived IDs for 0x4be4a135b4ba1fcbfe2abc8f533d05e5c746b7fd6daefa9d8befa83ded8cbea8: YES=44609510454095776192767657857626160262267801344294184364597447882917159559143, NO=20051838610933701748616342327392696502956650158310731878724020100318523469504
+2026-02-01T15:32:42.584517Z DEBUG polymarket_hft_agent::sniper: ✅ Fast sync success: Market 0x4be4a135b4ba1fcbfe2abc8f533d05e5c746b7fd6daefa9d8befa83ded8cbea8
+2026-02-01T15:32:42.584524Z  INFO polymarket_hft_agent::sniper: 🚀 Processing new market immediately: Market 0x4be4a135b4ba1fcbfe2abc8f533d05e5c746b7fd6daefa9d8befa83ded8cbea8
+2026-02-01T15:32:42.584534Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Market 0x4be4a135b4ba1fcbfe2abc8f533d05e5c746b7fd6daefa9d8befa83ded8cbea8
+2026-02-01T15:32:42.584546Z DEBUG polymarket_hft_agent::strategies::arbitrage: ⚠️ Missing prices for 0x4be4a135b4ba1fcbfe2abc8f533d05e5c746b7fd6daefa9d8befa83ded8cbea8: YES=0.0000, NO=0.0000
+2026-02-01T15:32:42.584585Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Market 0x4be4a135b4ba1fcbfe2abc8f533d05e5c746b7fd6daefa9d8befa83ded8cbea8 - No arb opportunity found
+2026-02-01T15:32:42.584563Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:46.466667Z DEBUG polymarket_hft_agent::polymarket::client: Fetching markets from Polymarket
+2026-02-01T15:32:46.539683Z  INFO polymarket_hft_agent::polymarket::client: Fetched 1000 markets
+2026-02-01T15:32:48.356022Z  INFO polymarket_hft_agent::polymarket::events: 🆕 NEW MARKET EVENT: Condition ID 0xfaf051b539e751b01615e8fd25f5aa43ffab13933686ffa250a2cd26b031f3d3
+2026-02-01T15:32:48.356060Z  INFO polymarket_hft_agent::sniper: ⚡ WebSocket event: New market condition 0xfaf051b539e751b01615e8fd25f5aa43ffab13933686ffa250a2cd26b031f3d3
+2026-02-01T15:32:48.356091Z  INFO polymarket_hft_agent::sniper: 🔮 Derived Token IDs locally! YES: ...696710, NO: ...601997
+2026-02-01T15:32:48.356111Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribed to CLOB for derived IDs (YES/NO)
+2026-02-01T15:32:48.356118Z DEBUG polymarket_hft_agent::sniper: ⚡ Triggering immediate fast market fetch...
+2026-02-01T15:32:48.356125Z DEBUG polymarket_hft_agent::polymarket::client: Fetching details for market (optimized): 0xfaf051b539e751b01615e8fd25f5aa43ffab13933686ffa250a2cd26b031f3d3
+2026-02-01T15:32:48.356151Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:48.508328Z  INFO polymarket_hft_agent::polymarket::client: ⚠️ Market 0xfaf051b539e751b01615e8fd25f5aa43ffab13933686ffa250a2cd26b031f3d3 not in Gamma yet. Attempting local derivation.
+2026-02-01T15:32:48.508390Z  INFO polymarket_hft_agent::polymarket::client: ✅ Derived IDs for 0xfaf051b539e751b01615e8fd25f5aa43ffab13933686ffa250a2cd26b031f3d3: YES=70657006629669424260453881936459428602894375178496857871047936253941399696710, NO=12805697820336590032968788500117852045923681138904321197537972623857458601997
+2026-02-01T15:32:48.508409Z DEBUG polymarket_hft_agent::sniper: ✅ Fast sync success: Market 0xfaf051b539e751b01615e8fd25f5aa43ffab13933686ffa250a2cd26b031f3d3
+2026-02-01T15:32:48.508417Z  INFO polymarket_hft_agent::sniper: 🚀 Processing new market immediately: Market 0xfaf051b539e751b01615e8fd25f5aa43ffab13933686ffa250a2cd26b031f3d3
+2026-02-01T15:32:48.508427Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Market 0xfaf051b539e751b01615e8fd25f5aa43ffab13933686ffa250a2cd26b031f3d3
+2026-02-01T15:32:48.508439Z DEBUG polymarket_hft_agent::strategies::arbitrage: ⚠️ Missing prices for 0xfaf051b539e751b01615e8fd25f5aa43ffab13933686ffa250a2cd26b031f3d3: YES=0.0000, NO=0.0000
+2026-02-01T15:32:48.508459Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:48.508463Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Market 0xfaf051b539e751b01615e8fd25f5aa43ffab13933686ffa250a2cd26b031f3d3 - No arb opportunity found
+2026-02-01T15:32:54.462392Z  INFO polymarket_hft_agent::polymarket::events: 🆕 NEW MARKET EVENT: Condition ID 0x3bdefa891c3e6197ed8510617de3904d25dc30ce673d5d9a71995fc5232debea
+2026-02-01T15:32:54.462469Z  INFO polymarket_hft_agent::sniper: ⚡ WebSocket event: New market condition 0x3bdefa891c3e6197ed8510617de3904d25dc30ce673d5d9a71995fc5232debea
+2026-02-01T15:32:54.462500Z  INFO polymarket_hft_agent::sniper: 🔮 Derived Token IDs locally! YES: ...615582, NO: ...586127
+2026-02-01T15:32:54.462533Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribed to CLOB for derived IDs (YES/NO)
+2026-02-01T15:32:54.462544Z DEBUG polymarket_hft_agent::sniper: ⚡ Triggering immediate fast market fetch...
+2026-02-01T15:32:54.462565Z DEBUG polymarket_hft_agent::polymarket::client: Fetching details for market (optimized): 0x3bdefa891c3e6197ed8510617de3904d25dc30ce673d5d9a71995fc5232debea
+2026-02-01T15:32:54.462554Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:32:54.607157Z  INFO polymarket_hft_agent::polymarket::client: ⚠️ Market 0x3bdefa891c3e6197ed8510617de3904d25dc30ce673d5d9a71995fc5232debea not in Gamma yet. Attempting local derivation.
+2026-02-01T15:32:54.607210Z  INFO polymarket_hft_agent::polymarket::client: ✅ Derived IDs for 0x3bdefa891c3e6197ed8510617de3904d25dc30ce673d5d9a71995fc5232debea: YES=109143704617937776567459981002007253235623792785445972572007902817515502615582, NO=96453164517464374590569773708808684279016864066419130454561779578872024586127
+2026-02-01T15:32:54.607222Z DEBUG polymarket_hft_agent::sniper: ✅ Fast sync success: Market 0x3bdefa891c3e6197ed8510617de3904d25dc30ce673d5d9a71995fc5232debea
+2026-02-01T15:32:54.607239Z  INFO polymarket_hft_agent::sniper: 🚀 Processing new market immediately: Market 0x3bdefa891c3e6197ed8510617de3904d25dc30ce673d5d9a71995fc5232debea
+2026-02-01T15:32:54.607247Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Market 0x3bdefa891c3e6197ed8510617de3904d25dc30ce673d5d9a71995fc5232debea
+2026-02-01T15:32:54.607259Z DEBUG polymarket_hft_agent::strategies::arbitrage: ⚠️ Missing prices for 0x3bdefa891c3e6197ed8510617de3904d25dc30ce673d5d9a71995fc5232debea: YES=0.0000, NO=0.0000
+2026-02-01T15:32:54.607303Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Market 0x3bdefa891c3e6197ed8510617de3904d25dc30ce673d5d9a71995fc5232debea - No arb opportunity found
+2026-02-01T15:32:54.607278Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:33:00.485433Z  INFO polymarket_hft_agent::polymarket::events: 🆕 NEW MARKET EVENT: Condition ID 0x17b8252cb522dbaa9ebcb2b1df02a7a7bbb7b3dfba7579e6ed282feb96a64157
+2026-02-01T15:33:00.485473Z  INFO polymarket_hft_agent::sniper: ⚡ WebSocket event: New market condition 0x17b8252cb522dbaa9ebcb2b1df02a7a7bbb7b3dfba7579e6ed282feb96a64157
+2026-02-01T15:33:00.485506Z  INFO polymarket_hft_agent::sniper: 🔮 Derived Token IDs locally! YES: ...150680, NO: ...213687
+2026-02-01T15:33:00.485527Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribed to CLOB for derived IDs (YES/NO)
+2026-02-01T15:33:00.485534Z DEBUG polymarket_hft_agent::sniper: ⚡ Triggering immediate fast market fetch...
+2026-02-01T15:33:00.485554Z DEBUG polymarket_hft_agent::polymarket::client: Fetching details for market (optimized): 0x17b8252cb522dbaa9ebcb2b1df02a7a7bbb7b3dfba7579e6ed282feb96a64157
+2026-02-01T15:33:00.485568Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:33:00.605247Z  INFO polymarket_hft_agent::polymarket::client: ⚠️ Market 0x17b8252cb522dbaa9ebcb2b1df02a7a7bbb7b3dfba7579e6ed282feb96a64157 not in Gamma yet. Attempting local derivation.
+2026-02-01T15:33:00.605304Z  INFO polymarket_hft_agent::polymarket::client: ✅ Derived IDs for 0x17b8252cb522dbaa9ebcb2b1df02a7a7bbb7b3dfba7579e6ed282feb96a64157: YES=36996963941015746142924279898481297484780446102505686813631846608982401150680, NO=27891865229532896592044301602962740190633532732822925167322499112348953213687
+2026-02-01T15:33:00.605317Z DEBUG polymarket_hft_agent::sniper: ✅ Fast sync success: Market 0x17b8252cb522dbaa9ebcb2b1df02a7a7bbb7b3dfba7579e6ed282feb96a64157
+2026-02-01T15:33:00.605332Z  INFO polymarket_hft_agent::sniper: 🚀 Processing new market immediately: Market 0x17b8252cb522dbaa9ebcb2b1df02a7a7bbb7b3dfba7579e6ed282feb96a64157
+2026-02-01T15:33:00.605337Z  INFO polymarket_hft_agent::sniper: 🔌 Subscribing to Orderbook for Market 0x17b8252cb522dbaa9ebcb2b1df02a7a7bbb7b3dfba7579e6ed282feb96a64157
+2026-02-01T15:33:00.605351Z DEBUG polymarket_hft_agent::strategies::arbitrage: ⚠️ Missing prices for 0x17b8252cb522dbaa9ebcb2b1df02a7a7bbb7b3dfba7579e6ed282feb96a64157: YES=0.0000, NO=0.0000
+2026-02-01T15:33:00.605365Z DEBUG polymarket_hft_agent::sniper: 🔍 Checked Market 0x17b8252cb522dbaa9ebcb2b1df02a7a7bbb7b3dfba7579e6ed282feb96a64157 - No arb opportunity found
+2026-02-01T15:33:00.605385Z  INFO polymarket_hft_agent::polymarket::ws: Binds Subscribing to 2 assets
+2026-02-01T15:33:01.467177Z DEBUG polymarket_hft_agent::polymarket::client: Fetching markets from Polymarket
+2026-02-01T15:33:01.831224Z  INFO polymarket_hft_agent::polymarket::client: Fetched 1000 markets
+2026-02-01T15:33:16.467029Z DEBUG polymarket_hft_agent::polymarket::client: Fetching markets from Polymarket
+2026-02-01T15:33:16.551511Z  INFO polymarket_hft_agent::polymarket::client: Fetched 1000 markets
+2026-02-01T15:33:31.466741Z DEBUG polymarket_hft_agent::polymarket::client: Fetching markets from Polymarket
+2026-02-01T15:33:31.562691Z  INFO polymarket_hft_agent::polymarket::client: Fetched 1000 markets

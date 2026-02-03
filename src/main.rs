@@ -5,7 +5,7 @@ use std::sync::{Arc, Mutex};
 
 use polymarket_hft_agent::sniper::Sniper;
 use polymarket_hft_agent::config::Config;
-use polymarket_hft_agent::analytics::{self, PnLTracker};
+use polymarket_hft_agent::analytics::PnLTracker;
 
 // Unused imports removed
 
@@ -50,48 +50,6 @@ async fn main() -> Result<()> {
     // Small delay to ensure tokio runtime is fully initialized
     tokio::time::sleep(tokio::time::Duration::from_millis(100)).await;
     
-    // TEST: Bind in main thread to verify network
-    println!("DEBUG: [MAIN] Attempting bind to 3002 in main thread...");
-    {
-        let listener = std::net::TcpListener::bind("0.0.0.0:3002");
-        match listener {
-            Ok(_) => println!("DEBUG: [MAIN] ✅ Sync bind to 3002 SUCCESS! (Dropping now)"),
-            Err(ref e) => println!("DEBUG: [MAIN] ❌ Sync bind to 3002 FAILED: {}", e),
-        }
-    } // Listener drops here automatically
-    tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
-
-    // Spawn API server
-    let tracker_clone = pnl_tracker.clone();
-    println!("DEBUG: [MAIN] Spawning dashboard task...");
-    let server_handle = tokio::spawn(async move {
-        // ... (existing code, maybe switch back to original run_server later)
-        println!("DEBUG: [TASK] Dashboard task started!");
-         analytics::api::run_server(tracker_clone).await;
-         println!("DEBUG: [TASK] Dashboard task ENDED");
-    });
-    
-    // Give server a moment to start
-    tokio::time::sleep(tokio::time::Duration::from_millis(1000)).await;
-
-    // Self-test dashboard
-    println!("DEBUG: [MAIN] performing self-test on port 3002...");
-    match reqwest::get("http://127.0.0.1:3002/api/stats").await {
-        Ok(resp) => {
-            if resp.status().is_success() {
-                println!("DEBUG: [MAIN] ✅ SELF-TEST PASSED on port 3002");
-                tracing::info!("✅ SELF-TEST: Dashboard server is RESPONDING on port 3002");
-            } else {
-                println!("DEBUG: [MAIN] ❌ SELF-TEST Failed status: {}", resp.status());
-                tracing::error!("❌ SELF-TEST: Dashboard server returned status {}", resp.status());
-            }
-        }
-        Err(e) => {
-             println!("DEBUG: [MAIN] ❌ SELF-TEST ERROR: {}", e);
-             tracing::error!("❌ SELF-TEST: Failed to connect to dashboard: {}", e);
-        }
-    }
-
     // Create and run sniper
     let mut sniper = Sniper::new(config, pnl_tracker).await;
     
@@ -99,7 +57,6 @@ async fn main() -> Result<()> {
     let sniper_result = sniper.run().await;
     
     // Cleanup
-    server_handle.abort();
     
     sniper_result
 }

@@ -13,6 +13,7 @@ pub struct Config {
     pub polygon_private_key: Option<String>,
     pub ctf_contract_address: Option<String>,
     pub expiration: ExpirationConfig,
+    pub predictive: PredictiveConfig,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -40,6 +41,14 @@ pub struct ExpirationConfig {
     pub max_time_remaining_sec: u64,
     pub min_price: f64,
     pub target_price: f64,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct PredictiveConfig {
+    pub enabled: bool,
+    pub min_confidence: f64,
+    pub max_uncertainty: f64,
+    pub binance_signal_threshold_pct: f64,
 }
 
 
@@ -224,6 +233,24 @@ impl Config {
             polygon_private_key,
             ctf_contract_address,
             expiration,
+            predictive: PredictiveConfig {
+                enabled: env::var("PREDICTIVE_SNIPING_ENABLED")
+                    .unwrap_or_else(|_| "false".to_string())
+                    .parse()
+                    .unwrap_or(false),
+                min_confidence: env::var("PREDICTIVE_MIN_CONFIDENCE")
+                    .unwrap_or_else(|_| "0.50".to_string())
+                    .parse()
+                    .unwrap_or(0.50),
+                max_uncertainty: env::var("PREDICTIVE_MAX_UNCERTAINTY")
+                    .unwrap_or_else(|_| "0.10".to_string())
+                    .parse()
+                    .unwrap_or(0.10),
+                binance_signal_threshold_pct: env::var("BINANCE_SIGNAL_THRESHOLD_PCT")
+                    .unwrap_or_else(|_| "0.5".to_string())
+                    .parse()
+                    .unwrap_or(0.5),
+            },
         })
     }
 }

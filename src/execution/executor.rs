@@ -5,6 +5,7 @@ use crate::strategies::risk::RiskManager;
 use crate::strategies::types::TradingDecision;
 use crate::polymarket::{MarketData, MarketInterface};
 use crate::execution::flashbots::FlashbotsClient;
+use polyfill_rs::types::OrderType;
 
 pub struct Executor {
     market_interface: Box<dyn MarketInterface>,
@@ -54,8 +55,9 @@ impl Executor {
             .place_order(
                 &market.id,
                 &decision.side,
-                price,
                 position_size_usd,
+                price,
+                OrderType::GTC,
             )
             .await?;
 
@@ -124,7 +126,7 @@ impl Executor {
         // Execute YES order
         let yes_order_id = self
             .market_interface
-            .place_order(&market.id, "YES", size_usd / 2.0, yes_price)
+            .place_order(&market.id, "YES", size_usd / 2.0, yes_price, OrderType::GTC)
             .await?;
         
         info!("✅ YES order placed: {}", yes_order_id);
@@ -132,7 +134,7 @@ impl Executor {
         // Execute NO order
         let no_order_id = self
             .market_interface
-            .place_order(&market.id, "NO", size_usd / 2.0, no_price)
+            .place_order(&market.id, "NO", size_usd / 2.0, no_price, OrderType::GTC)
             .await?;
         
         info!("✅ NO order placed: {}", no_order_id);
@@ -184,7 +186,7 @@ impl Executor {
         let opposite_side = if side == "YES" { "NO" } else { "YES" };
         let _order_id = self
             .market_interface
-            .place_order(&market.id, opposite_side, price, position.size_usd)
+            .place_order(&market.id, opposite_side, position.size_usd, price, OrderType::FOK)
             .await?;
 
         // Remove position from risk manager
@@ -214,6 +216,7 @@ impl Executor {
                 side,
                 size_usd,
                 price,
+                OrderType::FOK,
             )
             .await?;
 

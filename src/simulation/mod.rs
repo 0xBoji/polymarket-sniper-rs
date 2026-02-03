@@ -75,6 +75,8 @@ impl MarketSimulator {
     }
 }
 
+use polyfill_rs::types::OrderType;
+
 #[async_trait]
 impl MarketInterface for MarketSimulator {
     async fn get_active_markets(&self) -> Result<Vec<MarketData>> {
@@ -103,6 +105,7 @@ impl MarketInterface for MarketSimulator {
         side: &str,
         size: f64,
         price: f64,
+        _order_type: OrderType,
     ) -> Result<String> {
         // Simulate immediate fill at the requested price
         info!("⚡ [SIM] Order Placed: {} {} @ ${:.2} on {}", side, size, price, market_id);
