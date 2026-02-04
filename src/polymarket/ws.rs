@@ -1,7 +1,7 @@
 use futures_util::{SinkExt, StreamExt};
 use tokio_tungstenite::{connect_async, tungstenite::protocol::Message};
 use anyhow::Result;
-use tracing::{info, error, warn};
+use tracing::{info, error, warn, debug};
 use serde::{Deserialize, Serialize};
 use tokio::sync::mpsc;
 
