@@ -75,7 +75,7 @@ impl MarketSimulator {
     }
 }
 
-use polyfill_rs::types::OrderType;
+use polymarket_client_sdk::clob::types::OrderType;
 
 #[async_trait]
 impl MarketInterface for MarketSimulator {

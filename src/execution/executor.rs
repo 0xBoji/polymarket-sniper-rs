@@ -5,7 +5,7 @@ use crate::strategies::risk::RiskManager;
 use crate::strategies::types::TradingDecision;
 use crate::polymarket::{MarketData, MarketInterface};
 use crate::execution::flashbots::FlashbotsClient;
-use polyfill_rs::types::OrderType;
+use polymarket_client_sdk::clob::types::OrderType;
 
 pub struct Executor {
     market_interface: Box<dyn MarketInterface>,

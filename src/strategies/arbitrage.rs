@@ -67,14 +67,22 @@ impl ArbitrageStrategy {
         // Branchless validation: both prices must be positive
         // If either is <= 0, total_cost will be invalid
         let total_cost = yes_ask + no_ask;
+        
+        // Polymarket fees: ~0.2% maker + ~0.2% taker = 0.4% per trade
+        // For arbitrage (buy YES + buy NO), we pay fees twice = 0.8% total
+        const FEE_PER_TRADE_BPS: i32 = 40;  // 0.4% = 40 bps
+        const TOTAL_FEE_BPS: i32 = FEE_PER_TRADE_BPS * 2;  // 80 bps for both trades
+        
+        // Calculate spread AFTER fees
         let spread = 1.0 - total_cost;
         let spread_bps = (spread * 10000.0) as i32;
+        let net_spread_bps = spread_bps - TOTAL_FEE_BPS;
 
-        // Early return if no opportunity (most common case)
-        // Branchless: use comparison result directly
-        if spread_bps <= self.config.min_edge_bps {
+        // Early return if no opportunity after fees (most common case)
+        if net_spread_bps <= self.config.min_edge_bps {
             if spread_bps > 0 {
-                debug!("⚖️ Spread: {} bps (Target: {}). Not enough edge.", spread_bps, self.config.min_edge_bps);
+                debug!("⚖️ Spread: {} bps, After fees: {} bps (Target: {}). Not enough edge.", 
+                    spread_bps, net_spread_bps, self.config.min_edge_bps);
             }
             return TradeAction::None;
         }
@@ -84,9 +92,9 @@ impl ArbitrageStrategy {
             return TradeAction::None;
         }
 
-        // Hot path: calculate position size
+        // Hot path: calculate position size using NET spread (after fees)
         let size_usd = self.calculate_position_size(
-            spread_bps,
+            net_spread_bps,
             &market.id,
             0,
             true,
@@ -97,7 +105,7 @@ impl ArbitrageStrategy {
             yes_price: yes_ask,
             no_price: no_ask,
             size_usd,
-            expected_profit_bps: spread_bps,
+            expected_profit_bps: net_spread_bps,  // Net profit after fees
         }
     }
     

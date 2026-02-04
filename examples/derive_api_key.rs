@@ -2,8 +2,9 @@ use polyfill_rs::ClobClient;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    // Private key
-    let private_key = "here";
+    // Load private key from .env
+    dotenvy::dotenv().ok();
+    let private_key = std::env::var("POLYGON_PRIVATE_KEY")?;
     
     println!("🔑 Deriving Polymarket API credentials from private key...\n");
     
@@ -11,7 +12,7 @@ async fn main() -> anyhow::Result<()> {
     let host = "https://clob.polymarket.com";
     let chain_id = 137; // Polygon mainnet
     
-    let client = ClobClient::with_l1_headers(host, private_key, chain_id);
+    let client = ClobClient::with_l1_headers(host, &private_key, chain_id);
     
     // Derive API credentials using L1 auth
     let creds = client.create_or_derive_api_key(None).await?;

@@ -47,7 +47,7 @@ pub struct Sniper {
 }
 
 impl Sniper {
-    pub async fn new(config: Config, pnl_tracker: Arc<Mutex<PnLTracker>>) -> Self {
+    pub async fn new(config: Config, pnl_tracker: Arc<Mutex<PnLTracker>>) -> Result<Self> {
         // Initialize Market Interface (Real or Sim)
         let market_interface: Arc<dyn MarketInterface + Send + Sync> = if config.agent.simulation_mode {
             info!("🎞️  Initializing Market Simulator");
@@ -58,7 +58,7 @@ impl Sniper {
                 &config.polymarket, 
                 config.agent.paper_trading,
                 config.polygon_private_key.clone()
-            ))
+            )?)
         };
 
         let risk_manager = RiskManager::new(config.risk.clone());
@@ -76,7 +76,7 @@ impl Sniper {
         let executor_interface: Box<dyn MarketInterface> = if config.agent.simulation_mode {
             Box::new(MarketSimulator::new()) 
         } else {
-            Box::new(PolymarketClient::new(&config.polymarket, config.agent.paper_trading, config.polygon_private_key.clone()))
+            Box::new(PolymarketClient::new(&config.polymarket, config.agent.paper_trading, config.polygon_private_key.clone())?)
         };
 
         // Initialize Flashbots client if enabled
@@ -180,7 +180,7 @@ impl Sniper {
             (None, None)
         };
 
-        Self {
+        Ok(Self {
             config,
             market_interface,
             risk_manager,
@@ -201,7 +201,7 @@ impl Sniper {
             asset_map: HashMap::new(),
             cached_balance: 0.0,
             last_balance_update: std::time::Instant::now() - Duration::from_secs(600), // Force initial update
-        }
+        })
     }
 
     /// Main agent loop

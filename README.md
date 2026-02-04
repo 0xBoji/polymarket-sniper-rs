@@ -52,11 +52,34 @@ nano .env
 ```
 
 **Required Credentials:**
-*   `POLYMARKET_API_KEY`: Your Polymarket API Key (Proxy Key)
-*   `POLYMARKET_SECRET`: Your Polymarket API Secret
-*   `POLYMARKET_PASSPHRASE`: Your Polymarket API Passphrase
-*   `POLYGON_WS_RPC`: Polygon WebSocket RPC endpoint
-*   `POLYGON_PRIVATE_KEY`: Your wallet private key
+
+```bash
+# Wallet Configuration
+POLYGON_PRIVATE_KEY=0x...  # Your wallet private key (from MetaMask/wallet extension)
+
+# Trading Mode
+PAPER_TRADING=false  # Set to false for live trading
+
+# RPC Endpoints
+POLYGON_WS_RPC=wss://polygon-mainnet.g.alchemy.com/v2/YOUR_KEY
+POLYGON_HTTP_RPC=https://polygon-mainnet.g.alchemy.com/v2/YOUR_KEY
+```
+
+**Important Notes:**
+- ✅ **SDK Auto-generates API credentials** - No manual API key configuration needed!
+- ✅ **Safe wallet derivation** - SDK automatically derives your Gnosis Safe wallet from your EOA
+- ⚠️ **Minimum order size**: 5 tokens (approximately $2.50-$5.00 depending on price)
+
+**Wallet Architecture:**
+```
+Your EOA (MetaMask)
+    ↓ SDK derives
+Gnosis Safe Wallet (Signup address)
+    ↓ Controls
+Trading Wallet (Where funds are held)
+```
+
+The SDK uses your EOA private key to sign orders on behalf of your Gnosis Safe wallet.
 
 **Optional (Flashbots)**:
 *   `FLASHBOTS_ENABLED=true`: Enable MEV protection
@@ -71,6 +94,55 @@ cargo run --release
 ```
 
 Access dashboard at `http://localhost:3002`
+
+## SDK Integration
+
+This bot uses the official **`polymarket-client-sdk`** for all Polymarket interactions.
+
+### Key Features
+
+- ✅ **Automatic API credential generation** from your private key
+- ✅ **Gnosis Safe wallet support** for browser extension users
+- ✅ **Type-safe order building** with compile-time validation
+- ✅ **Real-time market data** via WebSocket subscriptions
+
+### Wallet Setup
+
+When you connect to Polymarket via browser extension (MetaMask, etc.), Polymarket creates a **Gnosis Safe wallet** for you. The SDK automatically:
+
+1. Derives your Safe wallet address from your EOA
+2. Signs orders using your EOA on behalf of the Safe
+3. Accesses funds in your trading wallet
+
+**Verification Script:**
+```bash
+cargo run --example verify_proxy_derivation
+```
+
+This will show your:
+- EOA address (from private key)
+- Safe wallet address (signup address)
+- Proxy wallet address (if using Magic Link)
+
+### Testing Order Placement
+
+Before running the full bot, test order placement:
+
+```bash
+cargo run --example test_order_sdk
+```
+
+This will:
+1. Check your balance
+2. Fetch active markets
+3. Place a test order (minimum $5)
+
+**Expected output:**
+```
+✅ LIVE ORDER SUCCESS: ID 0x...
+```
+
+
 
 ## Architecture
 

@@ -1,7 +1,7 @@
 use anyhow::Result;
 use async_trait::async_trait;
 use super::types::MarketData;
-use polyfill_rs::types::OrderType;
+use polymarket_client_sdk::clob::types::OrderType;
 
 #[async_trait]
 pub trait MarketInterface: Send + Sync {

@@ -51,7 +51,7 @@ async fn main() -> Result<()> {
     tokio::time::sleep(tokio::time::Duration::from_millis(100)).await;
     
     // Create and run sniper
-    let mut sniper = Sniper::new(config, pnl_tracker).await;
+    let mut sniper = Sniper::new(config, pnl_tracker).await?;
     
     // Run sniper (this blocks until Ctrl+C)
     let sniper_result = sniper.run().await;

@@ -22,6 +22,7 @@ pub struct PolymarketConfig {
     pub secret: String,
     pub passphrase: String,
     pub host: String,
+    pub proxy_address: Option<String>,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -90,11 +91,13 @@ impl Config {
         dotenvy::dotenv().ok();
 
         let polymarket = PolymarketConfig {
-            api_key: env::var("POLYMARKET_API_KEY")?,
-            secret: env::var("POLYMARKET_SECRET")?,
-            passphrase: env::var("POLYMARKET_PASSPHRASE")?,
+            // SDK auto-generates credentials from private key - these are optional
+            api_key: env::var("POLYMARKET_API_KEY").unwrap_or_default(),
+            secret: env::var("POLYMARKET_SECRET").unwrap_or_default(),
+            passphrase: env::var("POLYMARKET_PASSPHRASE").unwrap_or_default(),
             host: env::var("POLYMARKET_HOST")
                 .unwrap_or_else(|_| "https://clob.polymarket.com".to_string()),
+            proxy_address: env::var("POLYMARKET_PROXY_ADDRESS").ok(),
         };
 
         let arbitrage = ArbitrageConfig {
