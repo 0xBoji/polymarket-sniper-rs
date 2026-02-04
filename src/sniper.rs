@@ -279,7 +279,12 @@ impl Sniper {
                 } => {
                      // 1. Identify Market
                      if let Some((market_id, side)) = self.asset_map.get(&update.asset_id).cloned() {
-                         debug!("⚡ Tick: {} ({} bids, {} asks)", side, update.bids.len(), update.asks.len());
+                         // DEBUG: Sample 1% of ticks to show WS is alive
+                         if rand::random::<f64>() < 0.01 {
+                             info!("⚡ WS Tick Alive: {} [{}] ({} bids, {} asks)", market_id, side, update.bids.len(), update.asks.len());
+                         } else {
+                             debug!("⚡ Tick: {} ({} bids, {} asks)", side, update.bids.len(), update.asks.len());
+                         }
                          
                          // 2. Update State
                          if let Some(market) = self.active_markets.get_mut(&market_id) {

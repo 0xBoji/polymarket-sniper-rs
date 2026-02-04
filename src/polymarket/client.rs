@@ -382,6 +382,11 @@ impl PolymarketClient {
             }
         }
         
+        // DEBUG: Sampled log to check parsing
+        if rand::random::<f64>() < 0.005 { // 0.5% sample
+             info!("🔍 SDK Parse: {} -> YES={:.3} NO={:.3}", market.question, yes_price, no_price);
+        }
+        
         // Extract asset IDs
         let asset_ids = market.tokens.iter().map(|t| t.token_id.to_string()).collect();
 

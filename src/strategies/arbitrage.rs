@@ -1,6 +1,6 @@
 use crate::polymarket::{MarketData, OrderBook, OrderLevel};
 use crate::config::ArbitrageConfig;
-use tracing::debug;
+use tracing::{debug, info};
 use crate::strategies::position_sizing::{PositionSizer, estimate_win_probability, estimate_volatility};
 
 #[derive(Debug)]
@@ -78,11 +78,18 @@ impl ArbitrageStrategy {
         let spread_bps = (spread * 10000.0) as i32;
         let net_spread_bps = spread_bps - TOTAL_FEE_BPS;
 
+        // DEBUG: Sample 0.1% of checks to ensure we are seeing correct prices
+        if rand::random::<f64>() < 0.001 {
+             info!("🔍 SAMPLE CHECK [{}]: Yes={:.3} No={:.3} Cost={:.3} Spread={}bps Fees={}bps Net={}bps", 
+                market.question, yes_ask, no_ask, total_cost, spread_bps, TOTAL_FEE_BPS, net_spread_bps);
+        }
+
         // Early return if no opportunity after fees (most common case)
         if net_spread_bps <= self.config.min_edge_bps {
-            if spread_bps > 0 {
-                debug!("⚖️ Spread: {} bps, After fees: {} bps (Target: {}). Not enough edge.", 
-                    spread_bps, net_spread_bps, self.config.min_edge_bps);
+            // Log "Close calls" (e.g. within 50bps of target) to show it's working
+            if net_spread_bps > (self.config.min_edge_bps - 50) {
+                 debug!("👀 CLOSE CALL [{}]: Net Edge {} bps (Target {})", 
+                    market.question, net_spread_bps, self.config.min_edge_bps);
             }
             return TradeAction::None;
         }
