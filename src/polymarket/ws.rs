@@ -9,6 +9,7 @@ const CLOB_WS_URL: &str = "wss://ws-subscriptions-clob.polymarket.com/ws/market"
 
 #[derive(Debug, Clone, Serialize)]
 pub struct Subscription {
+    #[serde(rename = "assets")]
     pub assets_ids: Vec<String>,
     #[serde(rename = "type")]
     pub msg_type: String,
