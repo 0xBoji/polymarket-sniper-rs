@@ -1,41 +1,39 @@
 use anyhow::Result;
-use reqwest::Client;
-use serde::{Deserialize, Serialize};
-use serde_json::Value;
-use std::sync::Arc;
-use tokio::sync::Mutex;
-use tracing::{info, warn, error, debug};
-use rust_decimal::Decimal;
-use rust_decimal::prelude::FromPrimitive;
+use tracing::{info, warn, debug};
 use super::api::MarketInterface;
 use async_trait::async_trait;
 use alloy::signers::local::PrivateKeySigner;
 use alloy::primitives::Address;
-use std::time::{SystemTime, UNIX_EPOCH};
-use std::num::ParseIntError;
+use rust_decimal::Decimal;
 
     // SDK Imports
 use polymarket_client_sdk::{
     POLYGON,
 };
-use polymarket_client_sdk::auth::Credentials;
 use polymarket_client_sdk::clob::Client as ClobClient;
 use polymarket_client_sdk::clob::types::{OrderType, Side, SignedOrder, SignableOrder};
 use polymarket_client_sdk::clob::types::response::PostOrderResponse;
-use polymarket_client_sdk::clob::order_builder::{Limit, OrderBuilder};
 use polymarket_client_sdk::types::U256;
-use polymarket_client_sdk::clob::order_builder::Market;
 use polymarket_client_sdk::clob::types::response::MarketResponse;
 use polymarket_client_sdk::auth::state::Authenticated;
 use polymarket_client_sdk::auth::Normal;
 use polymarket_client_sdk::auth::{Signer, LocalSigner};
 use polymarket_client_sdk::error::Error as SdkError;
-use polymarket_client_sdk::clob::client::AuthenticationBuilder;
 use std::str::FromStr;
-use uuid::Uuid;
+use serde::Deserialize; // Only Deserialize is used for GammaMarket
 
 use crate::config::PolymarketConfig;
 use crate::polymarket::types::MarketData;
+
+// We need reqwest for Gamma API fallback (http_client)
+// But warning said unused `reqwest::Client`.
+// Let's check struct definition.
+// Struct has `http_client: reqwest::Client`.
+// Warning must be because we import it but use full path `reqwest::Client` in struct?
+// Line 42: `pub http_client: reqwest::Client`.
+// Line 2: `use reqwest::Client;`. 
+// Since we use fully qualified `reqwest::Client`, the import is indeed unused. So we remove usage of import.
+
 
 pub struct PolymarketClient {
     pub client: ClobClient, // Now from new SDK
