@@ -52,22 +52,32 @@ impl ClobWebSocket {
                         // In a real robust implem, we should re-subscribe to everything on reconnect.
                         // For now, we listen for new requests.
                         
+                        let mut pending_subs: Vec<String> = Vec::new();
+                        let mut flush_interval = tokio::time::interval(std::time::Duration::from_millis(200));
+
                         loop {
                             tokio::select! {
                                 Some(msg) = read.next() => {
                                     match msg {
                                         Ok(Message::Text(text)) => {
                                             // info!("📩 WS Msg: {}", text); // Debug
-                                            if let Ok(updates) = serde_json::from_str::<Vec<OrderbookUpdate>>(&text) {
-                                                for update in updates {
-                                                     if let Err(e) = update_tx.send(update).await {
-                                                         error!("❌ Failed to send update to agent: {}", e);
-                                                     }
+                                            match serde_json::from_str::<Vec<OrderbookUpdate>>(&text) {
+                                                Ok(updates) => {
+                                                    // info!("✅ Parsed {} updates", updates.len());
+                                                    for update in updates {
+                                                         if let Err(e) = update_tx.send(update).await {
+                                                             error!("❌ Failed to send update to agent: {}", e);
+                                                         }
+                                                    }
                                                 }
-                                            } else if text.contains("event") && text.contains("param") {
-                                                // Ignore system messages
-                                            } else {
-                                                // warn!("⚠️ Unknown WS message format: {}", text);
+                                                Err(e) => {
+                                                    // Only warn if it looks like a market update (contains "asset_id")
+                                                    if text.contains("asset_id") {
+                                                        error!("❌ Failed to parse WS update: {}. Text: {}", e, text);
+                                                    } else if !text.contains("check_ka") { // Ignore keep-alive checks
+                                                        debug!("ℹ️ Ignored system msg: {}", text);
+                                                    }
+                                                }
                                             }
                                         }
                                         Ok(Message::Ping(ping)) => {
@@ -86,18 +96,27 @@ impl ClobWebSocket {
                                         _ => {}
                                     }
                                 }
-                                Some(assets) = subscribe_rx.recv() => {
-                                    if !assets.is_empty() {
-                                        let sub = Subscription {
-                                            assets_ids: assets.clone(),
-                                            msg_type: "market".to_string(),
-                                        };
-                                        let json = serde_json::to_string(&sub).unwrap_or_default();
-                                        info!("Binds Subscribing to {} assets", assets.len());
-                                        if let Err(e) = write.send(Message::Text(json)).await {
-                                            error!("❌ Failed to send subscription: {}", e);
-                                            // Break to reconnect
-                                            break;
+                                Some(mut assets) = subscribe_rx.recv() => {
+                                    pending_subs.append(&mut assets);
+                                }
+                                _ = flush_interval.tick() => {
+                                    if !pending_subs.is_empty() {
+                                        let batch: Vec<String> = pending_subs.drain(..).collect();
+                                        // Chunking to avoid too large frames (e.g. 50 assets per msg)
+                                        for chunk in batch.chunks(50) {
+                                            let sub = Subscription {
+                                                assets_ids: chunk.to_vec(),
+                                                msg_type: "market".to_string(),
+                                            };
+                                            let json = serde_json::to_string(&sub).unwrap_or_default();
+                                            info!("Binds Batch Subscribing to {} assets", chunk.len());
+                                            if let Err(e) = write.send(Message::Text(json)).await {
+                                                error!("❌ Failed to send batch subscription: {}", e);
+                                                // If send fails, we might lose these subs. 
+                                                // In robust system, re-queue them. 
+                                                // Here we just break to reconnect.
+                                                break;
+                                            }
                                         }
                                     }
                                 }
