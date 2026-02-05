@@ -800,6 +800,37 @@ impl Sniper {
         Ok(())
     }
 
+    /// Monitor and log the top 5 raw opportunities (ignoring fees/filters) to gauge market saturation
+    async fn log_top_opportunities(&self) {
+        let mut spreads: Vec<(String, f64, f64, f64)> = Vec::new(); // (Question, Yes, No, Cost)
+
+        for market in self.active_markets.values() {
+            if market.yes_price > 0.0 && market.no_price > 0.0 {
+                let cost = market.yes_price + market.no_price;
+                if cost < 1.02 { // Only care about close calls
+                    spreads.push((market.question.clone(), market.yes_price, market.no_price, cost));
+                }
+            }
+        }
+
+        // Sort by lowest cost (ascending)
+        spreads.sort_by(|a, b| a.3.partial_cmp(&b.3).unwrap_or(std::cmp::Ordering::Equal));
+
+        if !spreads.is_empty() {
+            let top_n = std::cmp::min(5, spreads.len());
+            info!("📊 --- MARKET SATURATION CHECK (Top {} Spreads) ---", top_n);
+            for i in 0..top_n {
+                let (q, yes, no, cost) = &spreads[i];
+                let raw_edge_bps = ((1.0 - cost) * 10000.0) as i32;
+                info!(
+                    "#{}: Cost {:.4} (Edge {} bps) | Y: {:.3} N: {:.3} | {}", 
+                    i+1, cost, raw_edge_bps, yes, no, q
+                );
+            }
+            info!("--------------------------------------------------");
+        }
+    }
+
     /// Manage active positions (Stop Loss, Take Profit)
     async fn manage_positions(&mut self, current_markets: &[MarketData]) -> Result<()> {
         let positions = self.risk_manager.get_positions();
