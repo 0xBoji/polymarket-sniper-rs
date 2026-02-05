@@ -138,7 +138,10 @@ impl ClobWebSocket {
                                 }
                                 _ = flush_interval.tick() => {
                                     if !pending_subs.is_empty() {
-                                        let batch: Vec<String> = pending_subs.drain(..).collect();
+                                        let mut batch: Vec<String> = pending_subs.drain(..).collect();
+                                        batch.sort();
+                                        batch.dedup();
+                                        
                                         // Chunking to avoid too large frames (e.g. 50 assets per msg)
                                         for chunk in batch.chunks(50) {
                                             let sub = Subscription {
