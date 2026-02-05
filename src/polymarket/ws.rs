@@ -84,11 +84,6 @@ impl ClobWebSocket {
                                 Some(msg) = read.next() => {
                                     match msg {
                                         Ok(Message::Text(text)) => {
-                                            // FORCE LOG for debugging
-                                            if text.contains("asset_id") || text.contains("error") {
-                                                info!("📩 WS Rx: {}", text); 
-                                            }
-                                            
                                             // Correctly parse as Object (WsMessage) not Array
                                             match serde_json::from_str::<WsMessage>(&text) {
                                                 Ok(msg) => {
@@ -151,7 +146,7 @@ impl ClobWebSocket {
                                                 msg_type: "market".to_string(),
                                             };
                                             let json = serde_json::to_string(&sub).unwrap_or_default();
-                                            info!("📤 Sending Sub: {}", json);
+                                            debug!("📤 Sending Sub: {}", json); // Downgrade to debug
                                             if let Err(e) = write.send(Message::Text(json)).await {
                                                 error!("❌ Failed to send batch subscription: {}", e);
                                             }
