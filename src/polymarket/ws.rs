@@ -18,6 +18,35 @@ pub struct Subscription {
 
 
 
+// NEW STRUCTS DEFINITION
+#[derive(Debug, Deserialize)]
+pub struct WsMessage {
+    pub market: String,
+    pub price_changes: Vec<WsPriceChange>,
+    pub timestamp: String,
+    pub event_type: String,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct WsPriceChange {
+    pub asset_id: String,
+    pub price: String,
+    pub size: String,
+    pub side: String,
+    pub hash: String,
+    pub best_bid: String,
+    pub best_ask: String,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct OrderbookUpdate {
+    pub asset_id: String,
+    pub bids: Vec<PriceLevel>, // Kept for compatibility with sniper.rs
+    pub asks: Vec<PriceLevel>,
+    pub timestamp: String,
+    pub hash: String,
+}
+
 #[derive(Debug, Deserialize)]
 pub struct PriceLevel {
     pub price: String,
@@ -92,34 +121,7 @@ impl ClobWebSocket {
 
 // ... (Ping/Close handlers remain same) ...
 
-// NEW STRUCTS DEFINITION
-#[derive(Debug, Deserialize)]
-pub struct WsMessage {
-    pub market: String,
-    pub price_changes: Vec<WsPriceChange>,
-    pub timestamp: String,
-    pub event_type: String,
-}
 
-#[derive(Debug, Deserialize)]
-pub struct WsPriceChange {
-    pub asset_id: String,
-    pub price: String,
-    pub size: String,
-    pub side: String,
-    pub hash: String,
-    pub best_bid: String,
-    pub best_ask: String,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct OrderbookUpdate {
-    pub asset_id: String,
-    pub bids: Vec<PriceLevel>, // Kept for compatibility with sniper.rs
-    pub asks: Vec<PriceLevel>,
-    pub timestamp: String,
-    pub hash: String,
-}
                                         Ok(Message::Ping(ping)) => {
                                              if let Err(_) = write.send(Message::Pong(ping)).await {
                                                  break;
@@ -180,31 +182,4 @@ pub struct OrderbookUpdate {
     }
 }
 
-// NEW STRUCTS DEFINITION (Moved to top level)
-#[derive(Debug, Deserialize)]
-pub struct WsMessage {
-    pub market: String,
-    pub price_changes: Vec<WsPriceChange>,
-    pub timestamp: String,
-    pub event_type: String,
-}
 
-#[derive(Debug, Deserialize)]
-pub struct WsPriceChange {
-    pub asset_id: String,
-    pub price: String,
-    pub size: String,
-    pub side: String,
-    pub hash: String,
-    pub best_bid: String,
-    pub best_ask: String,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct OrderbookUpdate {
-    pub asset_id: String,
-    pub bids: Vec<PriceLevel>, // Kept for compatibility with sniper.rs
-    pub asks: Vec<PriceLevel>,
-    pub timestamp: String,
-    pub hash: String,
-}
