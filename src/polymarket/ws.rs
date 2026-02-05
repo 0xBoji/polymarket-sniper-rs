@@ -9,11 +9,43 @@ const CLOB_WS_URL: &str = "wss://ws-subscriptions-clob.polymarket.com/ws/market"
 
 #[derive(Debug, Clone, Serialize)]
 pub struct Subscription {
-    #[serde(rename = "assets")]
     pub assets_ids: Vec<String>,
     #[serde(rename = "type")]
     pub msg_type: String,
 }
+
+// ... (OrderbookUpdate structs remain) ...
+
+// In loop:
+                        Ok(Message::Text(text)) => {
+                            // LOG EVERYTHING to debug "Silence"
+                            if text.contains("asset_id") {
+                                info!("📩 WS Data: {}", text); 
+                            } else if text.contains("error_message") {
+                                error!("❌ WS Error: {}", text);
+                            }
+                            
+                            match serde_json::from_str::<Vec<OrderbookUpdate>>(&text) {
+                                Ok(updates) => {
+                                    for update in updates {
+                                            if let Err(e) = update_tx.send(update).await {
+                                                error!("❌ Failed to send update to agent: {}", e);
+                                            }
+                                    }
+                                }
+// ...
+// In flush_interval:
+                                        for chunk in batch.chunks(50) {
+                                            let sub = Subscription {
+                                                assets_ids: chunk.to_vec(),
+                                                msg_type: "market".to_string(),
+                                            };
+                                            let json = serde_json::to_string(&sub).unwrap_or_default();
+                                            info!("📤 Sending Sub Payload: {}", json); 
+                                            if let Err(e) = write.send(Message::Text(json)).await {
+                                                error!("❌ Failed to send batch subscription: {}", e);
+                                            }
+                                        }
 
 #[derive(Debug, Deserialize)]
 pub struct OrderbookUpdate {
@@ -61,10 +93,13 @@ impl ClobWebSocket {
                                 Some(msg) = read.next() => {
                                     match msg {
                                         Ok(Message::Text(text)) => {
-                                            // info!("📩 WS Msg: {}", text); // Debug
+                                            // FORCE LOG for debugging
+                                            if text.contains("asset_id") || text.contains("error") {
+                                                info!("📩 WS Rx: {}", text); 
+                                            }
+                                            
                                             match serde_json::from_str::<Vec<OrderbookUpdate>>(&text) {
                                                 Ok(updates) => {
-                                                    // info!("✅ Parsed {} updates", updates.len());
                                                     for update in updates {
                                                          if let Err(e) = update_tx.send(update).await {
                                                              error!("❌ Failed to send update to agent: {}", e);
@@ -110,13 +145,10 @@ impl ClobWebSocket {
                                                 msg_type: "market".to_string(),
                                             };
                                             let json = serde_json::to_string(&sub).unwrap_or_default();
-                                            info!("Binds Batch Subscribing to {} assets", chunk.len());
+                                            info!("📤 Sending Sub: {}", json);
                                             if let Err(e) = write.send(Message::Text(json)).await {
                                                 error!("❌ Failed to send batch subscription: {}", e);
                                                 // If send fails, we might lose these subs. 
-                                                // In robust system, re-queue them. 
-                                                // Here we just break to reconnect.
-                                                break;
                                             }
                                         }
                                     }
