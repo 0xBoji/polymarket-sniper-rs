@@ -434,6 +434,8 @@ impl Sniper {
                     if let Err(e) = self.process_markets().await {
                         error!("❌ Error processing markets: {}", e);
                     }
+                    // Log top active spreads for visibility
+                    self.log_top_opportunities().await;
                 }
                 
                 _ = redemption_interval.tick() => {
