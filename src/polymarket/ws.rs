@@ -14,38 +14,7 @@ pub struct Subscription {
     pub msg_type: String,
 }
 
-// ... (OrderbookUpdate structs remain) ...
 
-// In loop:
-                        Ok(Message::Text(text)) => {
-                            // LOG EVERYTHING to debug "Silence"
-                            if text.contains("asset_id") {
-                                info!("📩 WS Data: {}", text); 
-                            } else if text.contains("error_message") {
-                                error!("❌ WS Error: {}", text);
-                            }
-                            
-                            match serde_json::from_str::<Vec<OrderbookUpdate>>(&text) {
-                                Ok(updates) => {
-                                    for update in updates {
-                                            if let Err(e) = update_tx.send(update).await {
-                                                error!("❌ Failed to send update to agent: {}", e);
-                                            }
-                                    }
-                                }
-// ...
-// In flush_interval:
-                                        for chunk in batch.chunks(50) {
-                                            let sub = Subscription {
-                                                assets_ids: chunk.to_vec(),
-                                                msg_type: "market".to_string(),
-                                            };
-                                            let json = serde_json::to_string(&sub).unwrap_or_default();
-                                            info!("📤 Sending Sub Payload: {}", json); 
-                                            if let Err(e) = write.send(Message::Text(json)).await {
-                                                error!("❌ Failed to send batch subscription: {}", e);
-                                            }
-                                        }
 
 #[derive(Debug, Deserialize)]
 pub struct OrderbookUpdate {
