@@ -334,6 +334,22 @@ impl PolymarketClient {
             Address::ZERO
         };
 
+        // Auto-derive Proxy Address if not in config
+        let proxy_address = if config.proxy_address.is_none() && signer_address != Address::ZERO {
+            match polymarket_client_sdk::derive_safe_wallet(signer_address, POLYGON) {
+                Some(addr) => {
+                    info!("🔐 Auto-derived Proxy Wallet: {}", addr);
+                    Some(addr.to_string())
+                },
+                None => {
+                    warn!("⚠️ Failed to auto-derive Proxy Wallet");
+                    None
+                }
+            }
+        } else {
+            config.proxy_address.clone()
+        };
+
         let client = ClobClient::new(&config.host, polymarket_client_sdk::clob::Config::default())?;
 
         Ok(Self {
@@ -341,7 +357,7 @@ impl PolymarketClient {
             http_client,
             gamma_url: "https://gamma-api.polymarket.com".to_string(),
             paper_trading,
-            proxy_address: config.proxy_address.clone(),
+            proxy_address,
             api_key: config.api_key.clone(),
             secret: config.secret.clone(),
             passphrase: config.passphrase.clone(),
