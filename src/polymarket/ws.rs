@@ -16,14 +16,7 @@ pub struct Subscription {
 
 
 
-#[derive(Debug, Deserialize)]
-pub struct OrderbookUpdate {
-    pub asset_id: String,
-    pub bids: Vec<PriceLevel>,
-    pub asks: Vec<PriceLevel>,
-    pub timestamp: String,
-    pub hash: String,
-}
+
 
 #[derive(Debug, Deserialize)]
 pub struct PriceLevel {
@@ -67,24 +60,66 @@ impl ClobWebSocket {
                                                 info!("📩 WS Rx: {}", text); 
                                             }
                                             
-                                            match serde_json::from_str::<Vec<OrderbookUpdate>>(&text) {
-                                                Ok(updates) => {
-                                                    for update in updates {
-                                                         if let Err(e) = update_tx.send(update).await {
-                                                             error!("❌ Failed to send update to agent: {}", e);
-                                                         }
+                                            // Correctly parse as Object (WsMessage) not Array
+                                            match serde_json::from_str::<WsMessage>(&text) {
+                                                Ok(msg) => {
+                                                    // Convert WsMessage to Vec<OrderbookUpdate> for compatibility
+                                                    // or just send individual updates.
+                                                    for change in msg.price_changes {
+                                                        let update = OrderbookUpdate {
+                                                            asset_id: change.asset_id,
+                                                            bids: vec![PriceLevel { price: change.best_bid, size: "0".to_string() }], // Dummy Vec for compat
+                                                            asks: vec![PriceLevel { price: change.best_ask, size: "0".to_string() }], // Dummy Vec for compat
+                                                            timestamp: msg.timestamp.clone(),
+                                                            hash: change.hash,
+                                                        };
+                                                        
+                                                        if let Err(e) = update_tx.send(update).await {
+                                                            error!("❌ Failed to send update to agent: {}", e);
+                                                        }
                                                     }
                                                 }
                                                 Err(e) => {
                                                     // Only warn if it looks like a market update (contains "asset_id")
                                                     if text.contains("asset_id") {
                                                         error!("❌ Failed to parse WS update: {}. Text: {}", e, text);
-                                                    } else if !text.contains("check_ka") { // Ignore keep-alive checks
+                                                    } else if !text.contains("check_ka") { 
                                                         debug!("ℹ️ Ignored system msg: {}", text);
                                                     }
                                                 }
                                             }
                                         }
+
+// ... (Ping/Close handlers remain same) ...
+
+// NEW STRUCTS DEFINITION
+#[derive(Debug, Deserialize)]
+pub struct WsMessage {
+    pub market: String,
+    pub price_changes: Vec<WsPriceChange>,
+    pub timestamp: String,
+    pub event_type: String,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct WsPriceChange {
+    pub asset_id: String,
+    pub price: String,
+    pub size: String,
+    pub side: String,
+    pub hash: String,
+    pub best_bid: String,
+    pub best_ask: String,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct OrderbookUpdate {
+    pub asset_id: String,
+    pub bids: Vec<PriceLevel>, // Kept for compatibility with sniper.rs
+    pub asks: Vec<PriceLevel>,
+    pub timestamp: String,
+    pub hash: String,
+}
                                         Ok(Message::Ping(ping)) => {
                                              if let Err(_) = write.send(Message::Pong(ping)).await {
                                                  break;
