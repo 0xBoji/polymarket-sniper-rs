@@ -152,7 +152,6 @@ pub struct OrderbookUpdate {
                                             info!("📤 Sending Sub: {}", json);
                                             if let Err(e) = write.send(Message::Text(json)).await {
                                                 error!("❌ Failed to send batch subscription: {}", e);
-                                                // If send fails, we might lose these subs. 
                                             }
                                         }
                                     }
@@ -179,4 +178,33 @@ pub struct OrderbookUpdate {
             error!("❌ Failed to queue subscription: {}", e);
         }
     }
+}
+
+// NEW STRUCTS DEFINITION (Moved to top level)
+#[derive(Debug, Deserialize)]
+pub struct WsMessage {
+    pub market: String,
+    pub price_changes: Vec<WsPriceChange>,
+    pub timestamp: String,
+    pub event_type: String,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct WsPriceChange {
+    pub asset_id: String,
+    pub price: String,
+    pub size: String,
+    pub side: String,
+    pub hash: String,
+    pub best_bid: String,
+    pub best_ask: String,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct OrderbookUpdate {
+    pub asset_id: String,
+    pub bids: Vec<PriceLevel>, // Kept for compatibility with sniper.rs
+    pub asks: Vec<PriceLevel>,
+    pub timestamp: String,
+    pub hash: String,
 }
