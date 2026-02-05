@@ -97,8 +97,8 @@ impl PredictiveStrategy {
             for word in question.split_whitespace() {
                 let cleaned = word.trim_matches(|c: char| !c.is_digit(10) && c != '.' && c != ',');
                 if let Ok(p) = cleaned.replace(',', "").parse::<f64>() {
-                    // Sanity check: strike prices for BTC are usually > 1000
-                    if p > 100.0 {
+                     // Sanity check: price must be positive
+                    if p > 0.0 {
                         return Some(p);
                     }
                 }
