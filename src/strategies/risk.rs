@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use tracing::{info, warn, debug};
+use tracing::{debug, info, warn};
 
 use crate::config::RiskConfig;
 use crate::strategies::types::TradingDecision;
@@ -74,7 +74,7 @@ impl RiskManager {
             .duration_since(std::time::UNIX_EPOCH)
             .unwrap()
             .as_secs();
-        
+
         let held_secs = now.saturating_sub(position.timestamp);
         if held_secs < self.config.min_hold_time_secs {
             debug!(
@@ -150,7 +150,10 @@ impl RiskManager {
                 .as_secs(),
         };
         self.positions.insert(market_id, position);
-        info!("📝 Position added: size=${:.2}, price={:.4}", size_usd, entry_price);
+        info!(
+            "📝 Position added: size=${:.2}, price={:.4}",
+            size_usd, entry_price
+        );
     }
 
     pub fn remove_position(&mut self, market_id: &str) {
@@ -173,7 +176,7 @@ impl RiskManager {
         // Use validate_entry logic but map it back to decision
         let capital = 1000.0;
         let size_usd = capital * decision.position_size_pct;
-        
+
         if self.validate_entry(market_id, size_usd, decision.confidence) {
             Some(decision.clone())
         } else {

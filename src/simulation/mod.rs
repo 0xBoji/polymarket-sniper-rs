@@ -1,8 +1,8 @@
-use anyhow::{Result, anyhow};
+use crate::polymarket::{MarketData, MarketInterface};
+use anyhow::{anyhow, Result};
 use async_trait::async_trait;
 use std::collections::HashMap;
 use tracing::info;
-use crate::polymarket::{MarketInterface, MarketData};
 
 /// Simulates market interactions for backtesting
 pub struct MarketSimulator {
@@ -10,7 +10,7 @@ pub struct MarketSimulator {
     active_markets: Vec<MarketData>,
     balance: f64,
     _positions: HashMap<String, f64>, // (MarketID, SizeUSD)
-    
+
     // Backtesting Fields
     historical_ticks: Vec<Tick>,
     current_tick_index: usize,
@@ -35,7 +35,7 @@ impl MarketSimulator {
             current_tick_index: 0,
         }
     }
-    
+
     /// Load mock data for testing
     pub fn load_markets(&mut self, markets: Vec<MarketData>) {
         self.active_markets = markets;
@@ -47,11 +47,29 @@ impl MarketSimulator {
         // TODO: Implement actual CSV parsing
         // Creating mock ticks for demonstration
         self.historical_ticks = vec![
-            Tick { timestamp: 1000, market_id: "mkt1".into(), price: 0.50, volume: 100.0 },
-            Tick { timestamp: 2000, market_id: "mkt1".into(), price: 0.55, volume: 200.0 },
-            Tick { timestamp: 3000, market_id: "mkt1".into(), price: 0.45, volume: 150.0 },
+            Tick {
+                timestamp: 1000,
+                market_id: "mkt1".into(),
+                price: 0.50,
+                volume: 100.0,
+            },
+            Tick {
+                timestamp: 2000,
+                market_id: "mkt1".into(),
+                price: 0.55,
+                volume: 200.0,
+            },
+            Tick {
+                timestamp: 3000,
+                market_id: "mkt1".into(),
+                price: 0.45,
+                volume: 150.0,
+            },
         ];
-        info!("🎞️  Simulator loaded {} historical ticks", self.historical_ticks.len());
+        info!(
+            "🎞️  Simulator loaded {} historical ticks",
+            self.historical_ticks.len()
+        );
     }
 
     /// Advance simulation by one tick
@@ -59,16 +77,20 @@ impl MarketSimulator {
         if self.current_tick_index >= self.historical_ticks.len() {
             return None;
         }
-        
+
         let tick = &self.historical_ticks[self.current_tick_index];
         self.current_tick_index += 1;
-        
+
         // Update valid market state based on this tick
-        if let Some(market) = self.active_markets.iter_mut().find(|m| m.id == tick.market_id) {
-             // Simply update price for yes/no (assuming tick is YES price)
-             market.yes_price = tick.price;
-             market.no_price = 1.0 - tick.price;
-             market.volume += tick.volume;
+        if let Some(market) = self
+            .active_markets
+            .iter_mut()
+            .find(|m| m.id == tick.market_id)
+        {
+            // Simply update price for yes/no (assuming tick is YES price)
+            market.yes_price = tick.price;
+            market.no_price = 1.0 - tick.price;
+            market.volume += tick.volume;
         }
 
         Some(tick)
@@ -82,7 +104,7 @@ impl MarketInterface for MarketSimulator {
     async fn get_active_markets(&self) -> Result<Vec<MarketData>> {
         // In a real backtester, this would return the slice of markets valid at `current_time`
         // Should we auto-advance tick here? Or external control?
-        // Ideally Agent calls this in loop. 
+        // Ideally Agent calls this in loop.
         // For simplicity, let's just return current state. The 'runner' drives the ticks.
         Ok(self.active_markets.clone())
     }
@@ -108,24 +130,30 @@ impl MarketInterface for MarketSimulator {
         _order_type: OrderType,
     ) -> Result<String> {
         // Simulate immediate fill at the requested price
-        info!("⚡ [SIM] Order Placed: {} {} @ ${:.2} on {}", side, size, price, market_id);
-        
+        info!(
+            "⚡ [SIM] Order Placed: {} {} @ ${:.2} on {}",
+            side, size, price, market_id
+        );
+
         // In a real simulator, we'd deduct balance, update positions, check liquidity etc.
         // For now, simple logging success.
-        
+
         Ok(format!("sim-order-{}", uuid::Uuid::new_v4()))
     }
 }
 
 // Reuse UUID logic or import (duplication to avoid dep complexity for now, or just use uuid crate if added)
-// Since helper mod uuid is private in client.rs, we use uuid crate directly if available, 
+// Since helper mod uuid is private in client.rs, we use uuid crate directly if available,
 // or valid simple mock string.
 mod uuid {
     use std::time::{SystemTime, UNIX_EPOCH};
     pub struct Uuid;
     impl Uuid {
         pub fn new_v4() -> String {
-            let now = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_nanos();
+            let now = SystemTime::now()
+                .duration_since(UNIX_EPOCH)
+                .unwrap()
+                .as_nanos();
             format!("{:x}", now)
         }
     }

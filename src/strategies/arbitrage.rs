@@ -1,7 +1,9 @@
-use crate::polymarket::{MarketData, OrderBook, OrderLevel};
 use crate::config::ArbitrageConfig;
+use crate::polymarket::{MarketData, OrderBook, OrderLevel};
+use crate::strategies::position_sizing::{
+    estimate_volatility, estimate_win_probability, PositionSizer,
+};
 use tracing::{debug, info};
-use crate::strategies::position_sizing::{PositionSizer, estimate_win_probability, estimate_volatility};
 
 #[derive(Debug)]
 pub enum TradeAction {
@@ -49,8 +51,8 @@ impl ArbitrageStrategy {
         } else {
             None
         };
-        
-        Self { 
+
+        Self {
             config,
             position_sizer,
         }
@@ -61,18 +63,22 @@ impl ArbitrageStrategy {
     /// Optimized with branchless code and early returns
     #[inline(always)]
     pub fn check_opportunity(&self, market: &MarketData) -> TradeAction {
+        if !self.config.enabled {
+            return TradeAction::None;
+        }
+
         let yes_ask = market.yes_price;
         let no_ask = market.no_price;
 
         // Branchless validation: both prices must be positive
         // If either is <= 0, total_cost will be invalid
         let total_cost = yes_ask + no_ask;
-        
+
         // Polymarket fees: ~0.2% maker + ~0.2% taker = 0.4% per trade
         // For arbitrage (buy YES + buy NO), we pay fees twice = 0.8% total
-        const FEE_PER_TRADE_BPS: i32 = 40;  // 0.4% = 40 bps
-        const TOTAL_FEE_BPS: i32 = FEE_PER_TRADE_BPS * 2;  // 80 bps for both trades
-        
+        const FEE_PER_TRADE_BPS: i32 = 40; // 0.4% = 40 bps
+        const TOTAL_FEE_BPS: i32 = FEE_PER_TRADE_BPS * 2; // 80 bps for both trades
+
         // Calculate spread AFTER fees
         let spread = 1.0 - total_cost;
         let spread_bps = (spread * 10000.0) as i32;
@@ -80,7 +86,7 @@ impl ArbitrageStrategy {
 
         // DEBUG: Sample 0.1% of checks to ensure we are seeing correct prices
         if rand::random::<f64>() < 0.001 {
-             info!("🔍 SAMPLE CHECK [{}]: Yes={:.3} No={:.3} Cost={:.3} Spread={}bps Fees={}bps Net={}bps", 
+            info!("🔍 SAMPLE CHECK [{}]: Yes={:.3} No={:.3} Cost={:.3} Spread={}bps Fees={}bps Net={}bps", 
                 market.question, yes_ask, no_ask, total_cost, spread_bps, TOTAL_FEE_BPS, net_spread_bps);
         }
 
@@ -88,34 +94,34 @@ impl ArbitrageStrategy {
         if net_spread_bps <= self.config.min_edge_bps {
             // Log "Close calls" (e.g. within 50bps of target) to show it's working
             if net_spread_bps > (self.config.min_edge_bps - 50) {
-                 debug!("👀 CLOSE CALL [{}]: Net Edge {} bps (Target {})", 
-                    market.question, net_spread_bps, self.config.min_edge_bps);
+                debug!(
+                    "👀 CLOSE CALL [{}]: Net Edge {} bps (Target {})",
+                    market.question, net_spread_bps, self.config.min_edge_bps
+                );
             }
             return TradeAction::None;
         }
 
         if yes_ask <= 0.0 || no_ask <= 0.0 {
-            debug!("⚠️ Missing prices for {}: YES={:.4}, NO={:.4}", market.id, yes_ask, no_ask);
+            debug!(
+                "⚠️ Missing prices for {}: YES={:.4}, NO={:.4}",
+                market.id, yes_ask, no_ask
+            );
             return TradeAction::None;
         }
 
         // Hot path: calculate position size using NET spread (after fees)
-        let size_usd = self.calculate_position_size(
-            net_spread_bps,
-            &market.id,
-            0,
-            true,
-        );
-        
+        let size_usd = self.calculate_position_size(net_spread_bps, &market.id, 0, true);
+
         TradeAction::BuyBoth {
             market_id: market.id.clone(),
             yes_price: yes_ask,
             no_price: no_ask,
             size_usd,
-            expected_profit_bps: net_spread_bps,  // Net profit after fees
+            expected_profit_bps: net_spread_bps, // Net profit after fees
         }
     }
-    
+
     /// Calculate optimal position size based on edge and risk parameters
     /// Optimized with const capital and inline hint
     #[inline(always)]
@@ -131,39 +137,45 @@ impl ArbitrageStrategy {
             Some(s) => s,
             None => return self.config.max_position_size_usd,
         };
-        
+
         // Dynamic sizing using Kelly Criterion
         const CAPITAL: f64 = 1000.0; // Const for compiler optimization
         let win_prob = estimate_win_probability(is_atomic, slippage_bps);
         let volatility = estimate_volatility(market_id);
-        
+
         sizer.calculate_optimal_size(edge_bps, win_prob, CAPITAL, volatility)
     }
 
     /// Analyze full orderbook depth for a given order size
-    pub fn analyze_orderbook_depth(&self, orderbook: &OrderBook, order_size_usd: f64) -> OrderbookDepth {
+    pub fn analyze_orderbook_depth(
+        &self,
+        orderbook: &OrderBook,
+        order_size_usd: f64,
+    ) -> OrderbookDepth {
         // Calculate weighted average prices based on order size
-        let (weighted_bid, _bid_liquidity) = self.calculate_weighted_price(orderbook.bid_levels(), order_size_usd);
-        let (weighted_ask, _ask_liquidity) = self.calculate_weighted_price(orderbook.ask_levels(), order_size_usd);
-        
+        let (weighted_bid, _bid_liquidity) =
+            self.calculate_weighted_price(orderbook.bid_levels(), order_size_usd);
+        let (weighted_ask, _ask_liquidity) =
+            self.calculate_weighted_price(orderbook.ask_levels(), order_size_usd);
+
         // Calculate slippage (difference between best price and weighted average)
         let best_bid = orderbook.best_bid().unwrap_or(0.0);
         let best_ask = orderbook.best_ask().unwrap_or(1.0);
-        
+
         let bid_slippage = if best_bid > 0.0 {
             ((best_bid - weighted_bid) / best_bid * 10000.0) as i32
         } else {
             0
         };
-        
+
         let ask_slippage = if best_ask > 0.0 {
             ((weighted_ask - best_ask) / best_ask * 10000.0) as i32
         } else {
             0
         };
-        
+
         let total_slippage_bps = bid_slippage + ask_slippage;
-        
+
         // Calculate liquidity imbalance
         let total_bid_liq = orderbook.total_bid_liquidity();
         let total_ask_liq = orderbook.total_ask_liquidity();
@@ -172,7 +184,7 @@ impl ArbitrageStrategy {
         } else {
             0.0
         };
-        
+
         OrderbookDepth {
             total_bid_liquidity: total_bid_liq,
             total_ask_liquidity: total_ask_liq,
@@ -182,36 +194,36 @@ impl ArbitrageStrategy {
             imbalance_ratio,
         }
     }
-    
+
     /// Calculate weighted average price for a given order size
     /// Returns (weighted_price, total_liquidity_consumed)
     fn calculate_weighted_price(&self, levels: &[OrderLevel], order_size_usd: f64) -> (f64, f64) {
         if levels.is_empty() {
             return (0.0, 0.0);
         }
-        
+
         let mut remaining_size = order_size_usd;
         let mut total_cost = 0.0;
         let mut total_size_filled = 0.0;
-        
+
         for level in levels {
             if remaining_size <= 0.0 {
                 break;
             }
-            
+
             let size_at_level = level.size.min(remaining_size);
             total_cost += size_at_level * level.price;
             total_size_filled += size_at_level;
             remaining_size -= size_at_level;
         }
-        
+
         if total_size_filled > 0.0 {
             (total_cost / total_size_filled, total_size_filled)
         } else {
             (levels[0].price, 0.0)
         }
     }
-    
+
     /// Check for arbitrage opportunity using full orderbook depth
     pub fn check_orderbook_opportunity(
         &self,
@@ -223,24 +235,24 @@ impl ArbitrageStrategy {
         // Analyze depth for both YES and NO orderbooks
         let yes_depth = self.analyze_orderbook_depth(yes_orderbook, order_size_usd / 2.0);
         let no_depth = self.analyze_orderbook_depth(no_orderbook, order_size_usd / 2.0);
-        
+
         // Use weighted ask prices (we're buying)
         let yes_ask = yes_depth.weighted_ask_price;
         let no_ask = no_depth.weighted_ask_price;
-        
+
         if yes_ask <= 0.0 || no_ask <= 0.0 {
             return TradeAction::None;
         }
-        
+
         // Calculate total cost including slippage
         let total_cost = yes_ask + no_ask;
         let spread = 1.0 - total_cost;
         let spread_bps = (spread * 10000.0) as i32;
-        
+
         // Adjust for slippage
         let total_slippage = yes_depth.slippage_bps + no_depth.slippage_bps;
         let net_edge_bps = spread_bps - total_slippage;
-        
+
         if net_edge_bps > self.config.min_edge_bps {
             return TradeAction::BuyBoth {
                 market_id: market_id.to_string(),
@@ -250,10 +262,10 @@ impl ArbitrageStrategy {
                 expected_profit_bps: net_edge_bps,
             };
         }
-        
+
         TradeAction::None
     }
-    
+
     /// Calculate slippage for a given order size
     pub fn calculate_slippage(&self, orderbook: &OrderBook, order_size_usd: f64) -> i32 {
         let depth = self.analyze_orderbook_depth(orderbook, order_size_usd);

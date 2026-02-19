@@ -62,7 +62,7 @@ impl OrderBook {
                 .as_secs(),
         }
     }
-    
+
     #[inline(always)]
     pub fn best_bid(&self) -> Option<f64> {
         if self.bid_count > 0 {
@@ -71,7 +71,7 @@ impl OrderBook {
             None
         }
     }
-    
+
     #[inline(always)]
     pub fn best_ask(&self) -> Option<f64> {
         if self.ask_count > 0 {
@@ -80,7 +80,7 @@ impl OrderBook {
             None
         }
     }
-    
+
     #[inline(always)]
     pub fn total_bid_liquidity(&self) -> f64 {
         self.bids[..self.bid_count]
@@ -88,7 +88,7 @@ impl OrderBook {
             .map(|level| level.size)
             .sum()
     }
-    
+
     #[inline(always)]
     pub fn total_ask_liquidity(&self) -> f64 {
         self.asks[..self.ask_count]
@@ -96,13 +96,13 @@ impl OrderBook {
             .map(|level| level.size)
             .sum()
     }
-    
+
     /// Get active bid levels as slice
     #[inline(always)]
     pub fn bid_levels(&self) -> &[OrderLevel] {
         &self.bids[..self.bid_count]
     }
-    
+
     /// Get active ask levels as slice
     #[inline(always)]
     pub fn ask_levels(&self) -> &[OrderLevel] {

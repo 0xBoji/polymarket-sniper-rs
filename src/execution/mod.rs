@@ -1,9 +1,9 @@
-pub mod executor;
-pub mod redemption;
-pub mod flashbots;
 pub mod cpu_affinity;
+pub mod executor;
+pub mod flashbots;
+pub mod redemption;
 
-pub use executor::Executor;
-pub use redemption::RedemptionManager;
-pub use flashbots::FlashbotsClient;
 pub use cpu_affinity::CpuPinner;
+pub use executor::Executor;
+pub use flashbots::FlashbotsClient;
+pub use redemption::RedemptionManager;

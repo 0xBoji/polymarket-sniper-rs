@@ -1,6 +1,6 @@
 use ethers::prelude::*;
-use polymarket_client_sdk::{derive_proxy_wallet, derive_safe_wallet, POLYGON};
 use polymarket_client_sdk::types::Address as PolyAddress;
+use polymarket_client_sdk::{derive_proxy_wallet, derive_safe_wallet, POLYGON};
 use std::str::FromStr;
 
 #[tokio::main]
@@ -24,7 +24,10 @@ async fn main() -> anyhow::Result<()> {
 
     let provider = Provider::<Http>::try_from("https://polygon-rpc.com")?;
 
-    abigen!(ERC20, r#"[function balanceOf(address account) external view returns (uint256)]"#);
+    abigen!(
+        ERC20,
+        r#"[function balanceOf(address account) external view returns (uint256)]"#
+    );
     let usdc_native = ERC20::new(
         Address::from_str("0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359")?,
         provider.clone().into(),

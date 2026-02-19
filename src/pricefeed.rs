@@ -3,8 +3,8 @@ use reqwest::Client;
 use serde::Deserialize;
 use std::collections::HashMap;
 use std::sync::Arc;
-use tokio::sync::RwLock;
 use std::time::{Duration, Instant};
+use tokio::sync::RwLock;
 const BINANCE_API_URL: &str = "https://api.binance.com/api/v3/ticker/price";
 const CACHE_DURATION: Duration = Duration::from_millis(500);
 
@@ -65,10 +65,13 @@ impl BinanceClient {
         // 3. Update cache
         {
             let mut cache = self.cache.write().await;
-            cache.insert(symbol, CachedPrice {
-                price,
-                timestamp: Instant::now(),
-            });
+            cache.insert(
+                symbol,
+                CachedPrice {
+                    price,
+                    timestamp: Instant::now(),
+                },
+            );
         }
 
         Ok(price)
@@ -76,32 +79,66 @@ impl BinanceClient {
 
     pub fn symbol_from_question(question: &str) -> Option<&'static str> {
         let q = question.to_lowercase();
-        
+
         // Priority 1: Exact matches or strong indicators
-        if q.contains("dogecoin") || q.contains("doge") { return Some("DOGEUSDT"); }
-        if q.contains("shiba inu") || q.contains("shib") { return Some("SHIBUSDT"); }
-        if q.contains("cardano") || q.contains("ada") { return Some("ADAUSDT"); }
-        if q.contains("xrp") || q.contains("ripple") { return Some("XRPUSDT"); }
-        if q.contains("solana") || q.contains("sol ") || q.contains("sol?") { return Some("SOLUSDT"); } // Avoid "resolution" matching "sol"
-        if q.contains("bnb") || q.contains("binance coin") { return Some("BNBUSDT"); }
-        
+        if q.contains("dogecoin") || q.contains("doge") {
+            return Some("DOGEUSDT");
+        }
+        if q.contains("shiba inu") || q.contains("shib") {
+            return Some("SHIBUSDT");
+        }
+        if q.contains("cardano") || q.contains("ada") {
+            return Some("ADAUSDT");
+        }
+        if q.contains("xrp") || q.contains("ripple") {
+            return Some("XRPUSDT");
+        }
+        if q.contains("solana") || q.contains("sol ") || q.contains("sol?") {
+            return Some("SOLUSDT");
+        } // Avoid "resolution" matching "sol"
+        if q.contains("bnb") || q.contains("binance coin") {
+            return Some("BNBUSDT");
+        }
+
         // Priority 2: Majors (ETH before BTC to catch "ETH flip BTC")
-        if q.contains("ethereum") || q.contains("eth") { return Some("ETHUSDT"); }
-        if q.contains("bitcoin") || q.contains("btc") { return Some("BTCUSDT"); }
-        
+        if q.contains("ethereum") || q.contains("eth") {
+            return Some("ETHUSDT");
+        }
+        if q.contains("bitcoin") || q.contains("btc") {
+            return Some("BTCUSDT");
+        }
+
         // Priority 3: L1s / L2s
-        if q.contains("avalanche") || q.contains("avax") { return Some("AVAXUSDT"); }
-        if q.contains("polygon") || q.contains("matic") { return Some("MATICUSDT"); }
-        if q.contains("polkadot") || q.contains("dot") { return Some("DOTUSDT"); }
-        if q.contains("tron") || q.contains("trx") { return Some("TRXUSDT"); }
-        if q.contains("litecoin") || q.contains("ltc") { return Some("LTCUSDT"); }
-        if q.contains("chainlink") || q.contains("link") { return Some("LINKUSDT"); }
-        if q.contains("near protocol") || q.contains("near") { return Some("NEARUSDT"); }
-        
+        if q.contains("avalanche") || q.contains("avax") {
+            return Some("AVAXUSDT");
+        }
+        if q.contains("polygon") || q.contains("matic") {
+            return Some("MATICUSDT");
+        }
+        if q.contains("polkadot") || q.contains("dot") {
+            return Some("DOTUSDT");
+        }
+        if q.contains("tron") || q.contains("trx") {
+            return Some("TRXUSDT");
+        }
+        if q.contains("litecoin") || q.contains("ltc") {
+            return Some("LTCUSDT");
+        }
+        if q.contains("chainlink") || q.contains("link") {
+            return Some("LINKUSDT");
+        }
+        if q.contains("near protocol") || q.contains("near") {
+            return Some("NEARUSDT");
+        }
+
         // Priority 4: DeFi / Others
-        if q.contains("uniswap") || q.contains("uni") { return Some("UNIUSDT"); }
-        if q.contains("bitcoin cash") || q.contains("bch") { return Some("BCHUSDT"); }
-        
+        if q.contains("uniswap") || q.contains("uni") {
+            return Some("UNIUSDT");
+        }
+        if q.contains("bitcoin cash") || q.contains("bch") {
+            return Some("BCHUSDT");
+        }
+
         None
     }
 }

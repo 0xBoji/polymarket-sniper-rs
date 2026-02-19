@@ -1,5 +1,5 @@
-use crate::polymarket::MarketData;
 use crate::config::ExpirationConfig;
+use crate::polymarket::MarketData;
 use crate::strategies::arbitrage::TradeAction;
 use chrono::{DateTime, Utc};
 use tracing::{debug, info};
@@ -43,21 +43,26 @@ impl ExpirationStrategy {
             return TradeAction::None;
         }
 
-        debug!("⚡ Expiration Candidate: {} ({}s remaining)", market.question, time_remaining);
+        debug!(
+            "⚡ Expiration Candidate: {} ({}s remaining)",
+            market.question, time_remaining
+        );
 
         // 2. Identify Winning Side & Check Rules
         // Rule: Price must be > min_price (highly likely to win) AND < target_price (profitable)
-        
+
         let yes_price = market.yes_price;
         let no_price = market.no_price;
 
         // Check YES
         if yes_price >= self.config.min_price && yes_price < self.config.target_price {
             let profit_bps = ((1.0 - yes_price) * 10000.0) as i32;
-            info!("🎯 EXPIRATION SIGNAL (YES): {} | Price: {:.4} | Profit: {} bps | Time: {}s", 
-                market.question, yes_price, profit_bps, time_remaining);
-            
-            return TradeAction::Snipe { 
+            info!(
+                "🎯 EXPIRATION SIGNAL (YES): {} | Price: {:.4} | Profit: {} bps | Time: {}s",
+                market.question, yes_price, profit_bps, time_remaining
+            );
+
+            return TradeAction::Snipe {
                 market_id: market.id.clone(),
                 side: "YES".to_string(),
                 price: yes_price,
@@ -68,8 +73,10 @@ impl ExpirationStrategy {
         // Check NO
         if no_price >= self.config.min_price && no_price < self.config.target_price {
             let profit_bps = ((1.0 - no_price) * 10000.0) as i32;
-            info!("🎯 EXPIRATION SIGNAL (NO): {} | Price: {:.4} | Profit: {} bps | Time: {}s", 
-                market.question, no_price, profit_bps, time_remaining);
+            info!(
+                "🎯 EXPIRATION SIGNAL (NO): {} | Price: {:.4} | Profit: {} bps | Time: {}s",
+                market.question, no_price, profit_bps, time_remaining
+            );
 
             return TradeAction::Snipe {
                 market_id: market.id.clone(),

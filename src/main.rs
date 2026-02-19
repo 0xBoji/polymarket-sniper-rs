@@ -1,15 +1,13 @@
 use anyhow::Result;
-use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
-use tracing::{info, warn};
 use std::sync::{Arc, Mutex};
+use tracing::{info, warn};
+use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
-use polymarket_hft_agent::sniper::Sniper;
-use polymarket_hft_agent::config::Config;
 use polymarket_hft_agent::analytics::PnLTracker;
+use polymarket_hft_agent::config::Config;
+use polymarket_hft_agent::sniper::Sniper;
 
 // Unused imports removed
-
-
 
 #[global_allocator]
 static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
@@ -27,7 +25,7 @@ async fn main() -> Result<()> {
 
     // Load configuration
     let config = Config::from_env()?;
-    
+
     // Phase 2 Optimization: CPU Pinning
     // Pin main thread to dedicated core for consistent latency
     if let Some(pinner) = polymarket_hft_agent::execution::CpuPinner::new() {
@@ -46,18 +44,18 @@ async fn main() -> Result<()> {
 
     // Initialize PnL tracker
     let pnl_tracker = Arc::new(Mutex::new(PnLTracker::new(1000.0))); // $1000 initial capital
-    
+
     // Small delay to ensure tokio runtime is fully initialized
     tokio::time::sleep(tokio::time::Duration::from_millis(100)).await;
-    
+
     // Create and run sniper
     let mut sniper = Sniper::new(config, pnl_tracker).await?;
-    
+
     // Run sniper (this blocks until Ctrl+C)
     let sniper_result = sniper.run().await;
-    
+
     // Cleanup
-    
+
     sniper_result
 }
 
@@ -66,9 +64,27 @@ fn print_banner(config: &Config) {
     println!("║          Polymarket HFT Agent with OpenRouter            ║");
     println!("╚═══════════════════════════════════════════════════════════╝");
     println!();
-    println!("🚀 Strategy: Intra-Market Arbitrage (Sniper Mode)");
-    println!("💰 Min Edge: {} bps", config.arbitrage.min_edge_bps);
-    println!("💰 Max Size: ${:.2}", config.arbitrage.max_position_size_usd);
+    if config.predictive.enabled {
+        println!("🚀 Strategy: Last-Minute Crypto Predictive (Binance + Polymarket)");
+        println!("⏳ Final Window: {}s", config.predictive.final_window_sec);
+        println!(
+            "📈 Binance Threshold: {:.2}%",
+            config.predictive.binance_signal_threshold_pct
+        );
+        println!(
+            "💵 Max Entry Price: {:.2}",
+            config.predictive.max_entry_price
+        );
+    } else if config.arbitrage.enabled {
+        println!("🚀 Strategy: Intra-Market Arbitrage (Sniper Mode)");
+        println!("💰 Min Edge: {} bps", config.arbitrage.min_edge_bps);
+        println!(
+            "💰 Max Size: ${:.2}",
+            config.arbitrage.max_position_size_usd
+        );
+    } else {
+        println!("🚀 Strategy: Expiration Sniping");
+    }
     println!(
         "📊 Mode: {}",
         if config.agent.paper_trading {
@@ -96,7 +112,10 @@ fn print_banner(config: &Config) {
         "   • Min Liquidity: ${:.0}",
         config.market_filters.min_liquidity
     );
-    println!("⏱️  Poll Interval: {} seconds", config.agent.market_poll_interval_secs);
+    println!(
+        "⏱️  Poll Interval: {} seconds",
+        config.agent.market_poll_interval_secs
+    );
     println!();
     println!("Press Ctrl+C to stop");
     println!("═══════════════════════════════════════════════════════════");

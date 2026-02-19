@@ -1,10 +1,10 @@
 use anyhow::Result;
 use tracing::{info, warn};
 
+use crate::execution::flashbots::FlashbotsClient;
+use crate::polymarket::{MarketData, MarketInterface};
 use crate::strategies::risk::RiskManager;
 use crate::strategies::types::TradingDecision;
-use crate::polymarket::{MarketData, MarketInterface};
-use crate::execution::flashbots::FlashbotsClient;
 use polymarket_client_sdk::clob::types::OrderType;
 
 pub struct Executor {
@@ -92,22 +92,38 @@ impl Executor {
         // Check if Flashbots is enabled
         if let Some(_flashbots) = &self.flashbots_client {
             info!("⚡ Executing ATOMIC arbitrage bundle via Flashbots");
-            
+
             // TODO: Build actual transactions for YES and NO orders
             // This requires:
             // 1. Creating TypedTransaction for each order
             // 2. Setting proper gas limits and prices
             // 3. Signing with wallet
-            
+
             // For now, we'll use the regular interface and log that Flashbots would be used
             warn!("⚠️ Flashbots bundle creation not yet implemented - using regular execution");
             warn!("⚠️ TODO: Build TypedTransaction from Polymarket order data");
-            
+
             // Fallback to regular execution
-            self.execute_regular_arbitrage(market, yes_price, no_price, size_usd, trade_id, risk_manager).await
+            self.execute_regular_arbitrage(
+                market,
+                yes_price,
+                no_price,
+                size_usd,
+                trade_id,
+                risk_manager,
+            )
+            .await
         } else {
             // No Flashbots - regular execution
-            self.execute_regular_arbitrage(market, yes_price, no_price, size_usd, trade_id, risk_manager).await
+            self.execute_regular_arbitrage(
+                market,
+                yes_price,
+                no_price,
+                size_usd,
+                trade_id,
+                risk_manager,
+            )
+            .await
         }
     }
 
@@ -122,23 +138,23 @@ impl Executor {
         risk_manager: &mut RiskManager,
     ) -> Result<String> {
         info!("🔄 Executing regular arbitrage (non-atomic)");
-        
+
         // Execute YES order
         let yes_order_id = self
             .market_interface
             .place_order(&market.id, "YES", size_usd / 2.0, yes_price, OrderType::GTC)
             .await?;
-        
+
         info!("✅ YES order placed: {}", yes_order_id);
-        
+
         // Execute NO order
         let no_order_id = self
             .market_interface
             .place_order(&market.id, "NO", size_usd / 2.0, no_price, OrderType::GTC)
             .await?;
-        
+
         info!("✅ NO order placed: {}", no_order_id);
-        
+
         // Register positions
         risk_manager.add_position(
             market.id.clone(),
@@ -147,7 +163,7 @@ impl Executor {
             size_usd / 2.0,
             yes_price,
         );
-        
+
         risk_manager.add_position(
             market.id.clone(),
             format!("{}_NO", trade_id),
@@ -155,7 +171,7 @@ impl Executor {
             size_usd / 2.0,
             no_price,
         );
-        
+
         Ok(format!("YES:{},NO:{}", yes_order_id, no_order_id))
     }
 
@@ -186,7 +202,13 @@ impl Executor {
         let opposite_side = if side == "YES" { "NO" } else { "YES" };
         let _order_id = self
             .market_interface
-            .place_order(&market.id, opposite_side, position.size_usd, price, OrderType::FOK)
+            .place_order(
+                &market.id,
+                opposite_side,
+                position.size_usd,
+                price,
+                OrderType::FOK,
+            )
             .await?;
 
         // Remove position from risk manager
@@ -206,18 +228,15 @@ impl Executor {
         trade_id: &str,
         risk_manager: &mut RiskManager,
     ) -> Result<String> {
-        info!("🎯 Executing SNIPE for market: {} ({})", market.question, side);
+        info!(
+            "🎯 Executing SNIPE for market: {} ({})",
+            market.question, side
+        );
 
         // Place order
         let order_id = self
             .market_interface
-            .place_order(
-                &market.id,
-                side,
-                size_usd,
-                price,
-                OrderType::FOK,
-            )
+            .place_order(&market.id, side, size_usd, price, OrderType::FOK)
             .await?;
 
         info!(

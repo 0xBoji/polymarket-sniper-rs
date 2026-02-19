@@ -22,7 +22,7 @@ fn main() {
 
     for (question, expected) in test_cases {
         let result = BinanceClient::symbol_from_question(question);
-        
+
         let status = if result == expected {
             passed += 1;
             "✅ PASS"
@@ -31,7 +31,10 @@ fn main() {
             "❌ FAIL"
         };
 
-        println!("{} '{}' -> {:?} (Expected: {:?})", status, question, result, expected);
+        println!(
+            "{} '{}' -> {:?} (Expected: {:?})",
+            status, question, result, expected
+        );
     }
 
     println!("\n📊 Result: {} Passed, {} Failed", passed, failed);

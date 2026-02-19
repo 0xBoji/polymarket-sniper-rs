@@ -1,8 +1,8 @@
-use ethers::prelude::*;
-use std::sync::Arc;
-use std::str::FromStr;
-use tracing::{error, info, warn};
 use dashmap::DashSet;
+use ethers::prelude::*;
+use std::str::FromStr;
+use std::sync::Arc;
+use tracing::{error, info, warn};
 
 // use super::contracts::CtfExchangeCalls;
 
@@ -36,7 +36,7 @@ impl MempoolMonitor {
         };
 
         let target_address = Address::from_str(CTF_EXCHANGE_ADDRESS).unwrap();
-        
+
         let watched_addresses = Arc::new(DashSet::new());
 
         Self {
@@ -63,7 +63,7 @@ impl MempoolMonitor {
 
             tokio::spawn(async move {
                 info!("👀 Mempool monitoring started. Listening for pending txs...");
-                
+
                 // Subscribe to pending transactions
                 let mut stream = match provider_clone.subscribe_pending_txs().await {
                     Ok(s) => s,
@@ -84,8 +84,8 @@ impl MempoolMonitor {
                                 }
                             }
                         }
-                        Ok(None) => {} 
-                        Err(_) => {}   
+                        Ok(None) => {}
+                        Err(_) => {}
                     }
                 }
             });
@@ -99,7 +99,10 @@ impl MempoolMonitor {
 fn handle_exchange_tx(tx: &Transaction, watched_addresses: &DashSet<Address>) {
     // 1. Check if 'from' is a watched address
     if watched_addresses.contains(&tx.from) {
-        info!("🚨 ALERT: Watchlist address {:?} is interacting with Exchange!", tx.from);
+        info!(
+            "🚨 ALERT: Watchlist address {:?} is interacting with Exchange!",
+            tx.from
+        );
     }
 
     // 2. Decode Input to see what they are buying/filling
@@ -112,18 +115,18 @@ fn handle_exchange_tx(tx: &Transaction, watched_addresses: &DashSet<Address>) {
                 let token_id = call.order.token_id;
                 let maker_amount = call.order.maker_amount;
                 let outcome_side = if call.order.side == 0 { "BUY" } else { "SELL" }; // 0=BUY, 1=SELL
-                
+
                 // Filter out small noise
                 if maker_amount > U256::from(100_000_000) { // > 100 USDC (6 decimals)
                      info!(
-                        "🌊 Large Order Fill Detected! Side: {} | Token: {} | Amount: {}", 
+                        "🌊 Large Order Fill Detected! Side: {} | Token: {} | Amount: {}",
                         outcome_side, token_id, maker_amount
                     );
                 }
             },
             CtfExchangeCalls::Buy(call) => {
                  info!(
-                    "🛒 Direct Buy Detected! Condition: {:?} | Outcome: {} | Amount: {}", 
+                    "🛒 Direct Buy Detected! Condition: {:?} | Outcome: {} | Amount: {}",
                     call.condition_id, call.outcome_index, call.amount
                 );
             },

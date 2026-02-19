@@ -27,6 +27,7 @@ pub struct PolymarketConfig {
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct ArbitrageConfig {
+    pub enabled: bool,
     pub min_edge_bps: i32,
     pub max_position_size_usd: f64,
     // Dynamic position sizing
@@ -50,8 +51,9 @@ pub struct PredictiveConfig {
     pub min_confidence: f64,
     pub max_uncertainty: f64,
     pub binance_signal_threshold_pct: f64,
+    pub final_window_sec: u64,
+    pub max_entry_price: f64,
 }
-
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct AgentConfig {
@@ -101,6 +103,10 @@ impl Config {
         };
 
         let arbitrage = ArbitrageConfig {
+            enabled: env::var("ARBITRAGE_ENABLED")
+                .unwrap_or_else(|_| "false".to_string())
+                .parse()
+                .unwrap_or(false),
             min_edge_bps: env::var("MIN_EDGE_BPS")
                 .unwrap_or_else(|_| "20".to_string())
                 .parse()
@@ -238,9 +244,9 @@ impl Config {
             expiration,
             predictive: PredictiveConfig {
                 enabled: env::var("PREDICTIVE_SNIPING_ENABLED")
-                    .unwrap_or_else(|_| "false".to_string())
+                    .unwrap_or_else(|_| "true".to_string())
                     .parse()
-                    .unwrap_or(false),
+                    .unwrap_or(true),
                 min_confidence: env::var("PREDICTIVE_MIN_CONFIDENCE")
                     .unwrap_or_else(|_| "0.50".to_string())
                     .parse()
@@ -253,6 +259,14 @@ impl Config {
                     .unwrap_or_else(|_| "0.5".to_string())
                     .parse()
                     .unwrap_or(0.5),
+                final_window_sec: env::var("PREDICTIVE_FINAL_WINDOW_SEC")
+                    .unwrap_or_else(|_| "180".to_string())
+                    .parse()
+                    .unwrap_or(180),
+                max_entry_price: env::var("PREDICTIVE_MAX_ENTRY_PRICE")
+                    .unwrap_or_else(|_| "0.97".to_string())
+                    .parse()
+                    .unwrap_or(0.97),
             },
         })
     }

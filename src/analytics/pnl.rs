@@ -1,7 +1,6 @@
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use chrono::{DateTime, Utc};
-
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Position {
@@ -102,10 +101,10 @@ impl PnLTracker {
     pub fn close_position(&mut self, position_id: &str) -> Option<f64> {
         if let Some(position) = self.positions.remove(position_id) {
             let realized_pnl = position.unrealized_pnl();
-            
+
             // Return cash + PnL
             self.cash += position.size + realized_pnl;
-            
+
             // Record trade
             let trade = Trade {
                 id: position.id.clone(),
@@ -120,7 +119,7 @@ impl PnLTracker {
                 realized_pnl: Some(realized_pnl),
             };
             self.trades.push(trade);
-            
+
             Some(realized_pnl)
         } else {
             None
@@ -132,10 +131,7 @@ impl PnLTracker {
     }
 
     pub fn calculate_realized_pnl(&self) -> f64 {
-        self.trades
-            .iter()
-            .filter_map(|t| t.realized_pnl)
-            .sum()
+        self.trades.iter().filter_map(|t| t.realized_pnl).sum()
     }
 
     pub fn calculate_total_pnl(&self) -> f64 {
@@ -143,7 +139,12 @@ impl PnLTracker {
     }
 
     pub fn portfolio_value(&self) -> f64 {
-        self.cash + self.positions.values().map(|p| p.size + p.unrealized_pnl()).sum::<f64>()
+        self.cash
+            + self
+                .positions
+                .values()
+                .map(|p| p.size + p.unrealized_pnl())
+                .sum::<f64>()
     }
 
     pub fn take_snapshot(&mut self) {
@@ -162,9 +163,11 @@ impl PnLTracker {
         let unrealized_pnl = self.calculate_unrealized_pnl();
         let realized_pnl = self.calculate_realized_pnl();
         let portfolio_value = self.portfolio_value();
-        
+
         // Win rate
-        let winning_trades = self.trades.iter()
+        let winning_trades = self
+            .trades
+            .iter()
             .filter(|t| t.realized_pnl.unwrap_or(0.0) > 0.0)
             .count();
         let win_rate = if self.trades.is_empty() {
@@ -174,15 +177,16 @@ impl PnLTracker {
         };
 
         // Sharpe ratio (simplified)
-        let returns: Vec<f64> = self.snapshots.windows(2)
+        let returns: Vec<f64> = self
+            .snapshots
+            .windows(2)
             .map(|w| (w[1].total_value - w[0].total_value) / w[0].total_value)
             .collect();
-        
+
         let sharpe_ratio = if returns.len() > 1 {
             let mean = returns.iter().sum::<f64>() / returns.len() as f64;
-            let variance = returns.iter()
-                .map(|r| (r - mean).powi(2))
-                .sum::<f64>() / returns.len() as f64;
+            let variance =
+                returns.iter().map(|r| (r - mean).powi(2)).sum::<f64>() / returns.len() as f64;
             let std_dev = variance.sqrt();
             if std_dev > 0.0 {
                 mean / std_dev * (252.0_f64).sqrt() // Annualized

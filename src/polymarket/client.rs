@@ -1,26 +1,24 @@
-use anyhow::Result;
-use tracing::{info, warn, debug};
 use super::api::MarketInterface;
-use async_trait::async_trait;
-use alloy::signers::local::PrivateKeySigner;
 use alloy::primitives::Address;
+use alloy::signers::local::PrivateKeySigner;
+use anyhow::Result;
+use async_trait::async_trait;
 use rust_decimal::{Decimal, RoundingStrategy};
+use tracing::{debug, info, warn};
 
-    // SDK Imports
-use polymarket_client_sdk::{
-    POLYGON,
-};
-use polymarket_client_sdk::clob::Client as ClobClient;
-use polymarket_client_sdk::clob::types::{OrderType, Side, SignedOrder, SignableOrder};
-use polymarket_client_sdk::clob::types::response::PostOrderResponse;
-use polymarket_client_sdk::types::U256;
-use polymarket_client_sdk::clob::types::response::MarketResponse;
+// SDK Imports
 use polymarket_client_sdk::auth::state::Authenticated;
 use polymarket_client_sdk::auth::Normal;
-use polymarket_client_sdk::auth::{Signer, LocalSigner};
+use polymarket_client_sdk::auth::{LocalSigner, Signer};
+use polymarket_client_sdk::clob::types::response::MarketResponse;
+use polymarket_client_sdk::clob::types::response::PostOrderResponse;
+use polymarket_client_sdk::clob::types::{OrderType, Side, SignableOrder, SignedOrder};
+use polymarket_client_sdk::clob::Client as ClobClient;
 use polymarket_client_sdk::error::Error as SdkError;
-use std::str::FromStr;
-use serde::Deserialize; // Only Deserialize is used for GammaMarket
+use polymarket_client_sdk::types::U256;
+use polymarket_client_sdk::POLYGON;
+use serde::Deserialize;
+use std::str::FromStr; // Only Deserialize is used for GammaMarket
 
 use crate::config::PolymarketConfig;
 use crate::polymarket::types::MarketData;
@@ -31,9 +29,8 @@ use crate::polymarket::types::MarketData;
 // Struct has `http_client: reqwest::Client`.
 // Warning must be because we import it but use full path `reqwest::Client` in struct?
 // Line 42: `pub http_client: reqwest::Client`.
-// Line 2: `use reqwest::Client;`. 
+// Line 2: `use reqwest::Client;`.
 // Since we use fully qualified `reqwest::Client`, the import is indeed unused. So we remove usage of import.
-
 
 pub struct PolymarketClient {
     pub client: ClobClient, // Now from new SDK
@@ -71,55 +68,65 @@ impl MarketInterface for PolymarketClient {
 
         // Optimized: Fetch specific market from Gamma API directly
         let url = format!("{}/markets?condition_ids={}", self.gamma_url, market_id);
-        
-        let response = self.http_client
-            .get(&url)
-            .send()
-            .await?;
+
+        let response = self.http_client.get(&url).send().await?;
 
         if !response.status().is_success() {
             let status = response.status();
-            let error_text = response.text().await.unwrap_or_else(|_| "Unknown error".to_string());
-            warn!("Gamma API error for {}: {} - {}", market_id, status, error_text);
+            let error_text = response
+                .text()
+                .await
+                .unwrap_or_else(|_| "Unknown error".to_string());
+            warn!(
+                "Gamma API error for {}: {} - {}",
+                market_id, status, error_text
+            );
             anyhow::bail!("Gamma API error: {} - {}", status, error_text);
         }
 
         let markets: Vec<GammaMarket> = response.json().await?;
-        
+
         // Check Gamma findings
-        let market_gamma = markets
-            .into_iter()
-            .find(|m| m.condition_id == market_id);
+        let market_gamma = markets.into_iter().find(|m| m.condition_id == market_id);
 
         if let Some(m) = market_gamma {
             return self.convert_gamma_market(&m);
         }
-        
+
         // FALLBACK: If not found in Gamma, try local derivation
-        info!("⚠️ Market {} not in Gamma yet. Attempting local derivation.", market_id);
-        
+        info!(
+            "⚠️ Market {} not in Gamma yet. Attempting local derivation.",
+            market_id
+        );
+
         match crate::polymarket::contracts::derive_asset_ids(market_id) {
             Ok((yes_id, no_id)) => {
-                 info!("✅ Derived IDs for {}: YES={}, NO={}", market_id, yes_id, no_id);
-                 Ok(MarketData {
+                info!(
+                    "✅ Derived IDs for {}: YES={}, NO={}",
+                    market_id, yes_id, no_id
+                );
+                Ok(MarketData {
                     id: market_id.to_string(),
                     question: format!("Market {}", market_id),
                     end_date: None,
                     volume: 0.0,
                     liquidity: 0.0,
-                    yes_price: 0.0, 
+                    yes_price: 0.0,
                     no_price: 0.0,
                     volume_24h: 0.0,
                     description: None,
                     order_book_imbalance: 0.0,
                     best_bid: 0.0,
                     best_ask: 0.0,
-                    asset_ids: vec![no_id, yes_id], 
-                 })
-            },
+                    asset_ids: vec![no_id, yes_id],
+                })
+            }
             Err(e) => {
-                 warn!("❌ Failed to derive IDs: {}", e);
-                 anyhow::bail!("Market not found in Gamma and derivation failed: {}", market_id)
+                warn!("❌ Failed to derive IDs: {}", e);
+                anyhow::bail!(
+                    "Market not found in Gamma and derivation failed: {}",
+                    market_id
+                )
             }
         }
     }
@@ -174,12 +181,21 @@ impl MarketInterface for PolymarketClient {
                 "id": 1
             });
 
-            match self.http_client.post(&rpc_url).json(&native_req).send().await {
+            match self
+                .http_client
+                .post(&rpc_url)
+                .json(&native_req)
+                .send()
+                .await
+            {
                 Ok(resp) => {
                     let json: serde_json::Value = match resp.json().await {
                         Ok(v) => v,
                         Err(e) => {
-                            warn!("⚠️ Failed to parse balance response from {}: {}", rpc_url, e);
+                            warn!(
+                                "⚠️ Failed to parse balance response from {}: {}",
+                                rpc_url, e
+                            );
                             continue;
                         }
                     };
@@ -190,10 +206,15 @@ impl MarketInterface for PolymarketClient {
                     }
 
                     if let Some(result) = json.get("result").and_then(|v| v.as_str()) {
-                        if let Ok(amount) = u128::from_str_radix(result.trim_start_matches("0x"), 16) {
+                        if let Ok(amount) =
+                            u128::from_str_radix(result.trim_start_matches("0x"), 16)
+                        {
                             let balance = amount as f64 / 1_000_000.0;
                             if balance > 0.0 {
-                                info!("💰 Native USDC balance on {} via {}: ${:.2}", target_addr, rpc_url, balance);
+                                info!(
+                                    "💰 Native USDC balance on {} via {}: ${:.2}",
+                                    target_addr, rpc_url, balance
+                                );
                                 return Ok(balance);
                             }
                         }
@@ -215,12 +236,21 @@ impl MarketInterface for PolymarketClient {
                 "id": 2
             });
 
-            match self.http_client.post(&rpc_url).json(&bridged_req).send().await {
+            match self
+                .http_client
+                .post(&rpc_url)
+                .json(&bridged_req)
+                .send()
+                .await
+            {
                 Ok(resp) => {
                     let json: serde_json::Value = match resp.json().await {
                         Ok(v) => v,
                         Err(e) => {
-                            warn!("⚠️ Failed to parse bridged balance response from {}: {}", rpc_url, e);
+                            warn!(
+                                "⚠️ Failed to parse bridged balance response from {}: {}",
+                                rpc_url, e
+                            );
                             continue;
                         }
                     };
@@ -231,17 +261,25 @@ impl MarketInterface for PolymarketClient {
                     }
 
                     if let Some(result) = json.get("result").and_then(|v| v.as_str()) {
-                        if let Ok(amount) = u128::from_str_radix(result.trim_start_matches("0x"), 16) {
+                        if let Ok(amount) =
+                            u128::from_str_radix(result.trim_start_matches("0x"), 16)
+                        {
                             let balance = amount as f64 / 1_000_000.0;
                             if balance > 0.0 {
-                                info!("💰 Bridged USDC balance on {} via {}: ${:.2}", target_addr, rpc_url, balance);
+                                info!(
+                                    "💰 Bridged USDC balance on {} via {}: ${:.2}",
+                                    target_addr, rpc_url, balance
+                                );
                                 return Ok(balance);
                             }
                         }
                     }
                 }
                 Err(e) => {
-                    warn!("⚠️ Bridged balance RPC request failed via {}: {}", rpc_url, e);
+                    warn!(
+                        "⚠️ Bridged balance RPC request failed via {}: {}",
+                        rpc_url, e
+                    );
                     continue;
                 }
             }
@@ -278,7 +316,7 @@ impl MarketInterface for PolymarketClient {
         };
 
         let market_details = self.get_market_details(market_id).await?;
-        
+
         let token_id = if side_str.to_uppercase() == "YES" || side_str.to_uppercase() == "BUY" {
             if market_details.asset_ids.len() >= 2 {
                 market_details.asset_ids[1].clone()
@@ -293,21 +331,20 @@ impl MarketInterface for PolymarketClient {
             }
         };
 
-
         // Authenticated Client Setup
         let signer = if let Some(pk) = &self.private_key {
-             LocalSigner::from_str(pk)
-                 .map_err(|e| anyhow::anyhow!("Invalid private key format: {}", e))?
-                 .with_chain_id(Some(POLYGON))
+            LocalSigner::from_str(pk)
+                .map_err(|e| anyhow::anyhow!("Invalid private key format: {}", e))?
+                .with_chain_id(Some(POLYGON))
         } else {
-             return Err(anyhow::anyhow!("Private key required for signing orders"));
+            return Err(anyhow::anyhow!("Private key required for signing orders"));
         };
 
         // Create a NEW unauthenticated client (not clone) to avoid Arc ref count issues
         // SDK's authenticate() consumes the client and requires Arc::into_inner() to succeed
         let fresh_client = ClobClient::new(
             "https://clob.polymarket.com",
-            polymarket_client_sdk::clob::Config::default()
+            polymarket_client_sdk::clob::Config::default(),
         )?;
 
         // Use SDK-derived Safe wallet as funder
@@ -324,15 +361,15 @@ impl MarketInterface for PolymarketClient {
             .authenticate()
             .await?;
 
-
         let price = Self::normalize_order_price(price_f64)?;
         let size = Self::normalize_order_size(size_usd, price)?;
 
-        let token_id_u256 = U256::from_str(&token_id).map_err(|e| anyhow::anyhow!("Invalid token ID: {}", e))?;
-
+        let token_id_u256 =
+            U256::from_str(&token_id).map_err(|e| anyhow::anyhow!("Invalid token ID: {}", e))?;
 
         // 1. Build Order
-        let builder = auth_client.limit_order()
+        let builder = auth_client
+            .limit_order()
             .token_id(token_id_u256)
             .price(price)
             .size(size)
@@ -347,7 +384,8 @@ impl MarketInterface for PolymarketClient {
         let signed_order = sign_res.map_err(|e| anyhow::anyhow!("Failed to sign order: {}", e))?;
 
         // 3. Post Order
-        let post_res: Result<PostOrderResponse, SdkError> = auth_client.post_order(signed_order).await;
+        let post_res: Result<PostOrderResponse, SdkError> =
+            auth_client.post_order(signed_order).await;
         let response = post_res.map_err(|e| anyhow::anyhow!("Failed to post order: {}", e))?;
 
         let order_id = response.order_id;
@@ -356,7 +394,6 @@ impl MarketInterface for PolymarketClient {
         Ok(order_id)
     }
 }
-
 
 // Keep inherent impl for helper methods and new
 impl PolymarketClient {
@@ -403,8 +440,11 @@ impl PolymarketClient {
         Ok(normalized)
     }
 
-    pub fn new(config: &PolymarketConfig, paper_trading: bool, private_key: Option<String>) -> Result<Self> {
-        
+    pub fn new(
+        config: &PolymarketConfig,
+        paper_trading: bool,
+        private_key: Option<String>,
+    ) -> Result<Self> {
         let http_client = reqwest::Client::builder()
             .no_proxy()
             .timeout(std::time::Duration::from_secs(4))
@@ -415,7 +455,8 @@ impl PolymarketClient {
             .unwrap_or_else(|_| reqwest::Client::new());
 
         let signer_address = if let Some(pk) = &private_key {
-            let signer: PrivateKeySigner = pk.parse().unwrap_or_else(|_| PrivateKeySigner::random());
+            let signer: PrivateKeySigner =
+                pk.parse().unwrap_or_else(|_| PrivateKeySigner::random());
             signer.address()
         } else {
             Address::ZERO
@@ -427,7 +468,7 @@ impl PolymarketClient {
                 Some(addr) => {
                     info!("🔐 Auto-derived Proxy Wallet: {}", addr);
                     Some(addr.to_string())
-                },
+                }
                 None => {
                     warn!("⚠️ Failed to auto-derive Proxy Wallet");
                     None
@@ -456,18 +497,16 @@ impl PolymarketClient {
     /// Fetch all active markets
     pub async fn fetch_markets(&self) -> Result<Vec<MarketResponse>> {
         debug!("Fetching markets from Polymarket");
-        
+
         let response = self.client.sampling_markets(None).await?;
-        
+
         info!("Fetched {} markets", response.data.len());
         Ok(response.data)
     }
 
-
-
     /// Convert polyfill Market to our MarketData
     fn convert_market(&self, market: &MarketResponse) -> Result<MarketData> {
-        let volume = 0.0; 
+        let volume = 0.0;
         let liquidity = 0.0;
 
         let mut yes_price = 0.0;
@@ -482,17 +521,25 @@ impl PolymarketClient {
                 no_price = price_f64;
             }
         }
-        
+
         // DEBUG: Sampled log to check parsing
         if rand::random::<f64>() < 0.005 { // 0.5% sample
-            // info!("🔍 SDK Parse: {} -> YES={:.3} NO={:.3}", market.question, yes_price, no_price);
+             // info!("🔍 SDK Parse: {} -> YES={:.3} NO={:.3}", market.question, yes_price, no_price);
         }
-        
+
         // Extract asset IDs
-        let asset_ids = market.tokens.iter().map(|t| t.token_id.to_string()).collect();
+        let asset_ids = market
+            .tokens
+            .iter()
+            .map(|t| t.token_id.to_string())
+            .collect();
 
         Ok(MarketData {
-            id: market.condition_id.as_ref().map(|b| b.to_string()).unwrap_or_default(),
+            id: market
+                .condition_id
+                .as_ref()
+                .map(|b| b.to_string())
+                .unwrap_or_default(),
             question: market.question.clone(),
             end_date: market.end_date_iso.map(|dt| dt.to_string()),
             volume,
@@ -508,7 +555,6 @@ impl PolymarketClient {
         })
     }
 
-
     /// Convert GammaMarket to MarketData
     fn convert_gamma_market(&self, market: &GammaMarket) -> Result<MarketData> {
         let volume: f64 = match &market.volume {
@@ -516,7 +562,7 @@ impl PolymarketClient {
             serde_json::Value::String(s) => s.parse().unwrap_or(0.0),
             _ => 0.0,
         };
-        
+
         let liquidity: f64 = match &market.liquidity {
             serde_json::Value::Number(n) => n.as_f64().unwrap_or(0.0),
             serde_json::Value::String(s) => s.parse().unwrap_or(0.0),
@@ -526,11 +572,11 @@ impl PolymarketClient {
         // Parse outcome prices (stringified JSON array)
         // e.g. "[\"0.5\", \"0.5\"]"
         let outcome_prices: Vec<String> = if market.outcome_prices.is_empty() {
-            Vec::new() 
+            Vec::new()
         } else {
             serde_json::from_str(&market.outcome_prices).unwrap_or_default()
         };
-        
+
         let outcomes: Vec<String> = if market.outcomes.is_empty() {
             Vec::new()
         } else {
@@ -544,12 +590,18 @@ impl PolymarketClient {
         // Usually index 0 is Long No (or just No), index 1 is Long Yes (or Yes).
         // BUT we should check 'outcomes' strings to be sure if possible.
         // If not standard, default to 0=No, 1=Yes for binary.
-        
+
         if outcome_prices.len() >= 2 {
             // Robust check: try to find "Yes" in outcomes
-            let yes_idx = outcomes.iter().position(|s| s.eq_ignore_ascii_case("Yes")).unwrap_or(1);
-            let no_idx = outcomes.iter().position(|s| s.eq_ignore_ascii_case("No")).unwrap_or(0);
-            
+            let yes_idx = outcomes
+                .iter()
+                .position(|s| s.eq_ignore_ascii_case("Yes"))
+                .unwrap_or(1);
+            let no_idx = outcomes
+                .iter()
+                .position(|s| s.eq_ignore_ascii_case("No"))
+                .unwrap_or(0);
+
             if yes_idx < outcome_prices.len() {
                 yes_price = outcome_prices[yes_idx].parse().unwrap_or(0.0);
             }
@@ -557,12 +609,12 @@ impl PolymarketClient {
                 no_price = outcome_prices[no_idx].parse().unwrap_or(0.0);
             }
         }
-        
+
         // Parse clobTokenIds (stringified JSON array)
         let asset_ids: Vec<String> = if market.clob_token_ids.is_empty() {
-             Vec::new()
+            Vec::new()
         } else {
-             serde_json::from_str(&market.clob_token_ids).unwrap_or_default()
+            serde_json::from_str(&market.clob_token_ids).unwrap_or_default()
         };
 
         Ok(MarketData {
@@ -598,13 +650,13 @@ struct GammaMarket {
     pub description: Option<String>,
     // outcomes and outcomePrices are JSON strings!
     #[serde(default)]
-    pub outcomes: String,       // Default to ""
+    pub outcomes: String, // Default to ""
     #[serde(default)]
     pub outcome_prices: String, // Default to ""
     #[serde(default)]
     pub clob_token_ids: String, // Default to ""
-    pub volume: serde_json::Value,     // Can be String or Number
+    pub volume: serde_json::Value, // Can be String or Number
     #[serde(default)]
     pub volume_24hr: serde_json::Value, // Added for popularity filter
-    pub liquidity: serde_json::Value,  // Can be String or Number
+    pub liquidity: serde_json::Value, // Can be String or Number
 }

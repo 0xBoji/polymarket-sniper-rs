@@ -1,14 +1,14 @@
-use criterion::{black_box, criterion_group, criterion_main, Criterion, BenchmarkId};
+use criterion::{black_box, criterion_group, criterion_main, BenchmarkId, Criterion};
+use polymarket_hft_agent::config::ArbitrageConfig;
 use polymarket_hft_agent::polymarket::{MarketData, OrderBook, OrderLevel};
 use polymarket_hft_agent::strategies::arbitrage::ArbitrageStrategy;
 use polymarket_hft_agent::strategies::position_sizing::PositionSizer;
-use polymarket_hft_agent::config::ArbitrageConfig;
 
 fn create_mock_orderbook(depth: usize) -> OrderBook {
     let mut orderbook = OrderBook::new();
-    
+
     let actual_depth = depth.min(50); // Cap at 50
-    
+
     // Create bids (descending prices)
     for i in 0..actual_depth {
         orderbook.bids[i] = OrderLevel {
@@ -17,7 +17,7 @@ fn create_mock_orderbook(depth: usize) -> OrderBook {
         };
     }
     orderbook.bid_count = actual_depth;
-    
+
     // Create asks (ascending prices)
     for i in 0..actual_depth {
         orderbook.asks[i] = OrderLevel {
@@ -26,7 +26,7 @@ fn create_mock_orderbook(depth: usize) -> OrderBook {
         };
     }
     orderbook.ask_count = actual_depth;
-    
+
     orderbook
 }
 
@@ -106,7 +106,7 @@ fn benchmark_orderbook_analysis(c: &mut Criterion) {
     // Test with different orderbook depths
     for depth in [5, 10, 20, 50].iter() {
         let orderbook = create_mock_orderbook(*depth);
-        
+
         group.bench_with_input(
             BenchmarkId::new("analyze_depth", depth),
             &orderbook,
@@ -116,7 +116,7 @@ fn benchmark_orderbook_analysis(c: &mut Criterion) {
                 })
             },
         );
-        
+
         group.bench_with_input(
             BenchmarkId::new("calculate_slippage", depth),
             &orderbook,
@@ -133,7 +133,7 @@ fn benchmark_orderbook_analysis(c: &mut Criterion) {
 
 fn benchmark_position_sizing(c: &mut Criterion) {
     let sizer = PositionSizer::new(0.25, 0.01, 0.10);
-    
+
     let mut group = c.benchmark_group("position_sizing");
 
     // Test Kelly calculation with different edges
@@ -214,7 +214,7 @@ fn benchmark_full_pipeline(c: &mut Criterion) {
 
 fn benchmark_orderbook_helpers(c: &mut Criterion) {
     let orderbook = create_mock_orderbook(20);
-    
+
     let mut group = c.benchmark_group("orderbook_helpers");
 
     group.bench_function("best_bid", |b| {

@@ -1,6 +1,6 @@
+use anyhow::Result;
 use ethers::prelude::*;
 use std::str::FromStr;
-use anyhow::Result;
 
 /*
 abigen!(
@@ -36,12 +36,12 @@ pub fn derive_asset_ids(condition_id_str: &str) -> Result<(String, String)> {
         let mut encoded = Vec::new();
         encoded.extend_from_slice(parent.as_bytes());
         encoded.extend_from_slice(condition.as_bytes());
-        
+
         // index_set is uint256 (32 bytes)
         let mut index_bytes = [0u8; 32];
         index_set.to_big_endian(&mut index_bytes);
         encoded.extend_from_slice(&index_bytes);
-        
+
         H256::from(ethers::utils::keccak256(&encoded))
     }
 
@@ -50,24 +50,24 @@ pub fn derive_asset_ids(condition_id_str: &str) -> Result<(String, String)> {
         let mut encoded = Vec::new();
         encoded.extend_from_slice(collateral.as_bytes());
         encoded.extend_from_slice(collection.as_bytes());
-        
+
         // Return as massive decimal string (Token ID) usually?
         // Wait, Polymarket CLOB uses the DECIMAL STRING representation of the uint256 Position ID.
         // OR does it use the Hex string?
         // Checking API: "token_id": "217426331434639062905690501558262415339047831329679843560126160201174249"
         // It uses the DECIMAL string.
-        
+
         let hash = H256::from(ethers::utils::keccak256(&encoded));
         let params = U256::from_big_endian(hash.as_bytes());
         params.to_string()
     }
-    
+
     // 4. Compute
     let collection_no = get_collection_id(parent_collection_id, condition_id, index_set_no);
     let collection_yes = get_collection_id(parent_collection_id, condition_id, index_set_yes);
-    
+
     let asset_id_no = get_position_id(collateral_token, collection_no);
     let asset_id_yes = get_position_id(collateral_token, collection_yes);
-    
+
     Ok((asset_id_yes, asset_id_no))
 }

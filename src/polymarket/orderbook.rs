@@ -27,7 +27,7 @@ impl OrderBook {
     pub fn update(&mut self, side: &str, price: f64, size: f64) {
         // Store price as basis points (u64) to use as key
         let price_bps = (price * 10000.0) as u64;
-        
+
         if size == 0.0 {
             if side == "BUY" {
                 self.bids.remove(&price_bps);
@@ -61,7 +61,7 @@ impl OrderBook {
     /// Get Best Bid and Best Ask
     pub fn best_quote(&self) -> (Option<f64>, Option<f64>) {
         let best_bid = self.bids.keys().next_back().map(|&p| p as f64 / 10000.0); // Highest key
-        let best_ask = self.asks.keys().next().map(|&p| p as f64 / 10000.0);      // Lowest key
+        let best_ask = self.asks.keys().next().map(|&p| p as f64 / 10000.0); // Lowest key
         (best_bid, best_ask)
     }
 }

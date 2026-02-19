@@ -30,16 +30,16 @@ impl RedemptionManager {
     pub async fn new(rpc_url: &str, private_key: &str) -> Result<Self> {
         let provider = Provider::<Ws>::connect(rpc_url).await?;
         let wallet = LocalWallet::from_str(private_key)?.with_chain_id(137u64); // Polygon Mainnet ID
-        
+
         // Use clone for client (SignerMiddleware takes the provider instance)
         let client = Arc::new(SignerMiddleware::new(provider.clone(), wallet.clone()));
-        
+
         // Parse address
         let address = Address::from_str(CTF_ADDRESS)?;
-        
+
         // Wrap provider in Arc for CTF contract (read-only instance)
         // CTF::new expects Into<Arc<M>>
-        let contract = CTF::new(address, Arc::new(provider)); 
+        let contract = CTF::new(address, Arc::new(provider));
 
         Ok(Self {
             contract,
@@ -51,10 +51,14 @@ impl RedemptionManager {
     /// Check if a condition is resolved using payoutDenominator
     pub async fn is_condition_resolved(&self, condition_id_hex: &str) -> Result<bool> {
         let condition_id = self.parse_bytes32(condition_id_hex)?;
-        
+
         // payoutDenominator > 0 means resolved
-        let denominator = self.contract.payout_denominator(condition_id).call().await?;
-        
+        let denominator = self
+            .contract
+            .payout_denominator(condition_id)
+            .call()
+            .await?;
+
         Ok(denominator > U256::zero())
     }
 
@@ -66,7 +70,7 @@ impl RedemptionManager {
         let condition_id = self.parse_bytes32(condition_id_hex)?;
         let parent_collection_id = [0u8; 32]; // Always 0x0 for direct questions
         let collateral_token = Address::from_str(COLLATERAL_TOKEN)?;
-        
+
         // Index sets for binary market (1 and 2)
         // 1 = 0b01 (Outcome 0), 2 = 0b10 (Outcome 1)
         let index_sets = vec![U256::from(1), U256::from(2)];
@@ -75,23 +79,22 @@ impl RedemptionManager {
         let address = Address::from_str(CTF_ADDRESS)?;
         let contract_with_signer = CTF::new(address, self.client.clone());
 
-        let tx = contract_with_signer
-            .redeem_positions(
-                collateral_token,
-                parent_collection_id,
-                condition_id,
-                index_sets,
-            );
+        let tx = contract_with_signer.redeem_positions(
+            collateral_token,
+            parent_collection_id,
+            condition_id,
+            index_sets,
+        );
 
         // Send transaction
         let pending_tx = tx.send().await?;
         let tx_hash = pending_tx.tx_hash();
-        
+
         info!("✅ Redeem transaction sent! Hash: {:?}", tx_hash);
-        
+
         // Wait for receipt (optional, maybe don't block)
         // let receipt = pending_tx.await?;
-        
+
         Ok(format!("{:?}", tx_hash))
     }
 

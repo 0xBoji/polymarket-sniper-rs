@@ -1,25 +1,27 @@
 use anyhow::Result;
-use tokio::time::{interval, Duration};
-use tokio::sync::mpsc;
-use tracing::{error, info, warn, debug};
-use std::sync::{Arc, Mutex};
 use ethers::types::Address;
+use std::sync::{Arc, Mutex};
+use tokio::sync::mpsc;
+use tokio::time::{interval, Duration};
+use tracing::{debug, error, info, warn};
 
+use crate::analytics::{pnl::Position, PnLTracker};
 use crate::config::Config;
-use crate::strategies::risk::RiskManager;
+use crate::execution::{Executor, RedemptionManager};
+use crate::polymarket::contracts::derive_asset_ids;
+use crate::polymarket::ws::{ClobWebSocket, OrderbookUpdate};
+use crate::polymarket::{
+    MarketData, MarketEventListener, MarketInterface, MempoolMonitor, PolymarketClient,
+};
+use crate::pricefeed::BinanceClient;
+use crate::simulation::MarketSimulator;
 use crate::strategies::arbitrage::{ArbitrageStrategy, TradeAction};
 use crate::strategies::expiration::ExpirationStrategy;
 use crate::strategies::predictive::PredictiveStrategy;
-use crate::pricefeed::BinanceClient;
-use crate::execution::{Executor, RedemptionManager};
-use crate::polymarket::{MarketData, MempoolMonitor, PolymarketClient, MarketInterface, MarketEventListener};
-use crate::simulation::MarketSimulator;
-use crate::analytics::{PnLTracker, pnl::Position};
-use std::collections::{HashSet, HashMap};
-use std::collections::VecDeque;
+use crate::strategies::risk::RiskManager;
 use chrono::Utc;
-use crate::polymarket::ws::{ClobWebSocket, OrderbookUpdate};
-use crate::polymarket::contracts::derive_asset_ids;
+use std::collections::VecDeque;
+use std::collections::{HashMap, HashSet};
 
 pub struct Sniper {
     config: Config,
@@ -35,7 +37,7 @@ pub struct Sniper {
     seen_markets: HashSet<String>,
     pnl_tracker: Arc<Mutex<PnLTracker>>,
     new_market_rx: Option<mpsc::UnboundedReceiver<String>>, // From WebSocket events
-    pending_retries: VecDeque<(String, u8)>, // (MarketID, RetryCount)
+    pending_retries: VecDeque<(String, u8)>,                // (MarketID, RetryCount)
     // WebSocket CLOB
     ws_client: Option<ClobWebSocket>,
     ws_update_rx: Option<mpsc::Receiver<OrderbookUpdate>>,
@@ -50,47 +52,55 @@ pub struct Sniper {
 impl Sniper {
     pub async fn new(config: Config, pnl_tracker: Arc<Mutex<PnLTracker>>) -> Result<Self> {
         // Initialize Market Interface (Real or Sim)
-        let market_interface: Arc<dyn MarketInterface + Send + Sync> = if config.agent.simulation_mode {
-            info!("🎞️  Initializing Market Simulator");
-            Arc::new(MarketSimulator::new())
-        } else {
-            info!("🌐 Initializing Real Polymarket Client");
-            Arc::new(PolymarketClient::new(
-                &config.polymarket, 
-                config.agent.paper_trading,
-                config.polygon_private_key.clone()
-            )?)
-        };
+        let market_interface: Arc<dyn MarketInterface + Send + Sync> =
+            if config.agent.simulation_mode {
+                info!("🎞️  Initializing Market Simulator");
+                Arc::new(MarketSimulator::new())
+            } else {
+                info!("🌐 Initializing Real Polymarket Client");
+                Arc::new(PolymarketClient::new(
+                    &config.polymarket,
+                    config.agent.paper_trading,
+                    config.polygon_private_key.clone(),
+                )?)
+            };
 
         let risk_manager = RiskManager::new(config.risk.clone());
         let strategy = ArbitrageStrategy::new(config.arbitrage.clone());
         let expiration_strategy = ExpirationStrategy::new(config.expiration.clone());
         let binance_client = Arc::new(BinanceClient::new());
-        let predictive_strategy = PredictiveStrategy::new(config.predictive.clone(), binance_client.clone());
-        
+        let predictive_strategy =
+            PredictiveStrategy::new(config.predictive.clone(), binance_client.clone());
+
         // Executor needs a separate instance or clone.
         // For Sim: new simulator instance (Note: State sharing logic needed if we want positions to sync)
         // Ideally we pass Arc<Mutex<Simulator>>.
-        // For now, creating a fresh simulator means the executor has its own empty state. 
+        // For now, creating a fresh simulator means the executor has its own empty state.
         // This is a known limitation of current refactor (Step 7 limitation).
         // TODO: Use Arc<dyn MarketInterface> for shared state in future.
         let executor_interface: Box<dyn MarketInterface> = if config.agent.simulation_mode {
-            Box::new(MarketSimulator::new()) 
+            Box::new(MarketSimulator::new())
         } else {
-            Box::new(PolymarketClient::new(&config.polymarket, config.agent.paper_trading, config.polygon_private_key.clone())?)
+            Box::new(PolymarketClient::new(
+                &config.polymarket,
+                config.agent.paper_trading,
+                config.polygon_private_key.clone(),
+            )?)
         };
 
         // Initialize Flashbots client if enabled
         let flashbots_client = if config.flashbots.enabled {
             if let (Some(rpc), Some(pk)) = (&config.polygon_ws_rpc, &config.polygon_private_key) {
                 let signing_key = config.flashbots.signing_key.as_ref().unwrap_or(pk);
-                
+
                 match crate::execution::flashbots::FlashbotsClient::new(
                     rpc,
                     signing_key,
                     Some(&config.flashbots.relay_url),
                     config.flashbots.max_retries,
-                ).await {
+                )
+                .await
+                {
                     Ok(client) => {
                         info!("✅ Flashbots client initialized - MEV protection ENABLED");
                         Some(client)
@@ -111,36 +121,33 @@ impl Sniper {
         };
 
         let executor = Executor::new(executor_interface, flashbots_client);
-        
+
         let mempool_monitor = MempoolMonitor::new(config.polygon_ws_rpc.clone()).await;
 
-        let redemption_manager = if let (Some(rpc), Some(pk)) = (
-            &config.polygon_ws_rpc,
-            &config.polygon_private_key,
-        ) {
-            match RedemptionManager::new(rpc, pk).await {
-                Ok(rm) => {
-                    info!("✅ RedemptionManager initialized");
-                    Some(rm)
+        let redemption_manager =
+            if let (Some(rpc), Some(pk)) = (&config.polygon_ws_rpc, &config.polygon_private_key) {
+                match RedemptionManager::new(rpc, pk).await {
+                    Ok(rm) => {
+                        info!("✅ RedemptionManager initialized");
+                        Some(rm)
+                    }
+                    Err(e) => {
+                        error!("❌ Failed to init RedemptionManager: {}", e);
+                        None
+                    }
                 }
-                Err(e) => {
-                    error!("❌ Failed to init RedemptionManager: {}", e);
-                    None
-                }
-            }
-        } else {
-            None
-        };
+            } else {
+                None
+            };
 
         // Setup WebSocket event listener if configured
-        let new_market_rx = if let (Some(ws_url), Some(ctf_addr_str)) = (
-            &config.polygon_ws_rpc,
-            &config.ctf_contract_address,
-        ) {
+        let new_market_rx = if let (Some(ws_url), Some(ctf_addr_str)) =
+            (&config.polygon_ws_rpc, &config.ctf_contract_address)
+        {
             // Parse CTF contract address
             if let Ok(ctf_address) = ctf_addr_str.parse::<Address>() {
                 let (tx, rx) = mpsc::unbounded_channel();
-                
+
                 // Spawn WebSocket listener task
                 let ws_url_clone = ws_url.clone();
                 tokio::spawn(async move {
@@ -155,7 +162,7 @@ impl Sniper {
                         }
                     }
                 });
-                
+
                 info!("⚡ WebSocket real-time detection enabled");
                 Some(rx)
             } else {
@@ -209,7 +216,7 @@ impl Sniper {
     /// Main agent loop
     pub async fn run(&mut self) -> Result<()> {
         info!("🚀 Starting Polymarket HFT Agent");
-        
+
         // Start background tasks
         // self.mempool_monitor.start_monitoring().await;
         info!("⚠️ Mempool monitoring disabled to save API credits");
@@ -233,7 +240,7 @@ impl Sniper {
 
         // Redemption check interval (every 5 minutes)
         let mut redemption_interval = interval(Duration::from_secs(300));
-        
+
         // PnL update interval (every 10 seconds)
         let mut pnl_update_interval = interval(Duration::from_secs(10));
 
@@ -285,7 +292,7 @@ impl Sniper {
                          if rand::random::<f64>() < 0.002 {
                              info!("⚡ WS Tick Alive: {} [{}] ({} bids, {} asks)", market_id, side, update.bids.len(), update.asks.len());
                          }
-                         
+
                          // 2. Update State
                          if let Some(market) = self.active_markets.get_mut(&market_id) {
                              // Update Prices based on Bids/Asks
@@ -293,7 +300,7 @@ impl Sniper {
                              // Buying YES means taking the Lowest ASK.
                              // Buying NO means taking the Lowest ASK.
                              // So we care about ASKS.
-                             
+
                              if let Some(best_ask) = update.asks.first() {
                                  let price = best_ask.price.parse::<f64>().unwrap_or(0.0);
                                  if side == "YES" {
@@ -307,11 +314,11 @@ impl Sniper {
                                          debug!("📊 WS Update: {} NO -> {:.4}", market.question, price);
                                      }
                                  }
-                                 
+
                                  // Trigger re-eval
                                  // Clone to avoid borrow issues while calling async func
-                                 let market_clone = market.clone(); 
-                                 
+                                 let market_clone = market.clone();
+
                                  // We need to spawn this or call it?
                                  // Calling await here might block other updates slightly, but it's the core logic.
                                  // For HFT, we should check strategy synchronously if possible, but execute async.
@@ -338,14 +345,14 @@ impl Sniper {
                     if self.seen_markets.contains(&condition_id) {
                         continue;
                     }
-                    
+
                     // GOD MODE: Perform local calculation of Token IDs immediately
                     // This creates a "Synthetic" market to start tracking prices while Gamma indexes
                     match derive_asset_ids(&condition_id) {
                         Ok((yes_id, no_id)) => {
-                            info!("🔮 Derived Token IDs locally! YES: ...{}, NO: ...{}", 
+                            info!("🔮 Derived Token IDs locally! YES: ...{}, NO: ...{}",
                                 &yes_id[yes_id.len()-6..], &no_id[no_id.len()-6..]);
-                            
+
                             // Initialize "Synthetic" Market Entry
                             // We don't have the question yet, but we have the IDs to trade!
                             let synthetic_market = MarketData {
@@ -367,12 +374,12 @@ impl Sniper {
                                 // MarketData.asset_ids usually matches the order in CLOB.
                                 // Let's store them and map them.
                             };
-                            
+
                             // Map Assets for Price Updates
                             self.asset_map.insert(yes_id.clone(), (condition_id.clone(), "YES".to_string()));
                             self.asset_map.insert(no_id.clone(), (condition_id.clone(), "NO".to_string()));
                             self.active_markets.insert(condition_id.clone(), synthetic_market.clone());
-                            
+
                             // Subscribe to CLOB WebSocket IMMEDIATELY
                             if let Some(ws) = &mut self.ws_client {
                                 let mut to_subscribe = Vec::new();
@@ -402,7 +409,7 @@ impl Sniper {
                             if !self.seen_markets.contains(&market.id) {
                                 self.seen_markets.insert(market.id.clone());
                                 // Update the synthetic market with real metadata
-                                self.active_markets.insert(market.id.clone(), market.clone()); 
+                                self.active_markets.insert(market.id.clone(), market.clone());
                                 info!("🚀 Processing new market immediately: {}", market.question);
                                 if let Err(e) = self.process_single_market(&market).await {
                                     error!("❌ Error processing market {}: {}", market.question, e);
@@ -420,18 +427,18 @@ impl Sniper {
                 // Generic Retry Processing (Non-blocking spawning)
                 _ = retry_interval.tick() => {
                     // Process a batch of retries to avoid spawning too many tasks at once
-                    let batch_size = 20; 
+                    let batch_size = 20;
                     for _ in 0..batch_size {
                         if let Some((condition_id, attempts)) = self.pending_retries.pop_front() {
                             if self.seen_markets.contains(&condition_id) {
                                 continue;
                             }
-                            
+
                             // Spawn async fetch
                             let client = self.market_interface.clone();
                             let tx = retry_tx.clone();
                             let cid = condition_id.clone();
-                            
+
                             tokio::spawn(async move {
                                 let res = client.get_market_details(&cid).await;
                                 let _ = tx.send((cid, attempts, res)).await;
@@ -441,16 +448,18 @@ impl Sniper {
                         }
                     }
                 }
-                
+
                 // Polling (BACKUP - catches anything WS might miss)
                 _ = tick_interval.tick() => {
                     if let Err(e) = self.process_markets().await {
                         error!("❌ Error processing markets: {}", e);
                     }
-                    // Log top active spreads for visibility
-                    self.log_top_opportunities().await;
+                    // Saturation spread log is only useful for arbitrage mode.
+                    if self.config.arbitrage.enabled {
+                        self.log_top_opportunities().await;
+                    }
                 }
-                
+
                 _ = redemption_interval.tick() => {
                     if let Some(rm) = &self.redemption_manager {
                          // Iterate all positions and check if resolved
@@ -528,12 +537,15 @@ impl Sniper {
                     self.seen_markets.insert(market.id.clone());
                 }
                 info!("🚀 Startup: Skipped {} existing markets (only trading NEW markets from now on)", all_markets.len());
-                
+
                 // Still manage positions even on first run
                 self.manage_positions(&all_markets).await?;
                 return Ok(());
             } else {
-                info!("🚀 Startup: Analyzing {} existing markets for immediate opportunities...", all_markets.len());
+                info!(
+                    "🚀 Startup: Analyzing {} existing markets for immediate opportunities...",
+                    all_markets.len()
+                );
                 // Don't insert into seen_markets yet, let the loop below do it
             }
         }
@@ -573,112 +585,153 @@ impl Sniper {
 
         // Register for WS Updates
         if let Some(ws) = &self.ws_client {
-             if !market.asset_ids.is_empty() {
-                 let mut to_subscribe = Vec::new();
-                 for asset_id in &market.asset_ids {
-                     if self.subscribed_assets.insert(asset_id.clone()) {
-                         to_subscribe.push(asset_id.clone());
-                     }
-                 }
-                 if !to_subscribe.is_empty() {
-                     info!("🔌 Subscribing to Orderbook for {}", market.question);
-                     ws.subscribe(to_subscribe);
-                 }
-                 
-                 // Cache state - BUT PRESERVE WS PRICES if they exist and are newer
-                 if let Some(existing) = self.active_markets.get_mut(&market.id) {
-                     // Metadata update only
-                     existing.question = market.question.clone();
-                     existing.volume = market.volume;
-                     existing.liquidity = market.liquidity;
-                     existing.volume_24h = market.volume_24h;
-                     
-                     // Only update prices if Gamma has values AND WS hasn't provided better ones yet
-                     if existing.yes_price <= 0.0 && market.yes_price > 0.0 {
-                          existing.yes_price = market.yes_price;
-                     }
-                     if existing.no_price <= 0.0 && market.no_price > 0.0 {
-                          existing.no_price = market.no_price;
-                     }
-                 } else {
-                     self.active_markets.insert(market.id.clone(), market.clone());
-                 }
-                 
-                 // Map Asset Maps
-                 // Assuming asset_ids[0] = NO, asset_ids[1] = YES (This is standard for Polymarket CTF)
-                 // But wait, let's just Map them both. We need to know which is which.
-                 // In `client.rs` we didn't strictly order them, but `outcome_prices` logic assumed order.
-                 // IMPORTANT: We need to know which asset_id is YES and which is NO.
-                 // For now, let's simplistically Map: 
-                 // If we have 2 assets, assign them based on index (Hack for now, need robust mapping later)
-                 if market.asset_ids.len() >= 2 {
-                     self.asset_map.insert(market.asset_ids[0].clone(), (market.id.clone(), "NO".to_string()));
-                     self.asset_map.insert(market.asset_ids[1].clone(), (market.id.clone(), "YES".to_string()));
-                 }
-             }
+            if !market.asset_ids.is_empty() {
+                let mut to_subscribe = Vec::new();
+                for asset_id in &market.asset_ids {
+                    if self.subscribed_assets.insert(asset_id.clone()) {
+                        to_subscribe.push(asset_id.clone());
+                    }
+                }
+                if !to_subscribe.is_empty() {
+                    info!("🔌 Subscribing to Orderbook for {}", market.question);
+                    ws.subscribe(to_subscribe);
+                }
+
+                // Cache state - BUT PRESERVE WS PRICES if they exist and are newer
+                if let Some(existing) = self.active_markets.get_mut(&market.id) {
+                    // Metadata update only
+                    existing.question = market.question.clone();
+                    existing.volume = market.volume;
+                    existing.liquidity = market.liquidity;
+                    existing.volume_24h = market.volume_24h;
+
+                    // Only update prices if Gamma has values AND WS hasn't provided better ones yet
+                    if existing.yes_price <= 0.0 && market.yes_price > 0.0 {
+                        existing.yes_price = market.yes_price;
+                    }
+                    if existing.no_price <= 0.0 && market.no_price > 0.0 {
+                        existing.no_price = market.no_price;
+                    }
+                } else {
+                    self.active_markets
+                        .insert(market.id.clone(), market.clone());
+                }
+
+                // Map Asset Maps
+                // Assuming asset_ids[0] = NO, asset_ids[1] = YES (This is standard for Polymarket CTF)
+                // But wait, let's just Map them both. We need to know which is which.
+                // In `client.rs` we didn't strictly order them, but `outcome_prices` logic assumed order.
+                // IMPORTANT: We need to know which asset_id is YES and which is NO.
+                // For now, let's simplistically Map:
+                // If we have 2 assets, assign them based on index (Hack for now, need robust mapping later)
+                if market.asset_ids.len() >= 2 {
+                    self.asset_map.insert(
+                        market.asset_ids[0].clone(),
+                        (market.id.clone(), "NO".to_string()),
+                    );
+                    self.asset_map.insert(
+                        market.asset_ids[1].clone(),
+                        (market.id.clone(), "YES".to_string()),
+                    );
+                }
+            }
         }
 
-        // 1. Check Strategy (Sniper Mode: Intra-Market Arbitrage)
+        // 1) Primary: Last-minute predictive (Binance)
+        match self.predictive_strategy.check_opportunity(market).await {
+            TradeAction::Snipe {
+                market_id: _,
+                side,
+                price,
+                size_usd,
+            } => {
+                info!(
+                    "🎯 PREDICTIVE LAST-MINUTE Signal: {} (Side: {})",
+                    market.question, side
+                );
+                self.execute_snipe_signal(market, &side, price, size_usd, "pred", 0.8)
+                    .await?;
+                return Ok(());
+            }
+            _ => {}
+        }
+
+        // 2) Secondary: Expiration snipe
+        match self.expiration_strategy.check_opportunity(market) {
+            TradeAction::Snipe {
+                market_id: _,
+                side,
+                price,
+                size_usd,
+            } => {
+                info!(
+                    "🎯 EXPIRATION SNIPE Signal: {} (Side: {})",
+                    market.question, side
+                );
+                self.execute_snipe_signal(market, &side, price, size_usd, "snipe", 0.9)
+                    .await?;
+                return Ok(());
+            }
+            _ => {}
+        }
+
+        // 3) Optional fallback: arbitrage (disabled by default)
         match self.strategy.check_opportunity(market) {
-            TradeAction::BuyBoth { market_id: _, yes_price, no_price, size_usd, expected_profit_bps } => {
-                info!("🎯 Sniper Signal: {} (Profit: {} bps)", market.question, expected_profit_bps);
+            TradeAction::BuyBoth {
+                market_id: _,
+                yes_price,
+                no_price,
+                size_usd,
+                expected_profit_bps,
+            } => {
+                info!(
+                    "🎯 ARBITRAGE Signal: {} (Profit: {} bps)",
+                    market.question, expected_profit_bps
+                );
 
-                // 2. Balance Check & Capping
-                 // 2. Balance Check & Capping (Cached for performance)
-                 if self.last_balance_update.elapsed() > Duration::from_secs(10) {
-                     if let Ok(bal) = self.market_interface.get_balance().await {
-                         self.cached_balance = bal;
-                         self.last_balance_update = std::time::Instant::now();
-                     }
-                 }
-                 let balance = self.cached_balance;
+                if self.last_balance_update.elapsed() > Duration::from_secs(10) {
+                    if let Ok(bal) = self.market_interface.get_balance().await {
+                        self.cached_balance = bal;
+                        self.last_balance_update = std::time::Instant::now();
+                    }
+                }
+                let balance = self.cached_balance;
                 let mut final_size = size_usd;
-
                 if balance < final_size {
-                    warn!("⚠️ Balance (${:.2}) < Target Size (${:.2}). Capping to balance.", balance, final_size);
+                    warn!(
+                        "⚠️ Balance (${:.2}) < Target Size (${:.2}). Capping to balance.",
+                        balance, final_size
+                    );
                     final_size = balance;
                 }
-                
-                // Ensure we have enough for 2 legs (min ~$1 per leg)
-                // If we have less than $2, we probably can't execute both legs reliably or meet min size
+
                 const MIN_ARB_NOTIONAL_USD: f64 = 1.0;
                 if final_size < MIN_ARB_NOTIONAL_USD {
-                     warn!(
-                        "❌ Insufficient balance to trade (${:.2}). Min required for arb is ~${:.2}",
-                        balance,
-                        MIN_ARB_NOTIONAL_USD
-                    );
-                     // Skip this opportunity
-                     return Ok(()); 
+                    return Ok(());
                 }
 
-                // 3. Risk Check
-                // Note: For arb, confidence is essentially 100% (1.0) if we trust the orderbook
-                if self.risk_manager.validate_entry(&market.id, final_size, 1.0) {
-                     info!("⚡ Executing ARBITRAGE for {}", market.question);
-                     
-                     let trade_id = format!("arb_{}_{}", market.id, Utc::now().timestamp_millis());
+                if self
+                    .risk_manager
+                    .validate_entry(&market.id, final_size, 1.0)
+                {
+                    let trade_id = format!("arb_{}_{}", market.id, Utc::now().timestamp_millis());
+                    match self
+                        .executor
+                        .execute_arbitrage_bundle(
+                            market,
+                            yes_price,
+                            no_price,
+                            final_size,
+                            &trade_id,
+                            &mut self.risk_manager,
+                        )
+                        .await
+                    {
+                        Ok(tx_hash) => info!("✅ Arbitrage Executed! TX/Order: {}", tx_hash),
+                        Err(e) => error!("❌ Execution failed: {}", e),
+                    }
 
-                     // Execute atomic arbitrage bundle (YES + NO together)
-                     // This uses Flashbots if enabled, otherwise falls back to regular execution
-                     match self.executor.execute_arbitrage_bundle(
-                         market,
-                         yes_price,
-                         no_price,
-                         final_size,
-                         &trade_id,
-                         &mut self.risk_manager,
-                     ).await {
-                         Ok(tx_hash) => {
-                             info!("✅ Arbitrage Executed! TX/Order: {}", tx_hash);
-                         }
-                         Err(e) => {
-                             error!("❌ Execution failed: {}", e);
-                         }
-                     }
-                     
-                     // Update PnL (Mocking generic position for now)
-                     let position = Position {
+                    let position = Position {
                         id: trade_id.clone(),
                         market_id: market.id.clone(),
                         market_question: market.question.clone(),
@@ -687,146 +740,73 @@ impl Sniper {
                         entry_price: yes_price + no_price,
                         current_price: yes_price + no_price,
                         entry_time: Utc::now(),
-                     };
-                     if let Ok(mut tracker) = self.pnl_tracker.lock() {
-                         tracker.add_position(position);
-                     }
-                 } else {
-                    debug!("⚠️ Risk Check failed for {}", market.id);
+                    };
+                    if let Ok(mut tracker) = self.pnl_tracker.lock() {
+                        tracker.add_position(position);
+                    }
                 }
             }
-            TradeAction::Snipe { market_id: _, side, price, size_usd } => {
-                info!("🎯 EXPIRATION SNIPE Signal: {} (Side: {})", market.question, side);
-                
-                // Balance Check (reuse cached)
-                 if self.last_balance_update.elapsed() > Duration::from_secs(10) {
-                     if let Ok(bal) = self.market_interface.get_balance().await {
-                         self.cached_balance = bal;
-                         self.last_balance_update = std::time::Instant::now();
-                     }
-                 }
-                 let balance = self.cached_balance;
-                 let mut final_size = size_usd;
-                 
-                 if balance < final_size {
-                     final_size = balance;
-                  }
-
-                 if final_size < 1.0 { 
-                      warn!("❌ Insufficient balance for Snipe (${:.2})", balance);
-                      return Ok(());
-                 }
-                 
-                 // Risk Check
-                 if self.risk_manager.validate_entry(&market.id, final_size, 0.9) { 
-                     info!("⚡ Executing SNIPE for {}", market.question);
-                     let trade_id = format!("snipe_{}_{}", market.id, Utc::now().timestamp_millis());
-                     
-                     if let Err(e) = self.executor.execute_snipe(
-                         market,
-                         &side,
-                         price,
-                         final_size,
-                         &trade_id,
-                         &mut self.risk_manager
-                     ).await {
-                         error!("❌ Snipe execution failed: {}", e);
-                     }
-                 }
-            }
-            TradeAction::None => {
-                 // Fallback: Check Expiration Strategy
-                 match self.expiration_strategy.check_opportunity(market) {
-                     TradeAction::Snipe { market_id: _, side, price, size_usd } => {
-                         info!("🎯 EXPIRATION SNIPE Signal: {} (Side: {})", market.question, side);
-                         
-                         // Balance Check
-                         if self.last_balance_update.elapsed() > Duration::from_secs(10) {
-                             if let Ok(bal) = self.market_interface.get_balance().await {
-                                 self.cached_balance = bal;
-                                 self.last_balance_update = std::time::Instant::now();
-                             }
-                         }
-                         let balance = self.cached_balance;
-                         let mut final_size = size_usd;
-                         
-                         if balance < final_size {
-                             final_size = balance;
-                         }
-        
-                         if final_size < 1.0 {
-                              warn!("❌ Insufficient balance for Snipe (${:.2})", balance);
-                              return Ok(());
-                         }
-                         
-                         if self.risk_manager.validate_entry(&market.id, final_size, 0.9) {
-                             info!("⚡ Executing SNIPE for {}", market.question);
-                             let trade_id = format!("snipe_{}_{}", market.id, Utc::now().timestamp_millis());
-                             
-                             if let Err(e) = self.executor.execute_snipe(
-                                 market,
-                                 &side,
-                                 price,
-                                 final_size,
-                                 &trade_id,
-                                 &mut self.risk_manager
-                             ).await {
-                                 error!("❌ Snipe execution failed: {}", e);
-                             }
-                         }
-                     }
-                     _ => {
-                          // Final Fallback: Predictive Check (requires await)
-                          match self.predictive_strategy.check_opportunity(market).await {
-                              TradeAction::Snipe { market_id: _, side, price, size_usd } => {
-                                  info!("🎯 PREDICTIVE SNIPE Signal: {} (Side: {})", market.question, side);
-                                  
-                                  // Balance Check
-                                  if self.last_balance_update.elapsed() > Duration::from_secs(10) {
-                                      if let Ok(bal) = self.market_interface.get_balance().await {
-                                          self.cached_balance = bal;
-                                          self.last_balance_update = std::time::Instant::now();
-                                      }
-                                  }
-                                  let balance = self.cached_balance;
-                                  let mut final_size = size_usd;
-                                  
-                                  if balance < final_size {
-                                      final_size = balance;
-                                  }
-                 
-                                  if final_size < 1.0 {
-                                       warn!("❌ Insufficient balance for Predictive Snipe (${:.2})", balance);
-                                       return Ok(());
-                                  }
-                                  
-                                  if self.risk_manager.validate_entry(&market.id, final_size, 0.7) { // Lower confidence threshold for predictive
-                                      info!("⚡ Executing PREDICTIVE SNIPE for {}", market.question);
-                                      let trade_id = format!("pred_{}_{}", market.id, Utc::now().timestamp_millis());
-                                      
-                                      if let Err(e) = self.executor.execute_snipe(
-                                          market,
-                                          &side,
-                                          price,
-                                          final_size,
-                                          &trade_id,
-                                          &mut self.risk_manager
-                                      ).await {
-                                          error!("❌ Predictive Snipe execution failed: {}", e);
-                                      }
-                                  }
-                              }
-                              _ => {
-                                  if rand::random::<f64>() < 0.001 {
-                                      debug!("🔍 Checked {} - No arb opportunity found", market.question);
-                                  }
-                              }
-                          }
-                      }
-                  }
+            _ => {
+                if rand::random::<f64>() < 0.001 {
+                    debug!(
+                        "🔍 Checked {} - No predictive/expiration signal",
+                        market.question
+                    );
+                }
             }
         }
-        
+
+        Ok(())
+    }
+
+    async fn execute_snipe_signal(
+        &mut self,
+        market: &MarketData,
+        side: &str,
+        price: f64,
+        size_usd: f64,
+        trade_prefix: &str,
+        confidence: f64,
+    ) -> Result<()> {
+        if self.last_balance_update.elapsed() > Duration::from_secs(10) {
+            if let Ok(bal) = self.market_interface.get_balance().await {
+                self.cached_balance = bal;
+                self.last_balance_update = std::time::Instant::now();
+            }
+        }
+
+        let balance = self.cached_balance;
+        let final_size = size_usd.min(balance);
+        if final_size < 1.0 {
+            warn!("❌ Insufficient balance for snipe (${:.2})", balance);
+            return Ok(());
+        }
+
+        if self
+            .risk_manager
+            .validate_entry(&market.id, final_size, confidence)
+        {
+            let trade_id = format!(
+                "{}_{}_{}",
+                trade_prefix,
+                market.id,
+                Utc::now().timestamp_millis()
+            );
+            if let Err(e) = self
+                .executor
+                .execute_snipe(
+                    market,
+                    side,
+                    price,
+                    final_size,
+                    &trade_id,
+                    &mut self.risk_manager,
+                )
+                .await
+            {
+                error!("❌ Snipe execution failed: {}", e);
+            }
+        }
         Ok(())
     }
 
@@ -837,8 +817,14 @@ impl Sniper {
         for market in self.active_markets.values() {
             if market.yes_price > 0.0 && market.no_price > 0.0 {
                 let cost = market.yes_price + market.no_price;
-                if cost < 1.02 { // Only care about close calls
-                    spreads.push((market.question.clone(), market.yes_price, market.no_price, cost));
+                if cost < 1.02 {
+                    // Only care about close calls
+                    spreads.push((
+                        market.question.clone(),
+                        market.yes_price,
+                        market.no_price,
+                        cost,
+                    ));
                 }
             }
         }
@@ -853,8 +839,13 @@ impl Sniper {
                 let (q, yes, no, cost) = &spreads[i];
                 let raw_edge_bps = ((1.0 - cost) * 10000.0) as i32;
                 info!(
-                    "#{}: Cost {:.4} (Edge {} bps) | Y: {:.3} N: {:.3} | {}", 
-                    i+1, cost, raw_edge_bps, yes, no, q
+                    "#{}: Cost {:.4} (Edge {} bps) | Y: {:.3} N: {:.3} | {}",
+                    i + 1,
+                    cost,
+                    raw_edge_bps,
+                    yes,
+                    no,
+                    q
                 );
             }
             info!("--------------------------------------------------");
@@ -864,7 +855,7 @@ impl Sniper {
     /// Manage active positions (Stop Loss, Take Profit)
     async fn manage_positions(&mut self, current_markets: &[MarketData]) -> Result<()> {
         let positions = self.risk_manager.get_positions();
-        
+
         if positions.is_empty() {
             return Ok(());
         }
@@ -883,7 +874,11 @@ impl Sniper {
                 // Check Stop Loss via RiskManager
                 if self.risk_manager.check_stop_loss(&position, current_price) {
                     info!("🛑 Executing STOP LOSS for {}", market.question);
-                    if let Err(e) = self.executor.close_position(market, &position.side, &mut self.risk_manager).await {
+                    if let Err(e) = self
+                        .executor
+                        .close_position(market, &position.side, &mut self.risk_manager)
+                        .await
+                    {
                         error!("❌ Failed to close position for {}: {}", market.question, e);
                     } else {
                         // Success: Update PnL Tracker
@@ -895,9 +890,19 @@ impl Sniper {
 
                 // 2. Check Auto-Sell (Take Profit)
                 if current_price >= self.config.risk.auto_sell_threshold {
-                    info!("💰 Executing AUTO-SELL (Take Profit) for {} at {:.4}", market.question, current_price);
-                    if let Err(e) = self.executor.close_position(market, &position.side, &mut self.risk_manager).await {
-                         error!("❌ Failed to close position (Auto-Sell) for {}: {}", market.question, e);
+                    info!(
+                        "💰 Executing AUTO-SELL (Take Profit) for {} at {:.4}",
+                        market.question, current_price
+                    );
+                    if let Err(e) = self
+                        .executor
+                        .close_position(market, &position.side, &mut self.risk_manager)
+                        .await
+                    {
+                        error!(
+                            "❌ Failed to close position (Auto-Sell) for {}: {}",
+                            market.question, e
+                        );
                     } else {
                         // Success: Update PnL Tracker
                         if let Ok(mut tracker) = self.pnl_tracker.lock() {
@@ -907,7 +912,7 @@ impl Sniper {
                 }
             }
         }
-        
+
         Ok(())
     }
 
@@ -920,7 +925,7 @@ impl Sniper {
         }
 
         if market.volume < self.config.market_filters.min_market_volume {
-             debug!(
+            debug!(
                 "⏭️  Volume ${:.2} below minimum ${:.2} for {}",
                 market.volume, self.config.market_filters.min_market_volume, market.question
             );
@@ -928,7 +933,7 @@ impl Sniper {
         }
 
         if market.liquidity < self.config.market_filters.min_liquidity {
-             debug!(
+            debug!(
                 "⏭️  Liquidity ${:.2} below minimum ${:.2} for {}",
                 market.liquidity, self.config.market_filters.min_liquidity, market.question
             );
@@ -936,7 +941,7 @@ impl Sniper {
         }
 
         if market.volume_24h < self.config.market_filters.min_24h_volume {
-             debug!(
+            debug!(
                 "⏭️  24h Volume ${:.2} below minimum ${:.2} for {}",
                 market.volume_24h, self.config.market_filters.min_24h_volume, market.question
             );
