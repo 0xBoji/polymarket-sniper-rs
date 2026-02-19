@@ -325,8 +325,12 @@ impl MarketInterface for PolymarketClient {
             .await?;
 
 
-        let price = Decimal::from_f64_retain(price_f64).ok_or_else(|| anyhow::anyhow!("Invalid price"))?;
-        let token_size_f64 = size_usd / price_f64;
+        let price = Self::normalize_order_price(price_f64)?;
+        let price_f64_clean = price
+            .to_string()
+            .parse::<f64>()
+            .map_err(|e| anyhow::anyhow!("Failed to convert normalized price: {}", e))?;
+        let token_size_f64 = size_usd / price_f64_clean;
         let size = Decimal::from_f64_retain(token_size_f64).ok_or_else(|| anyhow::anyhow!("Invalid size"))?;
 
         let token_id_u256 = U256::from_str(&token_id).map_err(|e| anyhow::anyhow!("Invalid token ID: {}", e))?;
@@ -361,6 +365,24 @@ impl MarketInterface for PolymarketClient {
 
 // Keep inherent impl for helper methods and new
 impl PolymarketClient {
+    fn normalize_order_price(price_f64: f64) -> Result<Decimal> {
+        if !price_f64.is_finite() || price_f64 <= 0.0 {
+            anyhow::bail!("Invalid price: {}", price_f64);
+        }
+
+        // Remove f64 artifacts (e.g. 0.429999999...) and keep price
+        // on a practical tick grid for most CLOB markets.
+        let parsed = Decimal::from_str(&format!("{:.8}", price_f64))
+            .map_err(|e| anyhow::anyhow!("Invalid normalized price: {}", e))?;
+        let normalized = parsed.round_dp(2);
+
+        if normalized <= Decimal::ZERO {
+            anyhow::bail!("Normalized price is non-positive: {}", normalized);
+        }
+
+        Ok(normalized)
+    }
+
     pub fn new(config: &PolymarketConfig, paper_trading: bool, private_key: Option<String>) -> Result<Self> {
         
         let http_client = reqwest::Client::builder()
@@ -562,6 +584,7 @@ struct GammaMarket {
     #[serde(default)]
     pub clob_token_ids: String, // Default to ""
     pub volume: serde_json::Value,     // Can be String or Number
+    #[serde(default)]
     pub volume_24hr: serde_json::Value, // Added for popularity filter
     pub liquidity: serde_json::Value,  // Can be String or Number
 }
