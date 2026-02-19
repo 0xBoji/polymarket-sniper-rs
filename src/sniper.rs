@@ -41,6 +41,7 @@ pub struct Sniper {
     ws_update_rx: Option<mpsc::Receiver<OrderbookUpdate>>,
     active_markets: HashMap<String, MarketData>,
     asset_map: HashMap<String, (String, String)>, // AssetID -> (MarketID, Side)
+    subscribed_assets: HashSet<String>,
     // Caching
     cached_balance: f64,
     last_balance_update: std::time::Instant,
@@ -199,6 +200,7 @@ impl Sniper {
             ws_update_rx,
             active_markets: HashMap::new(),
             asset_map: HashMap::new(),
+            subscribed_assets: HashSet::new(),
             cached_balance: 0.0,
             last_balance_update: std::time::Instant::now() - Duration::from_secs(600), // Force initial update
         })
@@ -370,10 +372,19 @@ impl Sniper {
                             self.active_markets.insert(condition_id.clone(), synthetic_market.clone());
                             
                             // Subscribe to CLOB WebSocket IMMEDIATELY
-                             if let Some(ws) = &mut self.ws_client {
-                                ws.subscribe(vec![yes_id, no_id]);
-                                info!("🔌 Subscribed to CLOB for derived IDs (YES/NO)");
-                             }
+                            if let Some(ws) = &mut self.ws_client {
+                                let mut to_subscribe = Vec::new();
+                                if self.subscribed_assets.insert(yes_id.clone()) {
+                                    to_subscribe.push(yes_id);
+                                }
+                                if self.subscribed_assets.insert(no_id.clone()) {
+                                    to_subscribe.push(no_id);
+                                }
+                                if !to_subscribe.is_empty() {
+                                    ws.subscribe(to_subscribe);
+                                    info!("🔌 Subscribed to CLOB for derived IDs (YES/NO)");
+                                }
+                            }
                         }
                         Err(e) => {
                             error!("❌ Failed to derive asset ids: {}", e);
@@ -561,8 +572,16 @@ impl Sniper {
         // Register for WS Updates
         if let Some(ws) = &self.ws_client {
              if !market.asset_ids.is_empty() {
-                 info!("🔌 Subscribing to Orderbook for {}", market.question);
-                 ws.subscribe(market.asset_ids.clone());
+                 let mut to_subscribe = Vec::new();
+                 for asset_id in &market.asset_ids {
+                     if self.subscribed_assets.insert(asset_id.clone()) {
+                         to_subscribe.push(asset_id.clone());
+                     }
+                 }
+                 if !to_subscribe.is_empty() {
+                     info!("🔌 Subscribing to Orderbook for {}", market.question);
+                     ws.subscribe(to_subscribe);
+                 }
                  
                  // Cache state - BUT PRESERVE WS PRICES if they exist and are newer
                  if let Some(existing) = self.active_markets.get_mut(&market.id) {
@@ -620,8 +639,13 @@ impl Sniper {
                 
                 // Ensure we have enough for 2 legs (min ~$1 per leg)
                 // If we have less than $2, we probably can't execute both legs reliably or meet min size
-                if final_size < 2.0 {
-                     warn!("❌ Insufficient balance to trade (${:.2}). Min required for arb is ~$2.0", balance);
+                const MIN_ARB_NOTIONAL_USD: f64 = 1.0;
+                if final_size < MIN_ARB_NOTIONAL_USD {
+                     warn!(
+                        "❌ Insufficient balance to trade (${:.2}). Min required for arb is ~${:.2}",
+                        balance,
+                        MIN_ARB_NOTIONAL_USD
+                    );
                      // Skip this opportunity
                      return Ok(()); 
                 }

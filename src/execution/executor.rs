@@ -68,8 +68,8 @@ impl Executor {
 
         // Register position with risk manager
         risk_manager.add_position(
-            trade_id.to_string(),
             market.id.clone(),
+            trade_id.to_string(),
             decision.side.clone(),
             position_size_usd,
             price,
@@ -141,16 +141,16 @@ impl Executor {
         
         // Register positions
         risk_manager.add_position(
-            format!("{}_YES", trade_id),
             market.id.clone(),
+            format!("{}_YES", trade_id),
             "YES".to_string(),
             size_usd / 2.0,
             yes_price,
         );
         
         risk_manager.add_position(
-            format!("{}_NO", trade_id),
             market.id.clone(),
+            format!("{}_NO", trade_id),
             "NO".to_string(),
             size_usd / 2.0,
             no_price,
@@ -227,8 +227,8 @@ impl Executor {
 
         // Register position with risk manager
         risk_manager.add_position(
-            trade_id.to_string(),
             market.id.clone(),
+            trade_id.to_string(),
             side.to_string(),
             size_usd,
             price,
