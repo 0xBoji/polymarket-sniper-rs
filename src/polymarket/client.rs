@@ -4,7 +4,7 @@ use super::api::MarketInterface;
 use async_trait::async_trait;
 use alloy::signers::local::PrivateKeySigner;
 use alloy::primitives::Address;
-use rust_decimal::Decimal;
+use rust_decimal::{Decimal, RoundingStrategy};
 
     // SDK Imports
 use polymarket_client_sdk::{
@@ -326,12 +326,7 @@ impl MarketInterface for PolymarketClient {
 
 
         let price = Self::normalize_order_price(price_f64)?;
-        let price_f64_clean = price
-            .to_string()
-            .parse::<f64>()
-            .map_err(|e| anyhow::anyhow!("Failed to convert normalized price: {}", e))?;
-        let token_size_f64 = size_usd / price_f64_clean;
-        let size = Decimal::from_f64_retain(token_size_f64).ok_or_else(|| anyhow::anyhow!("Invalid size"))?;
+        let size = Self::normalize_order_size(size_usd, price)?;
 
         let token_id_u256 = U256::from_str(&token_id).map_err(|e| anyhow::anyhow!("Invalid token ID: {}", e))?;
 
@@ -378,6 +373,31 @@ impl PolymarketClient {
 
         if normalized <= Decimal::ZERO {
             anyhow::bail!("Normalized price is non-positive: {}", normalized);
+        }
+
+        Ok(normalized)
+    }
+
+    fn normalize_order_size(size_usd: f64, price: Decimal) -> Result<Decimal> {
+        if !size_usd.is_finite() || size_usd <= 0.0 {
+            anyhow::bail!("Invalid size_usd: {}", size_usd);
+        }
+        if price <= Decimal::ZERO {
+            anyhow::bail!("Invalid normalized price for size conversion: {}", price);
+        }
+
+        let size_usd_decimal = Decimal::from_str(&format!("{:.8}", size_usd))
+            .map_err(|e| anyhow::anyhow!("Invalid normalized size_usd: {}", e))?;
+
+        let raw_token_size = size_usd_decimal / price;
+        let normalized = raw_token_size.round_dp_with_strategy(2, RoundingStrategy::ToZero);
+
+        if normalized <= Decimal::ZERO {
+            anyhow::bail!(
+                "Normalized token size is zero after lot-size rounding (size_usd=${:.4}, price={})",
+                size_usd,
+                price
+            );
         }
 
         Ok(normalized)

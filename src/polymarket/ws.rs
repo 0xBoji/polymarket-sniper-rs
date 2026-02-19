@@ -1,7 +1,7 @@
 use futures_util::{SinkExt, StreamExt};
 use tokio_tungstenite::{connect_async, tungstenite::protocol::Message};
 use anyhow::Result;
-use tracing::{info, error, warn, debug};
+use tracing::{info, error, warn, debug, trace};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use tokio::sync::mpsc;
@@ -87,6 +87,8 @@ impl ClobWebSocket {
                         // For now, we listen for new requests.
                         
                         let mut pending_subs: Vec<String> = Vec::new();
+                        let mut invalid_operation_logged = false;
+                        let mut unknown_object_logged = false;
                         let mut flush_interval = tokio::time::interval(std::time::Duration::from_millis(200));
 
                         loop {
@@ -98,7 +100,14 @@ impl ClobWebSocket {
                                                 Ok(v) => v,
                                                 Err(e) => {
                                                     if !text.contains("check_ka") {
-                                                        debug!("ℹ️ Ignored non-JSON WS msg: {} | {}", e, text);
+                                                        if text.trim().eq_ignore_ascii_case("INVALID OPERATION") {
+                                                            if !invalid_operation_logged {
+                                                                debug!("ℹ️ Ignoring repeated WS non-JSON control message: {}", text.trim());
+                                                                invalid_operation_logged = true;
+                                                            }
+                                                        } else {
+                                                            trace!("ℹ️ Ignored non-JSON WS msg: {} | {}", e, text);
+                                                        }
                                                     }
                                                     continue;
                                                 }
@@ -172,8 +181,9 @@ impl ClobWebSocket {
                                                 }
                                             }
 
-                                            if !text.contains("check_ka") {
-                                                debug!("ℹ️ Ignored WS object msg: {}", text);
+                                            if !text.contains("check_ka") && !unknown_object_logged {
+                                                debug!("ℹ️ Ignoring unsupported WS object payload shape (logging once per connection)");
+                                                unknown_object_logged = true;
                                             }
                                         }
 
