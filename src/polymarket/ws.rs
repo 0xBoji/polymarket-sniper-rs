@@ -28,6 +28,15 @@ pub struct WsMessage {
 }
 
 #[derive(Debug, Deserialize)]
+pub struct WsBookSnapshot {
+    pub asset_id: String,
+    pub bids: Vec<PriceLevel>,
+    pub asks: Vec<PriceLevel>,
+    pub timestamp: String,
+    pub hash: String,
+}
+
+#[derive(Debug, Deserialize)]
 pub struct WsPriceChange {
     pub asset_id: String,
     pub price: String,
@@ -84,30 +93,44 @@ impl ClobWebSocket {
                                 Some(msg) = read.next() => {
                                     match msg {
                                         Ok(Message::Text(text)) => {
-                                            // Correctly parse as Object (WsMessage) not Array
+                                            // Feed format can be either:
+                                            // 1) array of full book snapshots, or
+                                            // 2) object with price_changes
+                                            if let Ok(snapshots) = serde_json::from_str::<Vec<WsBookSnapshot>>(&text) {
+                                                for snap in snapshots {
+                                                    let update = OrderbookUpdate {
+                                                        asset_id: snap.asset_id,
+                                                        bids: snap.bids,
+                                                        asks: snap.asks,
+                                                        timestamp: snap.timestamp,
+                                                        hash: snap.hash,
+                                                    };
+                                                    if let Err(e) = update_tx.send(update).await {
+                                                        error!("❌ Failed to send snapshot update to agent: {}", e);
+                                                    }
+                                                }
+                                                continue;
+                                            }
+
                                             match serde_json::from_str::<WsMessage>(&text) {
                                                 Ok(msg) => {
-                                                    // Convert WsMessage to Vec<OrderbookUpdate> for compatibility
-                                                    // or just send individual updates.
                                                     for change in msg.price_changes {
                                                         let update = OrderbookUpdate {
                                                             asset_id: change.asset_id,
-                                                            bids: vec![PriceLevel { price: change.best_bid, size: "0".to_string() }], // Dummy Vec for compat
-                                                            asks: vec![PriceLevel { price: change.best_ask, size: "0".to_string() }], // Dummy Vec for compat
+                                                            bids: vec![PriceLevel { price: change.best_bid, size: "0".to_string() }],
+                                                            asks: vec![PriceLevel { price: change.best_ask, size: "0".to_string() }],
                                                             timestamp: msg.timestamp.clone(),
                                                             hash: change.hash,
                                                         };
-                                                        
                                                         if let Err(e) = update_tx.send(update).await {
                                                             error!("❌ Failed to send update to agent: {}", e);
                                                         }
                                                     }
                                                 }
                                                 Err(e) => {
-                                                    // Only warn if it looks like a market update (contains "asset_id")
                                                     if text.contains("asset_id") {
                                                         error!("❌ Failed to parse WS update: {}. Text: {}", e, text);
-                                                    } else if !text.contains("check_ka") { 
+                                                    } else if !text.contains("check_ka") {
                                                         debug!("ℹ️ Ignored system msg: {}", text);
                                                     }
                                                 }
@@ -179,5 +202,4 @@ impl ClobWebSocket {
         }
     }
 }
-
 

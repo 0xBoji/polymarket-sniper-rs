@@ -125,82 +125,126 @@ impl MarketInterface for PolymarketClient {
     }
 
     async fn get_balance(&self) -> Result<f64> {
-        // Use default client for non-proxy
-        if self.proxy_address.is_none() {
-            // Note: BalanceAllowanceParams might be different in new SDK.
-            // Simplified check: just call get_balance_allowance(None) if possible?
-            // Or try to resolve type.
-            // For now, let's skip standard client check and focus on RPC proxy check as fallback
-            // or return 0.0 if not proxy.
-            
-            // Actually, let's try to use the SDK method with minimal params
-            // Assuming get_balance_allowance takes Option<...>.
-            // If I can't find the type, I'll comment it out.
-            /*
-            let response = self.client.get_balance_allowance(None).await?;
-            */
+        // Balance for trading should be checked on proxy/safe wallet if available.
+        // Fallback to signer only if proxy is unavailable.
+        let target_addr = if let Some(proxy) = &self.proxy_address {
+            proxy.clone()
+        } else {
+            format!("{:?}", self.signer_address)
+        };
+
+        if target_addr.is_empty() || target_addr == "0x0000000000000000000000000000000000000000" {
+            warn!("⚠️ Unable to determine target wallet for balance check");
             return Ok(0.0);
         }
 
-        // RPC PROXY BALANCE CHECK
-        let proxy = self.proxy_address.as_ref().unwrap();
         // Native USDC: 0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359
         // Bridged USDC: 0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174
-        // We check Native USDC as prioritized by user.
-        
+        // We check Native first, then Bridged.
+
         // Selector for balanceOf(address): 70a08231
         // Pad address to 32 bytes (64 hex chars)
         // proxy string is 0x... (42 chars). strip 0x, pad left with 0s to 64 chars.
-        let addr_clean = proxy.trim_start_matches("0x");
+        let addr_clean = target_addr.trim_start_matches("0x");
         let data = format!("0x70a08231000000000000000000000000{}", addr_clean);
-        
-        let rpc_url = "https://polygon-rpc.com";
-        
-        let body = serde_json::json!({
-            "jsonrpc": "2.0",
-            "method": "eth_call",
-            "params": [{
-                "to": "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359", // Native USDC
-                "data": data
-            }, "latest"],
-            "id": 1
-        });
-        
-        let response = self.http_client.post(rpc_url).json(&body).send().await?;
-        let json: serde_json::Value = response.json().await?;
-        println!("🔍 RPC Balance Check: {:?}", json);
-        
-        if let Some(result) = json.get("result").and_then(|v| v.as_str()) {
-            let hex_val = result.trim_start_matches("0x");
-             if let Ok(amount) = u128::from_str_radix(hex_val, 16) {
-                 let balance = amount as f64 / 1_000_000.0;
-                 if balance > 0.0 {
-                     println!("💰 Found Proxy RPC Balance: ${}", balance);
-                     return Ok(balance);
-                 }
-             }
+
+        let mut rpc_candidates = vec![
+            "https://polygon-rpc.com".to_string(),
+            "https://rpc.ankr.com/polygon".to_string(),
+        ];
+
+        if let Ok(ws_rpc) = std::env::var("POLYGON_WS_RPC") {
+            let http_rpc = ws_rpc
+                .replace("wss://", "https://")
+                .replace("ws://", "http://");
+            rpc_candidates.insert(0, http_rpc);
         }
-        
-        // Fallback to Bridged USDC check if Native is 0
-         let body_bridged = serde_json::json!({
-            "jsonrpc": "2.0",
-            "method": "eth_call",
-            "params": [{
-                "to": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174", // Bridged USDC
-                "data": data
-            }, "latest"],
-            "id": 2
-        });
-         let response_b = self.http_client.post(rpc_url).json(&body_bridged).send().await?;
-         let json_b: serde_json::Value = response_b.json().await?;
-         
-        if let Some(result) = json_b.get("result").and_then(|v| v.as_str()) {
-             let hex_val = result.trim_start_matches("0x");
-             if let Ok(amount) = u128::from_str_radix(hex_val, 16) {
-                 let balance = amount as f64 / 1_000_000.0;
-                 println!("💰 Found Proxy RPC Balance (Bridged): ${}", balance);
-                 return Ok(balance);
-             }
+
+        // Dedup and keep order.
+        rpc_candidates.dedup();
+
+        for rpc_url in rpc_candidates {
+            let native_req = serde_json::json!({
+                "jsonrpc": "2.0",
+                "method": "eth_call",
+                "params": [{
+                    "to": "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
+                    "data": data
+                }, "latest"],
+                "id": 1
+            });
+
+            match self.http_client.post(&rpc_url).json(&native_req).send().await {
+                Ok(resp) => {
+                    let json: serde_json::Value = match resp.json().await {
+                        Ok(v) => v,
+                        Err(e) => {
+                            warn!("⚠️ Failed to parse balance response from {}: {}", rpc_url, e);
+                            continue;
+                        }
+                    };
+
+                    if let Some(err) = json.get("error") {
+                        warn!("⚠️ RPC error from {}: {}", rpc_url, err);
+                        continue;
+                    }
+
+                    if let Some(result) = json.get("result").and_then(|v| v.as_str()) {
+                        if let Ok(amount) = u128::from_str_radix(result.trim_start_matches("0x"), 16) {
+                            let balance = amount as f64 / 1_000_000.0;
+                            if balance > 0.0 {
+                                info!("💰 Native USDC balance on {} via {}: ${:.2}", target_addr, rpc_url, balance);
+                                return Ok(balance);
+                            }
+                        }
+                    }
+                }
+                Err(e) => {
+                    warn!("⚠️ Balance RPC request failed via {}: {}", rpc_url, e);
+                    continue;
+                }
+            }
+
+            let bridged_req = serde_json::json!({
+                "jsonrpc": "2.0",
+                "method": "eth_call",
+                "params": [{
+                    "to": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
+                    "data": data
+                }, "latest"],
+                "id": 2
+            });
+
+            match self.http_client.post(&rpc_url).json(&bridged_req).send().await {
+                Ok(resp) => {
+                    let json: serde_json::Value = match resp.json().await {
+                        Ok(v) => v,
+                        Err(e) => {
+                            warn!("⚠️ Failed to parse bridged balance response from {}: {}", rpc_url, e);
+                            continue;
+                        }
+                    };
+
+                    if let Some(err) = json.get("error") {
+                        warn!("⚠️ RPC bridged error from {}: {}", rpc_url, err);
+                        continue;
+                    }
+
+                    if let Some(result) = json.get("result").and_then(|v| v.as_str()) {
+                        if let Ok(amount) = u128::from_str_radix(result.trim_start_matches("0x"), 16) {
+                            let balance = amount as f64 / 1_000_000.0;
+                            if balance > 0.0 {
+                                info!("💰 Bridged USDC balance on {} via {}: ${:.2}", target_addr, rpc_url, balance);
+                                return Ok(balance);
+                            }
+                        }
+                    }
+                }
+                Err(e) => {
+                    warn!("⚠️ Bridged balance RPC request failed via {}: {}", rpc_url, e);
+                    continue;
+                }
+            }
         }
 
         Ok(0.0)
@@ -320,6 +364,7 @@ impl PolymarketClient {
     pub fn new(config: &PolymarketConfig, paper_trading: bool, private_key: Option<String>) -> Result<Self> {
         
         let http_client = reqwest::Client::builder()
+            .no_proxy()
             .timeout(std::time::Duration::from_secs(4))
             .tcp_nodelay(true)
             .pool_idle_timeout(None)

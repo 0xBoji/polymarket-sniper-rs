@@ -30,6 +30,7 @@ impl BinanceClient {
     pub fn new() -> Self {
         Self {
             http_client: Client::builder()
+                .no_proxy()
                 .timeout(Duration::from_secs(2))
                 .build()
                 .unwrap_or_default(),
