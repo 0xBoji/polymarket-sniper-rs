@@ -281,11 +281,9 @@ impl Sniper {
                 } => {
                      // 1. Identify Market
                      if let Some((market_id, side)) = self.asset_map.get(&update.asset_id).cloned() {
-                         // DEBUG: Sample 1% of ticks to show WS is alive
-                         if rand::random::<f64>() < 0.01 {
+                         // Sampled heartbeat to avoid log spam under high WS throughput
+                         if rand::random::<f64>() < 0.002 {
                              info!("⚡ WS Tick Alive: {} [{}] ({} bids, {} asks)", market_id, side, update.bids.len(), update.asks.len());
-                         } else {
-                             debug!("⚡ Tick: {} ({} bids, {} asks)", side, update.bids.len(), update.asks.len());
                          }
                          
                          // 2. Update State
@@ -300,10 +298,14 @@ impl Sniper {
                                  let price = best_ask.price.parse::<f64>().unwrap_or(0.0);
                                  if side == "YES" {
                                      market.yes_price = price;
-                                     debug!("📊 WS Update: {} YES -> {:.4}", market.question, price);
+                                     if rand::random::<f64>() < 0.002 {
+                                         debug!("📊 WS Update: {} YES -> {:.4}", market.question, price);
+                                     }
                                  } else {
                                      market.no_price = price;
-                                     debug!("📊 WS Update: {} NO -> {:.4}", market.question, price);
+                                     if rand::random::<f64>() < 0.002 {
+                                         debug!("📊 WS Update: {} NO -> {:.4}", market.question, price);
+                                     }
                                  }
                                  
                                  // Trigger re-eval
@@ -815,7 +817,9 @@ impl Sniper {
                                   }
                               }
                               _ => {
-                                  debug!("🔍 Checked {} - No arb opportunity found", market.question);
+                                  if rand::random::<f64>() < 0.001 {
+                                      debug!("🔍 Checked {} - No arb opportunity found", market.question);
+                                  }
                               }
                           }
                       }

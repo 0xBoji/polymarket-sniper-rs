@@ -3,6 +3,7 @@ use tokio_tungstenite::{connect_async, tungstenite::protocol::Message};
 use anyhow::Result;
 use tracing::{info, error, warn, debug};
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
 use tokio::sync::mpsc;
 
 const CLOB_WS_URL: &str = "wss://ws-subscriptions-clob.polymarket.com/ws/market";
@@ -93,47 +94,86 @@ impl ClobWebSocket {
                                 Some(msg) = read.next() => {
                                     match msg {
                                         Ok(Message::Text(text)) => {
-                                            // Feed format can be either:
-                                            // 1) array of full book snapshots, or
-                                            // 2) object with price_changes
-                                            if let Ok(snapshots) = serde_json::from_str::<Vec<WsBookSnapshot>>(&text) {
-                                                for snap in snapshots {
-                                                    let update = OrderbookUpdate {
-                                                        asset_id: snap.asset_id,
-                                                        bids: snap.bids,
-                                                        asks: snap.asks,
-                                                        timestamp: snap.timestamp,
-                                                        hash: snap.hash,
-                                                    };
-                                                    if let Err(e) = update_tx.send(update).await {
-                                                        error!("❌ Failed to send snapshot update to agent: {}", e);
+                                            let json: Value = match serde_json::from_str(&text) {
+                                                Ok(v) => v,
+                                                Err(e) => {
+                                                    if !text.contains("check_ka") {
+                                                        debug!("ℹ️ Ignored non-JSON WS msg: {} | {}", e, text);
                                                     }
+                                                    continue;
                                                 }
+                                            };
+
+                                            // 1) Array snapshots
+                                            if json.is_array() {
+                                                if let Ok(snapshots) = serde_json::from_value::<Vec<WsBookSnapshot>>(json) {
+                                                    for snap in snapshots {
+                                                        let update = OrderbookUpdate {
+                                                            asset_id: snap.asset_id,
+                                                            bids: snap.bids,
+                                                            asks: snap.asks,
+                                                            timestamp: snap.timestamp,
+                                                            hash: snap.hash,
+                                                        };
+                                                        if let Err(e) = update_tx.send(update).await {
+                                                            error!("❌ Failed to send snapshot update to agent: {}", e);
+                                                        }
+                                                    }
+                                                    continue;
+                                                }
+                                                debug!("ℹ️ Ignored WS array msg (unknown shape)");
                                                 continue;
                                             }
 
-                                            match serde_json::from_str::<WsMessage>(&text) {
-                                                Ok(msg) => {
-                                                    for change in msg.price_changes {
+                                            // 2) Object events (book / last_trade_price / price_changes)
+                                            if let Some(obj) = json.as_object() {
+                                                let event_type = obj
+                                                    .get("event_type")
+                                                    .and_then(|v| v.as_str())
+                                                    .unwrap_or_default();
+
+                                                if event_type == "last_trade_price" {
+                                                    // We do not use last trade ticks for orderbook-based strategy.
+                                                    continue;
+                                                }
+
+                                                if event_type == "book" || (obj.contains_key("bids") && obj.contains_key("asks")) {
+                                                    if let Ok(snap) = serde_json::from_value::<WsBookSnapshot>(Value::Object(obj.clone())) {
                                                         let update = OrderbookUpdate {
-                                                            asset_id: change.asset_id,
-                                                            bids: vec![PriceLevel { price: change.best_bid, size: "0".to_string() }],
-                                                            asks: vec![PriceLevel { price: change.best_ask, size: "0".to_string() }],
-                                                            timestamp: msg.timestamp.clone(),
-                                                            hash: change.hash,
+                                                            asset_id: snap.asset_id,
+                                                            bids: snap.bids,
+                                                            asks: snap.asks,
+                                                            timestamp: snap.timestamp,
+                                                            hash: snap.hash,
                                                         };
                                                         if let Err(e) = update_tx.send(update).await {
-                                                            error!("❌ Failed to send update to agent: {}", e);
+                                                            error!("❌ Failed to send book update to agent: {}", e);
                                                         }
+                                                        continue;
                                                     }
                                                 }
-                                                Err(e) => {
-                                                    if text.contains("asset_id") {
-                                                        error!("❌ Failed to parse WS update: {}. Text: {}", e, text);
-                                                    } else if !text.contains("check_ka") {
-                                                        debug!("ℹ️ Ignored system msg: {}", text);
+
+                                                if obj.contains_key("price_changes") {
+                                                    if let Ok(msg) = serde_json::from_value::<WsMessage>(Value::Object(obj.clone())) {
+                                                        for change in msg.price_changes {
+                                                            let update = OrderbookUpdate {
+                                                                asset_id: change.asset_id,
+                                                                bids: vec![PriceLevel { price: change.best_bid, size: "0".to_string() }],
+                                                                asks: vec![PriceLevel { price: change.best_ask, size: "0".to_string() }],
+                                                                timestamp: msg.timestamp.clone(),
+                                                                hash: change.hash,
+                                                            };
+                                                            if let Err(e) = update_tx.send(update).await {
+                                                                error!("❌ Failed to send update to agent: {}", e);
+                                                            }
+                                                        }
+                                                        continue;
                                                     }
                                                 }
+                                            }
+
+                                            if !text.contains("check_ka") {
+                                                debug!("ℹ️ Ignored WS object msg: {}", text);
                                             }
                                         }
 
@@ -202,4 +242,3 @@ impl ClobWebSocket {
         }
     }
 }
-
